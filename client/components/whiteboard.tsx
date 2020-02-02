@@ -43,6 +43,7 @@ export class Whiteboard extends React.Component<{}, {}> {
     return (
       <div>
         <canvas ref="canvas" width={500} height={500} />
+        
         <div>Hello World</div>
       </div>
     )
