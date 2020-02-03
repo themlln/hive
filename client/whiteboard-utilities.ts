@@ -41,28 +41,27 @@ export function draw (
     shouldBroadcast && events.emit('draw', start, end, strokeColor)
 }
 
-export const resize = (canvas: HTMLCanvasElement = new HTMLCanvasElement()) => {
-  const ctx: any = canvas.getContext('2d')
-  ctx.setTransform(1, 0, 0, 1, 0, 0)
-  const pixelRatio: number = window.devicePixelRatio || 1
+// export const resize = () => {
+//   ctx.setTransform(1, 0, 0, 1, 0, 0)
+//   const pixelRatio: number = window.devicePixelRatio || 1
 
-  const w: number = canvas.clientWidth * pixelRatio
-  const h: number = canvas.clientHeight * pixelRatio
+//   const w: number = canvas.clientWidth * pixelRatio
+//   const h: number = canvas.clientHeight * pixelRatio
 
-  if (w !== canvas.width || h !== canvas.height) {
-    const imgData: object = ctx.getImageData(0, 0, canvas.width, canvas.height)
+//   if (w !== canvas.width || h !== canvas.height) {
+//     const imgData: object = ctx.getImageData(0, 0, canvas.width, canvas.height)
 
-    canvas.width = w
-    canvas.height = h
+//     canvas.width = w
+//     canvas.height = h
 
-    ctx.putImageData(imgData, 0, 0)
-  }
-  ctx.scale(pixelRatio, pixelRatio)
+//     ctx.putImageData(imgData, 0, 0)
+//   }
+//   ctx.scale(pixelRatio, pixelRatio)
 
-  ctx.lineWidth = 5
-  ctx.lineJoin = 'round'
-  ctx.lineCap = 'round'
-}
+//   ctx.lineWidth = 5
+//   ctx.lineJoin = 'round'
+//   ctx.lineCap = 'round'
+// }
 
 // export const position = (event: any) => {
 //   return [
