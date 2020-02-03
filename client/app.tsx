@@ -1,4 +1,5 @@
 import * as React from 'react'
+import 'reflect-metadata'
 
 import Navbar from './components/navbar'
 import Routes from './routes'
