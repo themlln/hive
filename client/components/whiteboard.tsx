@@ -6,10 +6,16 @@ import { findDOMNode } from 'react-dom'
 let currentMousePosition: any = {x: 0, y: 0}
 let lastMousePosition: any = {x: 0, y: 0}
 
-export class Whiteboard extends React.Component {
+interface State {
+  canvas: HTMLCanvasElement
+}
+
+export class Whiteboard extends React.Component <{}, State> {
   constructor() {
     super()
-    this.canvas = document.createElement('canvas')
+    this.state = {
+      canvas: document.createElement('canvas')
+    }
 
     this.setup = this.setup.bind(this)
     this.handleMouseMove = this.handleMouseMove.bind(this)
@@ -32,7 +38,7 @@ export class Whiteboard extends React.Component {
   }
 
   setup() {
-    document.body.appendChild(canvas)
+    document.body.appendChild(this.state.canvas)
     this.handleResize()
   }
 
@@ -47,8 +53,7 @@ export class Whiteboard extends React.Component {
       <>
         {/* {onMouseDown={(event) => this.handleMouseDown(event)} onMouseMove={(event) => this.handleMouseMove(event)} */}
         <button onClick={ () => draw([1,1], [100,100], 'black', true)}>Draw a Line!</button>
-        <canvas 
-          ref={(canvas) => this.canvasRef = canvas}
+        <canvas
           onMouseDown={this.handleMouseDown}
           onMouseMove={this.handleMouseMove}
         />
