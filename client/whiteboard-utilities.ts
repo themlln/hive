@@ -10,8 +10,8 @@ export let lastMousePosition: any = {x: 0, y: 0}
 export function draw (start: any = [0,0], end: any = [0,0], strokeColor: string = 'black', shouldBroadcast: boolean = true) {
   ctx.beginPath()
   ctx.strokeStyle = strokeColor
-  ctx.moveTo(...start)
-  ctx.lineTo(...end)
+  ctx.moveTo(start[0], start[1])
+  ctx.lineTo(end[0], end[1])
   ctx.closePath()
   ctx.stroke()
 
