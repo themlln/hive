@@ -10,7 +10,6 @@ export default class App extends React.Component {
       <div>
         <Navbar />
         <Routes />
-        <Whiteboard />
       </div>
     )
   }
