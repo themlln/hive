@@ -2,7 +2,7 @@ import {EventEmitter} from 'events'
 
 export const events: EventEmitter = new EventEmitter();
 export const canvas: HTMLCanvasElement = document.createElement('canvas')
-const ctx: any = canvas.getContext('2d')
+export const ctx: any = canvas.getContext('2d')
 
 export let currentMousePosition: any = {x: 0, y: 0}
 export let lastMousePosition: any = {x: 0, y: 0}
@@ -10,8 +10,8 @@ export let lastMousePosition: any = {x: 0, y: 0}
 export function draw (start: any = [0,0], end: any = [0,0], strokeColor: string = 'black', shouldBroadcast: boolean = true) {
   ctx.beginPath()
   ctx.strokeStyle = strokeColor
-  ctx.moveTo(start[0], start[1])
-  ctx.lineTo(end[0], end[1])
+  ctx.moveTo(...start)
+  ctx.lineTo(...end)
   ctx.closePath()
   ctx.stroke()
 
@@ -52,6 +52,7 @@ export const setupCanvas = () => {
   canvas.addEventListener('resize', resize)
 
   canvas.addEventListener('mousedown', (event: any) => {
+    console.log('EVENT - mousedown', event)
     currentMousePosition = position(event)
   })
   canvas.addEventListener('mousemove', (event: any) => {
