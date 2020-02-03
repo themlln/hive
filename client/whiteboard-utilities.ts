@@ -1,24 +1,9 @@
 import {EventEmitter} from 'events'
 
 export const events: EventEmitter = new EventEmitter();
-// export const canvas: HTMLCanvasElement = document.createElement('canvas')
-// export const ctx: any = canvas.getContext('2d')
 
 export let currentMousePosition: any = {x: 0, y: 0}
 export let lastMousePosition: any = {x: 0, y: 0}
-
-// export function draw (start: any = [0,0], end: any = [0,0], strokeColor: string = 'black', shouldBroadcast: boolean = true) {
-//   console.log('draw function');
-
-//   ctx.beginPath()
-//   ctx.strokeStyle = strokeColor
-//   ctx.moveTo(start[0], start[1])
-//   ctx.lineTo(end[0], end[1])
-//   ctx.closePath()
-//   ctx.stroke()
-
-//   shouldBroadcast && events.emit('draw', start, end, strokeColor)
-// }
 
 export function draw (
     start: any = [0,0],
@@ -27,9 +12,7 @@ export function draw (
     shouldBroadcast: boolean = true,
     canvas: HTMLCanvasElement = new HTMLCanvasElement()
   ) {
-    console.log('canvas:', canvas);
     const ctx: any = canvas.getContext('2d')
-    console.log('draw function');
 
     ctx.beginPath()
     ctx.strokeStyle = strokeColor
@@ -41,34 +24,35 @@ export function draw (
     shouldBroadcast && events.emit('draw', start, end, strokeColor)
 }
 
-// export const resize = () => {
-//   ctx.setTransform(1, 0, 0, 1, 0, 0)
-//   const pixelRatio: number = window.devicePixelRatio || 1
+export const resize = (canvas: HTMLCanvasElement = new HTMLCanvasElement()) => {
+  const ctx: any = canvas.getContext('2d')
+  ctx.setTransform(1, 0, 0, 1, 0, 0)
+  const pixelRatio: number = window.devicePixelRatio || 1
 
-//   const w: number = canvas.clientWidth * pixelRatio
-//   const h: number = canvas.clientHeight * pixelRatio
+  const w: number = canvas.clientWidth * pixelRatio
+  const h: number = canvas.clientHeight * pixelRatio
 
-//   if (w !== canvas.width || h !== canvas.height) {
-//     const imgData: object = ctx.getImageData(0, 0, canvas.width, canvas.height)
+  if (w !== canvas.width || h !== canvas.height) {
+    const imgData: object = ctx.getImageData(0, 0, canvas.width, canvas.height)
 
-//     canvas.width = w
-//     canvas.height = h
+    canvas.width = w
+    canvas.height = h
 
-//     ctx.putImageData(imgData, 0, 0)
-//   }
-//   ctx.scale(pixelRatio, pixelRatio)
+    ctx.putImageData(imgData, 0, 0)
+  }
+  ctx.scale(pixelRatio, pixelRatio)
 
-//   ctx.lineWidth = 5
-//   ctx.lineJoin = 'round'
-//   ctx.lineCap = 'round'
-// }
+  ctx.lineWidth = 5
+  ctx.lineJoin = 'round'
+  ctx.lineCap = 'round'
+}
 
-// export const position = (event: any) => {
-//   return [
-//     event.pageX - canvas.offsetLeft,
-//     event.pageY - canvas.offsetTop
-//   ]
-// }
+export const position = (event: any, canvas: HTMLCanvasElement = new HTMLCanvasElement()) => {
+  return [
+    event.pageX - canvas.offsetLeft,
+    event.pageY - canvas.offsetTop
+  ]
+}
 
 // export const setupCanvas = () => {
 //   resize()

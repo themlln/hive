@@ -29,9 +29,3 @@ canvas {
   height: 100%;
 }
 
-canvas {
-  border: 2px solid coral;
-}
-div#app {
-  border: 2px solid green;
-}
