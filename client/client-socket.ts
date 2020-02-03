@@ -1,4 +1,4 @@
-import { draw, events } from './whiteboard-utilities'
+import { Canvas, events } from './components/canvas'
 import * as createClientSocket from 'socket.io-client'
 
 const clientSocket: any = createClientSocket(window.location.origin)
@@ -10,11 +10,11 @@ clientSocket.on('connect', () => {
 })
 
 clientSocket.on('replay-drawing', (instructions: any) => {
-  instructions.forEach((instruction: any) => draw(...instruction, false))
+  instructions.forEach((instruction: any) => Canvas.prototype.draw(...instruction, false))
 })
 
 clientSocket.on('draw-from-server', (start: any, end: any, color: string) => {
-  draw(start, end, color, false);
+  Canvas.prototype.draw(start, end, color, false);
 })
 
 events.on('draw', (start: any, end: any, color: string) => {

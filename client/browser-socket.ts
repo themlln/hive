@@ -1,5 +1,5 @@
 import * as io from 'socket.io-client'
-import { draw, events } from './whiteboard-utilities'
+import { Canvas, events } from './components/canvas'
 
 const socket = io(window.location.origin)
 
@@ -10,12 +10,12 @@ socket.on('connect', () => {
 socket.on('load', (strokes: any) => {
   strokes.forEach((stroke: any) => {
     const { start, end, color } = stroke
-    draw(start, end, color, false)
+    Canvas.prototype.draw(start, end, color, false)
   })
 })
 
 socket.on('draw', (start: any, end: any, color: string) => {
-  draw(start, end, color, false)
+  Canvas.prototype.draw(start, end, color, false)
 })
 
 events.on('draw', (start: any, end: any, color: string) => {
