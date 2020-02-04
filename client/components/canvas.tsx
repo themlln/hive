@@ -37,9 +37,7 @@ export class Canvas extends React.Component <{}, State> {
     //   clientSocket.emit('draw', start, end, color)
     // })
 
-    clientSocket.on('replay-drawing', (instructions: any) => {
-      instructions.forEach((instruction: any) => this.draw(...instruction, false))
-    })
+
     
     clientSocket.on('draw-from-server', (start: [number, number], end: [number, number], color: string) => {
       this.draw(start, end, color, false);
@@ -104,6 +102,8 @@ export class Canvas extends React.Component <{}, State> {
 
   handleMouseDown(event) {
     currentMousePosition = this.position(event)
+    console.log("WHAT IS THE COUNTER?!", this.state.counter)
+
   }
 
   handleMouseMove(event) {
@@ -115,12 +115,12 @@ export class Canvas extends React.Component <{}, State> {
 
   componentDidMount() {
     this.handleResize()
-    this.setState({counter: this.state.counter + 1})
+    this.setState({counter: 2})
 
     clientSocket.on('replay-drawing', (instructions: any) => {
+      console.log("INSTRUCTIONS RECEIVED!!!!")
       instructions.forEach((instruction: any) => this.draw(...instruction, false))
     })
-
   }
 
   public render() {
