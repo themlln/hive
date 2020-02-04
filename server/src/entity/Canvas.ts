@@ -1,3 +1,4 @@
+import "reflect-metadata";
 import {Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany, ManyToOne} from "typeorm";
 import { SharedCanvas } from "./SharedCanvas";
 import { User } from "./User";
