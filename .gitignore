@@ -1,7 +1,13 @@
 node_modules
 public/bundle.js
 public/bundle.js.map
-secrets.js
+secrets.ts
 .DS_Store
 npm-debug.log
 yarn-error.log
+server/ormconfig.env
+server/.idea/
+server/.vscode/
+server/build/
+server/tmp/
+server/temp/
