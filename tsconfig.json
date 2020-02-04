@@ -20,5 +20,5 @@
       "experimentalDecorators": true
    },
    "exclude": ["node_modules"],
-   "include": ["server/src/**/*.tsx", "server/src/**/*.ts"]
+   "include": ["typeORM-server/src/**/*.tsx", "typeORM-server/src/**/*.ts"]
 }
