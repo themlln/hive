@@ -20,7 +20,7 @@
     "seed:generate": "ts-node typeorm migration:generate -c seed -n ",
     "seed:run": "ts-node typeorm migration:run -c seed",
     "seed:revert": "ts-node typeorm migration:revert -c seed",
-    "start": "ts-node src/index.ts",
+    "start": "ts-node server/src/index.ts",
     "start-dev": "NODE_ENV='development' npm run build-client-watch & NODE_ENV='development' npm run start-server",
     "start-server": "ts-node-dev server/index.ts",
     "test": "NODE_ENV='test' mocha \"./server/**/*.spec.js\" \"./client/**/*.spec.js\" \"./script/**/*.spec.js\" "
