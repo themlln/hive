@@ -1,4 +1,9 @@
 {
+  "type": "postgres",
+  "host": "collaboard.cj1lr373zea1.us-east-2.rds.amazonaws.com",
+  "username": "lizzo",
+  "password": "rdVPHv3J35255Fki4xQ8",
+  "database": "collabo",
   "port": 5432,
   "logging": false,
   "synchronize": true,

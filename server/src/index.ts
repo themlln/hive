@@ -5,14 +5,7 @@ import {Canvas} from "./entity/Canvas"
 import {Collaborators} from "./entity/Collaborator"
 import '../../secrets'
 
-createConnection({
-  type: "postgres",
-  host: process.env.TYPEORM_HOST,
-  username: process.env.TYPEORM_USERNAME,
-  password: process.env.TYPEORM_PASSWORD,
-  database: process.env.TYPEORM_DATABASE,
-  port: 5432
-}).then(async connection => {
+createConnection().then(async connection => {
 
     console.log("Inserting a new user into the database...");
     const user = new User();
@@ -54,6 +47,6 @@ createConnection({
     console.log("Loaded users: ", users);
     console.log("Loaded canvases: ", canvases);
 
-    console.log("Connection has been established gloriously.");
+    console.log("Connection has been established gloriously by Mizzo.");
 
-}).catch(error => console.log("Unable to connect to the database:", error));
+}).catch(error => console.log("Unable to connect Mingo to the database:", error));
