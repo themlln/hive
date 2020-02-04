@@ -3,10 +3,10 @@ import { User } from "./User";
 import { Canvas } from './Canvas'
 
 @Entity()
-export class SharedCanvas {
+export class Collaborators {
 
     @PrimaryGeneratedColumn()
-    userToCanvasId: number;
+    sharedId: number;
 
     @Column()
     userId: number;

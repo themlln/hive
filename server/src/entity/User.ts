@@ -1,8 +1,7 @@
-import "reflect-metadata";
-import {Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany, ManyToOne} from "typeorm";
+import {Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany} from "typeorm";
 import {IsEmail} from 'class-validator'
 import {Canvas} from './Canvas'
-import {SharedCanvas} from './SharedCanvas'
+import {Collaborators} from './Collaborator'
 
 @Entity()
 export class User {
@@ -35,9 +34,6 @@ export class User {
     @OneToMany(type => Canvas, canvas => canvas.owner)
     canvas: Canvas[]
 
-    @ManyToOne(type => Canvas, collaboratorCanvas => collaboratorCanvas.collaborator)
-    collaboratorCanvas: Canvas
-
-    @OneToMany(type => SharedCanvas, sharedCanvas => sharedCanvas.userId)
-    sharedCanvas: SharedCanvas[];
+    @OneToMany(type => Collaborators, sharedCanvas => sharedCanvas.user)
+    sharedCanvas: Collaborators[];
 }
