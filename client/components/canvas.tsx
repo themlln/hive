@@ -9,17 +9,16 @@ export const drawingName: String = '/canvas'
 let currentMousePosition: any = {x: 0, y: 0}
 let lastMousePosition: any = {x: 0, y: 0}
 
+clientSocket.on('connect', () => {
+  console.log('Client-Socket: I have a made a persistent two-way connection!')
+  clientSocket.emit('join-drawing', drawingName)
+})
+
 interface State {
   // canvas: HTMLCanvasElement
   canvasRef: any,
   instructions: Array<any>
 }
-
-
-clientSocket.on('connect', () => {
-  console.log('Client-Socket: I have a made a persistent two-way connection!')
-  clientSocket.emit('join-drawing', drawingName)
-})
 
 export class Canvas extends React.Component <{}, State> {
   constructor(props) {
@@ -33,7 +32,6 @@ export class Canvas extends React.Component <{}, State> {
     this.handleMouseMove = this.handleMouseMove.bind(this)
     this.handleMouseDown = this.handleMouseDown.bind(this)
     this.handleResize = this.handleResize.bind(this)
-    this.load = this.load.bind(this)
     this.draw = this.draw.bind(this)
   }
 
@@ -97,25 +95,20 @@ export class Canvas extends React.Component <{}, State> {
     lastMousePosition && currentMousePosition && this.draw(lastMousePosition, currentMousePosition, 'black', true)
   }
 
-  load() {
-    this.state.instructions.forEach((instruction: any) => this.draw(...instruction, false))
-  }
-
   componentDidMount() {
     this.handleResize()
-
-
 
     clientSocket.on('replay-drawing', (instructions: any) => {
       console.log("INSTRUCTIONS RECEIVED!!!!", instructions)
       this.setState({instructions: instructions})
       instructions.forEach((instruction: any) => this.draw(...instruction, false))
     })
-    this.load()
-
     clientSocket.on('draw-from-server', (start: [number, number], end: [number, number], color: string) => {
       this.draw(start, end, color, false);
     })
+  }
+
+  componentDidUpdate(){
   }
 
   public render() {
