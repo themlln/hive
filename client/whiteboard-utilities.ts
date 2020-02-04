@@ -57,6 +57,7 @@
 //   resize()
 //   canvas.addEventListener('resize', resize)
 
+<<<<<<< HEAD
 //   canvas.addEventListener('mousedown', (event: any) => {
 //     console.log('EVENT - mousedown', event)
 //     currentMousePosition = position(event)
@@ -68,3 +69,27 @@
 //     lastMousePosition && currentMousePosition && draw(lastMousePosition, currentMousePosition, 'black', true)
 //   })
 // }
+||||||| merged common ancestors
+  canvas.addEventListener('mousedown', (event: any) => {
+    console.log('EVENT - mousedown', event)
+    currentMousePosition = position(event)
+  })
+  canvas.addEventListener('mousemove', (event: any) => {
+    if (!event.buttons) return
+    lastMousePosition = currentMousePosition
+    currentMousePosition = position(event)
+    lastMousePosition && currentMousePosition && draw(lastMousePosition, currentMousePosition, 'black', true)
+  })
+}
+=======
+  canvas.addEventListener('mousedown', (event: any) => {
+    currentMousePosition = position(event)
+  })
+  canvas.addEventListener('mousemove', (event: any) => {
+    if (!event.buttons) return
+    lastMousePosition = currentMousePosition
+    currentMousePosition = position(event)
+    lastMousePosition && currentMousePosition && draw(lastMousePosition, currentMousePosition, 'black', true)
+  })
+}
+>>>>>>> origin/pseudomaster
