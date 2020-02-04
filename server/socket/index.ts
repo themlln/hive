@@ -14,13 +14,14 @@ module.exports = io => {
 
     socket.on('join-drawing', (drawingName: any) => {
       socket.join(drawingName)
-      const drawing = getDrawing(drawingName)
-      socket.emit('replay-drawing', drawing)
+      const instructions = getDrawing(drawingName)
+      console.log(instructions)
+      socket.emit('replay-drawing', instructions)
     })
 
     socket.on('draw-from-client', (drawingName: any, start: [number, number], end: [number, number], color: string) => {
-      const drawing = getDrawing(drawingName)
-      drawing.push([start, end, color])
+      const instructions = getDrawing(drawingName)
+      instructions.push([start, end, color])
       socket.broadcast.to(drawingName).emit('draw-from-server', start, end, color)
     })
 

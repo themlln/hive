@@ -1,15 +1,13 @@
 import * as React from 'react'
-import {EventEmitter} from 'events'
-
-export const events: EventEmitter = new EventEmitter();
-
+import {clientSocket, drawingName} from '../client-socket'
 
 let currentMousePosition: any = {x: 0, y: 0}
 let lastMousePosition: any = {x: 0, y: 0}
 
 interface State {
   // canvas: HTMLCanvasElement
-  canvasRef: any
+  canvasRef: any, 
+  counter: number
 }
 
 export class Canvas extends React.Component <{}, State> {
@@ -17,10 +15,36 @@ export class Canvas extends React.Component <{}, State> {
     super(props)
 
     this.state = {
-      canvasRef: React.createRef()
+      canvasRef: React.createRef(), 
+      counter: 0
     }
 
-    this.setup = this.setup.bind(this)
+    // clientSocket.on('load', (strokes: any) => {
+    //   console.log('componentDidMount LoAd')
+    //   console.log('strokes', strokes)
+    //   strokes.forEach((stroke: any) => {
+    //     const { start, end, color } = stroke
+    //     this.draw(start, end, color, false)
+    //     console.log(stroke, "stroke")
+    //   })
+    // })
+    
+    // clientSocket.on('draw', (start: any, end: any, color: string) => {
+    //   this.draw(start, end, color, false)
+    // })
+    
+    // clientSocket.on('draw', (start: any, end: any, color: string) => {
+    //   clientSocket.emit('draw', start, end, color)
+    // })
+
+    clientSocket.on('replay-drawing', (instructions: any) => {
+      instructions.forEach((instruction: any) => this.draw(...instruction, false))
+    })
+    
+    clientSocket.on('draw-from-server', (start: [number, number], end: [number, number], color: string) => {
+      this.draw(start, end, color, false);
+    })
+
     this.handleMouseMove = this.handleMouseMove.bind(this)
     this.handleMouseDown = this.handleMouseDown.bind(this)
     this.handleResize = this.handleResize.bind(this)
@@ -44,7 +68,7 @@ export class Canvas extends React.Component <{}, State> {
     ctx.closePath()
     ctx.stroke()
 
-    shouldBroadcast && events.emit('draw', start, end, strokeColor)
+    shouldBroadcast && clientSocket.emit('draw-from-client', drawingName, start, end, strokeColor)
 }
 
   handleResize() {
@@ -89,15 +113,19 @@ export class Canvas extends React.Component <{}, State> {
     lastMousePosition && currentMousePosition && this.draw(lastMousePosition, currentMousePosition, 'black', true)
   }
 
-  setup() {
-    this.handleResize()
-  }
-
   componentDidMount() {
-    this.setup()
+    this.handleResize()
+    this.setState({counter: this.state.counter + 1})
+
+    clientSocket.on('replay-drawing', (instructions: any) => {
+      instructions.forEach((instruction: any) => this.draw(...instruction, false))
+    })
+
   }
 
   public render() {
+
+
     return (
       <>
         <button onClick={ () => this.draw([1,1], [100,100], 'black', true)}>Draw a Line!</button>

@@ -1,5 +1,4 @@
 // import {EventEmitter} from 'events'
-
 // export const events: EventEmitter = new EventEmitter();
 
 // export let currentMousePosition: any = {x: 0, y: 0}
@@ -47,12 +46,12 @@
 //   ctx.lineCap = 'round'
 // }
 
-export const position = (event: any, canvas: HTMLCanvasElement = new HTMLCanvasElement()) => {
-  return [
-    event.pageX - canvas.offsetLeft,
-    event.pageY - canvas.offsetTop
-  ]
-}
+// export const position = (event: any, canvas: HTMLCanvasElement = new HTMLCanvasElement()) => {
+//   return [
+//     event.pageX - canvas.offsetLeft,
+//     event.pageY - canvas.offsetTop
+//   ]
+// }
 
 // export const setupCanvas = () => {
 //   resize()
