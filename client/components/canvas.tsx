@@ -7,7 +7,7 @@ let lastMousePosition: any = {x: 0, y: 0}
 interface State {
   // canvas: HTMLCanvasElement
   canvasRef: any, 
-  counter: number
+  instructions: Array<any>
 }
 
 export class Canvas extends React.Component <{}, State> {
@@ -16,7 +16,7 @@ export class Canvas extends React.Component <{}, State> {
 
     this.state = {
       canvasRef: React.createRef(), 
-      counter: 0
+      instructions: []
     }
 
     // clientSocket.on('load', (strokes: any) => {
@@ -38,14 +38,16 @@ export class Canvas extends React.Component <{}, State> {
     // })
 
 
-    
-    clientSocket.on('draw-from-server', (start: [number, number], end: [number, number], color: string) => {
-      this.draw(start, end, color, false);
+    clientSocket.on('replay-drawing', (instructions: any) => {
+      console.log("INSTRUCTIONS RECEIVED!!!!", instructions)
+      this.setState({instructions: instructions})
+      // instructions.forEach((instruction: any) => this.draw(...instruction, false))
     })
 
     this.handleMouseMove = this.handleMouseMove.bind(this)
     this.handleMouseDown = this.handleMouseDown.bind(this)
     this.handleResize = this.handleResize.bind(this)
+    this.load = this.load.bind(this)
     this.draw = this.draw.bind(this)
   }
 
@@ -102,8 +104,6 @@ export class Canvas extends React.Component <{}, State> {
 
   handleMouseDown(event) {
     currentMousePosition = this.position(event)
-    console.log("WHAT IS THE COUNTER?!", this.state.counter)
-
   }
 
   handleMouseMove(event) {
@@ -113,13 +113,19 @@ export class Canvas extends React.Component <{}, State> {
     lastMousePosition && currentMousePosition && this.draw(lastMousePosition, currentMousePosition, 'black', true)
   }
 
+  load() {
+    console.log('is load running?')
+    console.log('load instructions', this.state.instructions)
+    this.state.instructions.forEach((instruction: any) => this.draw(...instruction, false))
+  }
+
   componentDidMount() {
     this.handleResize()
-    this.setState({counter: 2})
+    console.log('Is componentDidMount even running?')
+    this.load()
 
-    clientSocket.on('replay-drawing', (instructions: any) => {
-      console.log("INSTRUCTIONS RECEIVED!!!!")
-      instructions.forEach((instruction: any) => this.draw(...instruction, false))
+    clientSocket.on('draw-from-server', (start: [number, number], end: [number, number], color: string) => {
+      this.draw(start, end, color, false);
     })
   }
 
