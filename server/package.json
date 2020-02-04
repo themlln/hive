@@ -16,6 +16,9 @@
       "typeorm": "0.2.22"
    },
    "scripts": {
-      "start": "ts-node src/index.ts"
+      "start": "ts-node src/index.ts",
+      "seed:generate": "ts-node typeorm migration:generate -c seed -n ",
+      "seed:run": "ts-node typeorm migration:run -c seed",
+      "seed:revert": "ts-node typeorm migration:revert -c seed"
    }
 }
