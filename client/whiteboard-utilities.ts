@@ -2,7 +2,7 @@ import {EventEmitter} from 'events'
 
 export const events: EventEmitter = new EventEmitter();
 export const canvas: HTMLCanvasElement = document.createElement('canvas')
-export const ctx: any = canvas.getContext('2d')
+const ctx: any = canvas.getContext('2d')
 
 export let currentMousePosition: any = {x: 0, y: 0}
 export let lastMousePosition: any = {x: 0, y: 0}
@@ -52,7 +52,6 @@ export const setupCanvas = () => {
   canvas.addEventListener('resize', resize)
 
   canvas.addEventListener('mousedown', (event: any) => {
-    console.log('EVENT - mousedown', event)
     currentMousePosition = position(event)
   })
   canvas.addEventListener('mousemove', (event: any) => {
