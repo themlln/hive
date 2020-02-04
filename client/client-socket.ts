@@ -1,16 +1,13 @@
 // import { Canvas, events } from './components/canvas'
-import * as createClientSocket from 'socket.io-client'
+// import * as createClientSocket from 'socket.io-client'
 
-export const clientSocket: any = createClientSocket(window.location.origin)
-export const drawingName: any = window.location.pathname
+// export const clientSocket: any = createClientSocket(window.location.origin)
+// export const drawingName: String = '/canvas'
 
-
-console.log('pathname', drawingName)
-
-clientSocket.on('connect', () => {
-  console.log('Client-Socket: I have a made a persistent two-way connection!')
-  clientSocket.emit('join-drawing', drawingName)
-})
+// clientSocket.on('connect', () => {
+//   console.log('Client-Socket: I have a made a persistent two-way connection!')
+//   clientSocket.emit('join-drawing', drawingName)
+// })
 
 // clientSocket.on('replay-drawing', (instructions: any) => {
 //   instructions.forEach((instruction: any) => Canvas.prototype.draw(...instruction, false))

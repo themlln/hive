@@ -1,48 +1,34 @@
 import * as React from 'react'
-import {clientSocket, drawingName} from '../client-socket'
+
+import * as createClientSocket from 'socket.io-client'
+
+export const clientSocket: any = createClientSocket(window.location.origin)
+export const drawingName: String = '/canvas'
+
 
 let currentMousePosition: any = {x: 0, y: 0}
 let lastMousePosition: any = {x: 0, y: 0}
 
 interface State {
   // canvas: HTMLCanvasElement
-  canvasRef: any, 
+  canvasRef: any,
   instructions: Array<any>
 }
+
+
+clientSocket.on('connect', () => {
+  console.log('Client-Socket: I have a made a persistent two-way connection!')
+  clientSocket.emit('join-drawing', drawingName)
+})
 
 export class Canvas extends React.Component <{}, State> {
   constructor(props) {
     super(props)
 
     this.state = {
-      canvasRef: React.createRef(), 
+      canvasRef: React.createRef(),
       instructions: []
     }
-
-    // clientSocket.on('load', (strokes: any) => {
-    //   console.log('componentDidMount LoAd')
-    //   console.log('strokes', strokes)
-    //   strokes.forEach((stroke: any) => {
-    //     const { start, end, color } = stroke
-    //     this.draw(start, end, color, false)
-    //     console.log(stroke, "stroke")
-    //   })
-    // })
-    
-    // clientSocket.on('draw', (start: any, end: any, color: string) => {
-    //   this.draw(start, end, color, false)
-    // })
-    
-    // clientSocket.on('draw', (start: any, end: any, color: string) => {
-    //   clientSocket.emit('draw', start, end, color)
-    // })
-
-
-    clientSocket.on('replay-drawing', (instructions: any) => {
-      console.log("INSTRUCTIONS RECEIVED!!!!", instructions)
-      this.setState({instructions: instructions})
-      // instructions.forEach((instruction: any) => this.draw(...instruction, false))
-    })
 
     this.handleMouseMove = this.handleMouseMove.bind(this)
     this.handleMouseDown = this.handleMouseDown.bind(this)
@@ -57,10 +43,8 @@ export class Canvas extends React.Component <{}, State> {
     strokeColor: string = 'black',
     shouldBroadcast: boolean = true,
   ) {
-    
+
     const ctx: any = this.state.canvasRef.current.getContext('2d')
-
-
     ctx.beginPath()
     ctx.strokeStyle = strokeColor
     ctx.moveTo(start[0], start[1])
@@ -76,20 +60,20 @@ export class Canvas extends React.Component <{}, State> {
     const ctx: any = canvas.getContext('2d')
     ctx.setTransform(1, 0, 0, 1, 0, 0)
     const pixelRatio: number = window.devicePixelRatio || 1
-  
+
     const w: number = canvas.clientWidth * pixelRatio
     const h: number = canvas.clientHeight * pixelRatio
-  
+
     if (w !== canvas.width || h !== canvas.height) {
       const imgData: object = ctx.getImageData(0, 0, canvas.width, canvas.height)
-  
+
       canvas.width = w
       canvas.height = h
-  
+
       ctx.putImageData(imgData, 0, 0)
     }
     ctx.scale(pixelRatio, pixelRatio)
-  
+
     ctx.lineWidth = 5
     ctx.lineJoin = 'round'
     ctx.lineCap = 'round'
@@ -97,7 +81,7 @@ export class Canvas extends React.Component <{}, State> {
 
   position(event) {
     return [
-      event.pageX - this.state.canvasRef.current.offsetLeft, 
+      event.pageX - this.state.canvasRef.current.offsetLeft,
       event.pageY - this.state.canvasRef.current.offsetTop
     ]
   }
@@ -114,14 +98,19 @@ export class Canvas extends React.Component <{}, State> {
   }
 
   load() {
-    console.log('is load running?')
-    console.log('load instructions', this.state.instructions)
     this.state.instructions.forEach((instruction: any) => this.draw(...instruction, false))
   }
 
   componentDidMount() {
     this.handleResize()
-    console.log('Is componentDidMount even running?')
+
+
+
+    clientSocket.on('replay-drawing', (instructions: any) => {
+      console.log("INSTRUCTIONS RECEIVED!!!!", instructions)
+      this.setState({instructions: instructions})
+      instructions.forEach((instruction: any) => this.draw(...instruction, false))
+    })
     this.load()
 
     clientSocket.on('draw-from-server', (start: [number, number], end: [number, number], color: string) => {
@@ -131,10 +120,11 @@ export class Canvas extends React.Component <{}, State> {
 
   public render() {
 
-
+    console.log("CANVAS REF***", this.state.canvasRef)
     return (
       <>
         <button onClick={ () => this.draw([1,1], [100,100], 'black', true)}>Draw a Line!</button>
+
         <canvas
           ref={this.state.canvasRef}
           onMouseDown={this.handleMouseDown}
