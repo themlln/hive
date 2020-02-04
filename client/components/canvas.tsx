@@ -15,7 +15,6 @@ clientSocket.on('connect', () => {
 })
 
 interface State {
-  // canvas: HTMLCanvasElement
   canvasRef: any,
   instructions: Array<any>
 }
@@ -99,7 +98,6 @@ export class Canvas extends React.Component <{}, State> {
     this.handleResize()
 
     clientSocket.on('replay-drawing', (instructions: any) => {
-      console.log("INSTRUCTIONS RECEIVED!!!!", instructions)
       this.setState({instructions: instructions})
       instructions.forEach((instruction: any) => this.draw(...instruction, false))
     })
@@ -112,8 +110,6 @@ export class Canvas extends React.Component <{}, State> {
   }
 
   public render() {
-
-    console.log("CANVAS REF***", this.state.canvasRef)
     return (
       <>
         <button onClick={ () => this.draw([1,1], [100,100], 'black', true)}>Draw a Line!</button>
