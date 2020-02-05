@@ -1,9 +1,11 @@
+
 import * as React from 'react'
 
 /**
  * ACTION TYPES
  */
  const UPDATE_TOOL = 'UPDATE_TOOL'
+ const UPDATE_COLOR = 'UPDATE_COLOR'
 
 
  //TYPES OF ACTION TYPES
@@ -12,7 +14,12 @@ import * as React from 'react'
    tool: string
  }
 
- type PanelActionTypes = UpdateToolAction
+ interface UpdateColorAction {
+   type: typeof UPDATE_COLOR
+   color: string
+ }
+
+ type PanelActionTypes = UpdateToolAction | UpdateColorAction
  /**
  * INITIAL STATE
  */
@@ -37,13 +44,19 @@ const initialState: Panel = {
  * ACTION CREATORS
  */
 
- export function updateTool(tool:string): UpdateToolAction {
+ export function updateTool(tool:string): PanelActionTypes {
    return {
      type: UPDATE_TOOL,
      tool
    }
  }
 
+ export function updateColor(color:string): PanelActionTypes {
+   return {
+     type: UPDATE_COLOR,
+     color
+   }
+ }
  /**
  * THUNK CREATORS
  */
@@ -56,12 +69,17 @@ const initialState: Panel = {
  export default function panelReducer(
    state=initialState,
    action: PanelActionTypes
-   ) : Panel {
+   ): Panel {
      switch(action.type) {
        case UPDATE_TOOL:
         return {
           ...state,
           tool: action.tool
+        }
+       case UPDATE_COLOR:
+        return {
+          ...state,
+          color: action.color
         }
        default:
         return state
