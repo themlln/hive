@@ -1,22 +1,35 @@
-const path = require('path')
-const express = require('express')
-const morgan = require('morgan')
-const compression = require('compression')
-const session = require('express-session')
-const passport = require('passport')
-const SequelizeStore = require('connect-session-sequelize')(session.Store)
-const db = require('./db')
-const sessionStore = new SequelizeStore({db})
+import * as morgan from 'morgan'
+import * as path from 'path'
+import * as express from 'express'
+import * as compression from 'compression'
+
+import { getConnection, createConnection } from 'typeorm'
+import 'reflect-metadata'
+import { TypeormStore } from 'typeorm-store'
+import { Session } from './entity/session'
+// require('./db')
+
+import * as session from 'express-session'
+import * as passport from 'passport'
+import * as socketio from 'socket.io'
+
+// const SequelizeStore = require('connect-session-sequelize')(session.Store)
+// const db = require('./db')
+// const sessionStore = new SequelizeStore({db})
+
 const PORT = process.env.PORT || 8080
 const app = express()
-const socketio = require('socket.io')
 module.exports = app
 
 // This is a global Mocha hook, used for resource cleanup.
 // Otherwise, Mocha v4+ never quits after tests.
-if (process.env.NODE_ENV === 'test') {
-  after('close the session store', () => sessionStore.stopExpiringSessions())
-}
+// console.log("db****", db);
+const repository = getConnection().getRepository(Session);
+console.log("***repository***", repository);
+
+// if (process.env.NODE_ENV === 'test') {
+//   after('close the session store', () => sessionStore.stopExpiringSessions())
+// }
 
 /**
  * In your development environment, you can keep all of your
@@ -26,7 +39,7 @@ if (process.env.NODE_ENV === 'test') {
  * keys as environment variables, so that they can still be read by the
  * Node process on process.env
  */
-if (process.env.NODE_ENV !== 'production') require('../secrets')
+// if (process.env.NODE_ENV !== 'production') require('../secrets')
 
 // passport registration
 passport.serializeUser((user, done) => done(null, user.id))
@@ -46,7 +59,7 @@ const createApp = () => {
 
   // body parsing middleware
   app.use(express.json())
-  app.use(express.urlencoded({extended: true}))
+  app.use(express.urlencoded({ extended: true }))
 
   // compression middleware
   app.use(compression())
@@ -55,7 +68,7 @@ const createApp = () => {
   app.use(
     session({
       secret: process.env.SESSION_SECRET || 'my best friend is Cody',
-      store: sessionStore,
+      store: new TypeormStore({repository}),
       resave: false,
       saveUninitialized: false
     })
@@ -105,13 +118,15 @@ const startListening = () => {
   require('./socket')(io)
 }
 
-const syncDb = () => db.sync()
+// const syncDb = () => db.sync()
 
 async function bootApp() {
-  await sessionStore.sync()
-  await syncDb()
+  // await sessionStore.sync()
   await createApp()
+  await createConnection()
   await startListening()
+
+
 }
 // This evaluates as true when this file is run directly from the command line,
 // i.e. when we say 'node server/index.js' (or 'nodemon server/index.js', or 'nodemon server', etc)
