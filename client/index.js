@@ -6,10 +6,6 @@ import history from './history'
 import store from './store'
 import App from './app'
 
-// establishes socket connection
-import './browser-socket.ts'
-import './client-socket.ts'
-
 ReactDOM.render(
   <Provider store={store}>
     <Router history={history}>

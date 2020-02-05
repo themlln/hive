@@ -1,26 +1,26 @@
 import * as React from 'react'
-import {draw, setupCanvas, canvas} from '../whiteboard-utilities'
 
-export class Whiteboard extends React.Component<{}, {}> {
-  constructor() {
-    super()
-    this.setup = this.setup.bind(this)
-  }
+interface State {
+    
+}
 
-  setup() {
-    document.body.appendChild(canvas)
-    setupCanvas()
-  }
+export class Whiteboard extends React.Component < {}, {} > {
+    constructor(props) {
+        super(props)
 
-  componentDidMount() {
-    this.setup()
-  }
+        this.state = {
 
-  public render() {
-    return (
-      <>
-        <button onClick={ () => draw([1,1], [100,100], 'black', true)}>Draw a Line!</button>
-      </>
-    )
-  }
+        }
+    }
+
+    componentDidMount() {
+        
+    }
+
+    public render() {
+        return (
+        <>
+        </>
+        )
+    }
 }

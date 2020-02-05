@@ -14,9 +14,8 @@ module.exports = io => {
 
     socket.on('join-drawing', (drawingName: any) => {
       socket.join(drawingName)
-      const drawing = getDrawing(drawingName)
-      console.log('DRAWING --> ', drawing)
-      socket.emit('replay-drawing', drawing)
+      const instructions = getDrawing(drawingName)
+      socket.emit('replay-drawing', instructions)
     })
 
     socket.on('draw-from-client', (drawingName: any, start: [number, number], end: [number, number], color: string) => {
