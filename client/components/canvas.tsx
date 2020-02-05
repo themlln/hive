@@ -1,7 +1,7 @@
 import * as React from 'react'
 
 import * as createClientSocket from 'socket.io-client'
-
+import { connect } from 'react-redux'
 export const clientSocket: any = createClientSocket(window.location.origin)
 export const drawingName: String = '/canvas'
 
@@ -19,7 +19,7 @@ interface State {
   instructions: Array<any>
 }
 
-export class Canvas extends React.Component <{}, State> {
+class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, State> {
   constructor(props) {
     super(props)
 
@@ -31,17 +31,22 @@ export class Canvas extends React.Component <{}, State> {
     this.handleMouseMove = this.handleMouseMove.bind(this)
     this.handleMouseDown = this.handleMouseDown.bind(this)
     this.handleResize = this.handleResize.bind(this)
-    this.draw = this.draw.bind(this)
+    this.drawErase = this.drawErase.bind(this)
   }
 
-  draw (
+  drawErase (
     start: any = [0,0],
     end: any = [0,0],
     strokeColor: string = 'black',
     shouldBroadcast: boolean = true,
   ) {
-
     const ctx: any = this.state.canvasRef.current.getContext('2d')
+    if(this.props.tool === 'erase') {
+      strokeColor = 'white'
+      ctx.lineWidth = 10
+    } else {
+      ctx.lineWidth = this.props.strokeWidth
+    }
     ctx.beginPath()
     ctx.strokeStyle = strokeColor
     ctx.moveTo(start[0], start[1])
@@ -91,7 +96,7 @@ export class Canvas extends React.Component <{}, State> {
     if (!event.buttons) return
     lastMousePosition = currentMousePosition
     currentMousePosition = this.position(event)
-    lastMousePosition && currentMousePosition && this.draw(lastMousePosition, currentMousePosition, 'black', true)
+    lastMousePosition && currentMousePosition && this.drawErase(lastMousePosition, currentMousePosition, 'black', true)
   }
 
   componentDidMount() {
@@ -99,10 +104,10 @@ export class Canvas extends React.Component <{}, State> {
 
     clientSocket.on('replay-drawing', (instructions: any) => {
       this.setState({instructions: instructions})
-      instructions.forEach((instruction: any) => this.draw(...instruction, false))
+      instructions.forEach((instruction: any) => this.drawErase(...instruction, false))
     })
     clientSocket.on('draw-from-server', (start: [number, number], end: [number, number], color: string) => {
-      this.draw(start, end, color, false);
+      this.drawErase(start, end, color, false);
     })
   }
 
@@ -112,7 +117,7 @@ export class Canvas extends React.Component <{}, State> {
   public render() {
     return (
       <>
-        <button onClick={ () => this.draw([1,1], [100,100], 'black', true)}>Draw a Line!</button>
+        <button onClick={ () => this.drawErase([1,1], [100,100], 'black', true)}>Draw a Line!</button>
 
         <canvas
           ref={this.state.canvasRef}
@@ -123,3 +128,37 @@ export class Canvas extends React.Component <{}, State> {
     )
   }
 }
+
+//INTERFACE
+
+interface CanvasStateProps {
+    tool: string
+    color: string
+    strokeWidth: number
+    canvasRef: any
+    instructions: Array<any>
+}
+
+interface CanvasDispatchProps {
+
+}
+
+
+const mapStateToProps = (state: any): CanvasStateProps => {
+  return {
+    tool: state.panel.tool,
+    color: state.panel.color,
+    strokeWidth: state.panel.strokeWidth,
+    canvasRef: state.panel.canvasRef,
+    instructions: state.panel.instruction,
+  }
+}
+
+const mapDispatchToProps = (dispatch: any): CanvasDispatchProps => {
+  return {
+  }
+}
+
+const connectCanvas = connect(mapStateToProps, mapDispatchToProps)(Canvas)
+
+export default connectCanvas
