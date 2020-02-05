@@ -19,8 +19,8 @@ module.exports = io => {
     })
 
     socket.on('draw-from-client', (drawingName: any, start: [number, number], end: [number, number], color: string) => {
-      const instructions = getDrawing(drawingName)
-      instructions.push([start, end, color])
+      const drawing = getDrawing(drawingName)
+      drawing.push([start, end, color])
       socket.broadcast.to(drawingName).emit('draw-from-server', start, end, color)
     })
 
