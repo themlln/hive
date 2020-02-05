@@ -96,7 +96,7 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
     if (!event.buttons) return
     lastMousePosition = currentMousePosition
     currentMousePosition = this.position(event)
-    lastMousePosition && currentMousePosition && this.drawErase(lastMousePosition, currentMousePosition, 'black', true)
+    lastMousePosition && currentMousePosition && this.drawErase(lastMousePosition, currentMousePosition, this.props.color, true)
   }
 
   componentDidMount() {
