@@ -14,13 +14,13 @@ export class User {
     @IsEmail()
     email: string;
 
-    @Column()
+    @Column({select: false})
     password: string;
 
-    @Column({nullable: true})
+    @Column({select: false, nullable: true})
     private tempPassword: string;
 
-    @Column({nullable: true})
+    @Column({select: false, nullable: true})
     salt: string;
 
     @Column({nullable: true})
@@ -43,17 +43,19 @@ export class User {
 
     @BeforeUpdate()
     @BeforeInsert()
-    static setSaltAndPassword = (instance: User): void => {
+    setSaltAndPassword = () => {
       console.log("setSALT & PASSWORD RUNNING NOW")
-      if (instance.tempPassword !== instance.password) {
-        instance.salt = User.generateSalt()
-        instance.password = User.encryptPassword(instance.password, instance.salt)
+      if (this.tempPassword !== this.password) {
+        this.salt = this.generateSalt()
+        this.password = this.encryptPassword(this.password, this.salt)
       }
     }
-    static generateSalt = function(): string {
+
+    generateSalt = function(): string {
         return crypto.randomBytes(16).toString('base64')
     }
-    static encryptPassword = function(plainText: string, salt: string): string {
+
+    encryptPassword = function(plainText: string, salt: string): string {
         console.log("ENCRYPTPASSWORD RUNNING", plainText, salt)
         return crypto
           .createHash('RSA-SHA256')
@@ -62,9 +64,10 @@ export class User {
           .digest('hex')
     }
 
-    // Instance Methods
-    correctPassword = function(candidatePwd: string) {
+    // Class Methods
+    static correctPassword = function(candidatePwd: string): Boolean {
       console.log("INSTANCE METHOD IS RUNNING")
-      return User.encryptPassword(candidatePwd, User.prototype.salt) === User.prototype.password
+      return this.encryptPassword(candidatePwd, this.salt) === User.prototype.password
     }
+
 }
