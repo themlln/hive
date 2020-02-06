@@ -1,6 +1,6 @@
 const drawings: object = {}
 
-const getDrawing = (drawingName: any) => {
+const getDrawing = (drawingName: String) => {
   if (!drawings[drawingName]) {
     drawings[drawingName] = []
   }

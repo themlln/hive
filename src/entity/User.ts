@@ -20,13 +20,13 @@ export class User {
     @Column({nullable: true})
     private tempPassword: string;
 
-    @Column()
+    @Column({nullable: true})
     salt: string;
 
-    @Column()
+    @Column({nullable: true})
     sessionId: string;
 
-    @Column()
+    @Column({nullable: true})
     googleId: string;
 
     @CreateDateColumn()
