@@ -1,6 +1,6 @@
 const drawings: object = {}
 
-const getDrawing = (drawingName: any) => {
+const getDrawing = (drawingName: String) => {
   if (!drawings[drawingName]) {
     drawings[drawingName] = []
   }
@@ -18,10 +18,11 @@ module.exports = io => {
       socket.emit('replay-drawing', instructions)
     })
 
-    socket.on('draw-from-client', (drawingName: any, path: string) => {
+    socket.on('draw-from-client', (drawingName: any, start: array, end: array, color: string) => {
       const drawing = getDrawing(drawingName)
-      drawing.push([path])
-      socket.broadcast.to(drawingName).emit('draw-from-server', path)
+      const line = `M ${start[0]} ${start[1]} L ${end[0]} ${end[1]} z`
+      // drawing.push([start, end, color])
+      socket.broadcast.to(drawingName).emit('draw-from-server', line, color)
     })
 
     socket.on('disconnect', () => {

@@ -34,16 +34,17 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
 
     this.handleMouseMove = this.handleMouseMove.bind(this)
     this.handleMouseDown = this.handleMouseDown.bind(this)
-    // this.handleResize = this.handleResize.bind(this)
     this.drawErase = this.drawErase.bind(this)
   }
 
+
   drawErase (
+    start: any = [0,0],
+    end: any = [0,0],
     strokeColor: string = 'black',
     shouldBroadcast: boolean = true,
   ) {
     const canvas = this.state.canvas
-
     if(this.props.tool === 'erase'){
       strokeColor = 'white'
       canvas.freeDrawingBrush.width = 10;
@@ -51,30 +52,30 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
 
     canvas.freeDrawingBrush.color = strokeColor
     canvas.isDrawingMode = true
-    console.log(canvas, "THIS IS THE CANVASSS")
-    if (canvas._objects.length){
-      const indexlastObject = canvas._objects.length - 1
-      const paths = canvas._objects[indexlastObject].path
-      paths.forEach(path =>
-        shouldBroadcast && clientSocket.emit('draw-from-client', drawingName, JSON.stringify(path.join(' '))))
+    shouldBroadcast && clientSocket.emit('draw-from-client', drawingName, start, end, strokeColor)
     }
 
-
-      // const canvasStr = JSON.stringify(key)
-      // shouldBroadcast && clientSocket.emit('draw-from-client', drawingName, canvasStr)
-
-
-
-}
+  position(event) {
+    return [
+      event.pageX,
+      event.pageY
+    ]
+  }
 
   handleMouseDown(event) {
     console.log("MOUSE DOWNNNNN")
-    // currentMousePosition = this.position(event.e)
+    currentMousePosition = this.position(event.e)
   }
 
   handleMouseMove(event) {
-    this.drawErase(this.props.color, true)
+    lastMousePosition = currentMousePosition
+    currentMousePosition = this.position(event.e)
 
+    // console.log(lastMousePosition, 'LAST MOUSE POSITION')
+    // console.log(currentMousePosition, 'CURRENT POSITION')
+
+    // console.log(event, 'EVENT IN MOUSE MOVE')
+    lastMousePosition && currentMousePosition && this.drawErase(lastMousePosition, currentMousePosition, this.props.color, true)
   }
 
   componentDidMount() {
@@ -86,7 +87,6 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
     height: 500
   })
 
-  console.log(fabricCanvas, "FABRIC CANVAS")
   this.setState({
     canvas: fabricCanvas
   })
@@ -94,13 +94,10 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
       instructions.forEach(instruction => this.state.canvas.loadFromJSON(instruction, this.state.canvas.renderAll.bind(this.state.canvas)))
     })
 
-    clientSocket.on('draw-from-server', (path) => {
-      // this.state.canvas.clear()
-      let newPath = new fabric.Path(path)
-      this.state.canvas.add(newPath)
-
-      console.log('CANVAS STRINGGGG', path)
-      // this.drawErase(color, false);
+    clientSocket.on('draw-from-server', (line: string, color: string) => {
+      const path = new fabric.Path(line)
+      path.set({stroke: color})
+      this.state.canvas.add(path)
     })
 
 
@@ -119,6 +116,12 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
     return (
       <>
         <button onClick={ () => this.drawErase([1,1], [100,100], 'black', true)}>Draw a Line!</button>
+        <button onClick={ () => {
+          const path = new fabric.Path('M 1 1 L 100 100')
+          path.set({stroke: 'pink'})
+
+          this.state.canvas.add(path)
+        }}>TESTINGG</button>
 
         <canvas
           ref={this.state.canvasRef}
