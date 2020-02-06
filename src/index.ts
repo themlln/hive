@@ -3,7 +3,7 @@ import * as path from 'path'
 import * as express from 'express'
 import * as compression from 'compression'
 
-import { getConnection, createConnection, getManager, getRepository } from 'typeorm'
+import { createConnection, Connection, Repository } from 'typeorm'
 import 'reflect-metadata'
 import { TypeormStore } from 'typeorm-store'
 import { User } from './entity/User'
@@ -27,27 +27,12 @@ module.exports = app
 
 /**
  * In your development environment, you can keep all of your
- * app's secret API keys in a file called `secrets.js`, in your project
- * root. This file is included in the .gitignore - it will NOT be tracked
- * or show up on Github. On your production server, you can add these
- * keys as environment variables, so that they can still be read by the
- * Node process on process.env
+ * app's secret API keys in a file called `secrets.js`, in your project root. This file is included in the .gitignore - it will NOT be tracked
  */
 // if (process.env.NODE_ENV !== 'production') require('../secrets')
 
-// passport registration
-// passport.serializeUser((user, done) => done(null, user.id))
 
-// passport.deserializeUser(async (id, done) => {
-//   try {
-//     const user = await userRepository.find({ where: {id: id}})
-//     done(null, user)
-//   } catch (err) {
-//     done(err)
-//   }
-// })
-
-const createApp = () => {
+const createApp = (sessionRepository: Repository<Session>) => {
   // logging middleware
   app.use(morgan('dev'))
 
@@ -59,16 +44,16 @@ const createApp = () => {
   app.use(compression())
 
   // session middleware with passport
-  // app.use(
-  //   session({
-  //     secret: process.env.SESSION_SECRET || 'my best friend is Cody',
-  //     store: new TypeormStore({repository}),
-  //     resave: false,
-  //     saveUninitialized: false
-  //   })
-  // // )
-  // app.use(passport.initialize())
-  // app.use(passport.session())
+  app.use(
+    session({
+      secret: process.env.SESSION_SECRET || 'my best friend is Cody',
+      store: new TypeormStore({ repository: sessionRepository }),
+      resave: false,
+      saveUninitialized: false
+    })
+  )
+  app.use(passport.initialize())
+  app.use(passport.session())
 
   // auth and api routes
   app.use('/auth', require('./auth'))
@@ -112,31 +97,39 @@ const startListening = () => {
   require('./socket')(io)
 }
 
-// const syncDb = () => db.sync()
 
 async function bootApp() {
   try {
-    await createConnection()
+    const connection: Connection = await createConnection()
     console.log("connection created to database")
-    await createApp()
+    const userRepository = connection.getRepository(User);
+    const sessionRepository = connection.getRepository(Session);
+
+    //passport registration
+    passport.serializeUser((user, done) => done(null, user.id))
+
+    passport.deserializeUser(async (id, done) => {
+      try {
+        const user = await userRepository.find({ where: { id: id } })
+        done(null, user)
+      } catch (err) {
+        done(err)
+      }
+    })
+
+    await createApp(sessionRepository)
     await startListening()
-  } catch(err) {
+  } catch (err) {
     console.error(err)
   }
-  // await sessionStore.sync()
-
-
 }
 // This evaluates as true when this file is run directly from the command line,
-// i.e. when we say 'node server/index.js' (or 'nodemon server/index.js', or 'nodemon server', etc)
-// It will evaluate false when this module is required by another module - for example,
-// if we wanted to require our app in a test spec
-if (require.main === module) {
-  bootApp()
-} else {
-  createApp()
-}
+// i.e. 'node server/index.js' (or 'nodemon server/index.js', or 'nodemon server', etc)
+// This will evaluate false when this module is required by another module - for example, in a test spec
+// if (require.main === module) {
+//   bootApp()
+// } else {
+//   createApp()
+// }
 
-
-// const connection = getConnection()
-// console.log("***repository***", connection);
+bootApp();
