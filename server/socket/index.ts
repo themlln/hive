@@ -18,10 +18,10 @@ module.exports = io => {
       socket.emit('replay-drawing', instructions)
     })
 
-    socket.on('draw-from-client', (drawingName: any, start: [number, number], end: [number, number], color: string) => {
+    socket.on('draw-from-client', (drawingName: any, path: string) => {
       const drawing = getDrawing(drawingName)
-      drawing.push([start, end, color])
-      socket.broadcast.to(drawingName).emit('draw-from-server', start, end, color)
+      drawing.push([path])
+      socket.broadcast.to(drawingName).emit('draw-from-server', path)
     })
 
     socket.on('disconnect', () => {
