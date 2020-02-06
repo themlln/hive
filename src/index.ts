@@ -8,30 +8,19 @@ import 'reflect-metadata'
 import { TypeormStore } from 'typeorm-store'
 import { User } from './entity/User'
 import { Session } from './entity/Session'
-// require('./db')
-
 
 
 import * as session from 'express-session'
 import * as passport from 'passport'
 import * as socketio from 'socket.io'
 
-// const SequelizeStore = require('connect-session-sequelize')(session.Store)
-// const db = require('./db')
-// const sessionStore = new SequelizeStore({db})
-
 const PORT = process.env.PORT || 8080
 const app = express()
 module.exports = app
 
+
 // This is a global Mocha hook, used for resource cleanup.
 // Otherwise, Mocha v4+ never quits after tests.
-// console.log("db****", db);
-const repository = getConnection().getRepository(Session);
-console.log("***repository***", repository);
-const userRepository = getRepository(User)
-
-
 // if (process.env.NODE_ENV === 'test') {
 //   after('close the session store', () => sessionStore.stopExpiringSessions())
 // }
@@ -47,16 +36,16 @@ const userRepository = getRepository(User)
 // if (process.env.NODE_ENV !== 'production') require('../secrets')
 
 // passport registration
-passport.serializeUser((user, done) => done(null, user.id))
+// passport.serializeUser((user, done) => done(null, user.id))
 
-passport.deserializeUser(async (id, done) => {
-  try {
-    const user = await userRepository.find({ where: {id: id}})
-    done(null, user)
-  } catch (err) {
-    done(err)
-  }
-})
+// passport.deserializeUser(async (id, done) => {
+//   try {
+//     const user = await userRepository.find({ where: {id: id}})
+//     done(null, user)
+//   } catch (err) {
+//     done(err)
+//   }
+// })
 
 const createApp = () => {
   // logging middleware
@@ -70,16 +59,16 @@ const createApp = () => {
   app.use(compression())
 
   // session middleware with passport
-  app.use(
-    session({
-      secret: process.env.SESSION_SECRET || 'my best friend is Cody',
-      store: new TypeormStore({repository}),
-      resave: false,
-      saveUninitialized: false
-    })
-  )
-  app.use(passport.initialize())
-  app.use(passport.session())
+  // app.use(
+  //   session({
+  //     secret: process.env.SESSION_SECRET || 'my best friend is Cody',
+  //     store: new TypeormStore({repository}),
+  //     resave: false,
+  //     saveUninitialized: false
+  //   })
+  // // )
+  // app.use(passport.initialize())
+  // app.use(passport.session())
 
   // auth and api routes
   app.use('/auth', require('./auth'))
@@ -126,12 +115,15 @@ const startListening = () => {
 // const syncDb = () => db.sync()
 
 async function bootApp() {
+  try {
+    await createConnection()
+    console.log("connection created to database")
+    await createApp()
+    await startListening()
+  } catch(err) {
+    console.error(err)
+  }
   // await sessionStore.sync()
-  await createConnection()
-  console.log("connectioncreated")
-  await createApp()
-
-  await startListening()
 
 
 }
@@ -144,3 +136,7 @@ if (require.main === module) {
 } else {
   createApp()
 }
+
+
+// const connection = getConnection()
+// console.log("***repository***", connection);
