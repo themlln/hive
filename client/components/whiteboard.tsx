@@ -1,7 +1,9 @@
 import * as React from 'react'
-
+import Panel from './panel'
+import Canvas from './canvas'
+import ColorPicker from './color'
 interface State {
-    
+
 }
 
 export class Whiteboard extends React.Component < {}, {} > {
@@ -14,12 +16,17 @@ export class Whiteboard extends React.Component < {}, {} > {
     }
 
     componentDidMount() {
-        
+
     }
 
     public render() {
         return (
         <>
+        <div>
+          <Panel />
+          <ColorPicker />
+          <Canvas />
+        </div>
         </>
         )
     }
