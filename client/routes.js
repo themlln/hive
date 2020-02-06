@@ -5,7 +5,8 @@ import PropTypes from 'prop-types'
 import {Login, Signup, UserHome} from './components'
 import {me} from './store'
 import connectCanvas from './components/canvas'
-import { Whiteboard } from './components/whiteboard'
+import Whiteboard from './components/whiteboard'
+import ConnectChat from './components/chat'
 
 /**
  * COMPONENT
@@ -25,11 +26,13 @@ class Routes extends Component {
         <Route path="/signup" component={Signup} />
         <Route path="/whiteboard" component={Whiteboard}/>
         <Route path="/canvas" component={connectCanvas} />
+        <Route path="/chat" component={ConnectChat} />
         {isLoggedIn && (
           <Switch>
             {/* Routes placed here are only available after logging in */}
             <Route path="/home" component={UserHome} />
             <Route path="/canvas" component={connectCanvas} />
+            <Route path="/chat" component={ConnectChat} />
           </Switch>
         )}
         {/* Displays our Login component as a fallback */}

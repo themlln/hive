@@ -13,3 +13,4 @@ server/temp/
 server/ormconfig
 ormconfig.env
 ormconfig.json
+secrets.js
