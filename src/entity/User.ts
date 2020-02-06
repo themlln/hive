@@ -44,6 +44,7 @@ export class User {
     @BeforeUpdate()
     @BeforeInsert()
     static setSaltAndPassword = (instance: User): void => {
+      console.log("setSALT & PASSWORD RUNNING NOW")
       if (instance.tempPassword !== instance.password) {
         instance.salt = User.generateSalt()
         instance.password = User.encryptPassword(instance.password, instance.salt)
@@ -53,6 +54,7 @@ export class User {
         return crypto.randomBytes(16).toString('base64')
     }
     static encryptPassword = function(plainText: string, salt: string): string {
+        console.log("ENCRYPTPASSWORD RUNNING", plainText, salt)
         return crypto
           .createHash('RSA-SHA256')
           .update(plainText)
@@ -62,6 +64,7 @@ export class User {
 
     // Instance Methods
     correctPassword = function(candidatePwd: string) {
+      console.log("INSTANCE METHOD IS RUNNING")
       return User.encryptPassword(candidatePwd, User.prototype.salt) === User.prototype.password
     }
 }
