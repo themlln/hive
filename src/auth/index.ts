@@ -1,10 +1,18 @@
+import { Request, NextFunction } from "express"
+import { getRepository } from "typeorm"
+
 const router = require('express').Router()
 const {User} = require('../entity/User')
 module.exports = router
 
-router.post('/login', async (req, res, next) => {
+
+const userRepository = getRepository(User)
+
+router.post('/login', async (req: Request, res:Response, next: NextFunction) => {
   try {
-    const user = await User.findOne({where: {email: req.body.email}})
+    const user = await userRepository.find({
+      email: req.body.email
+    })
     if (!user) {
       console.log('No such user found:', req.body.email)
       res.status(401).send('Wrong username and/or password')
@@ -19,9 +27,10 @@ router.post('/login', async (req, res, next) => {
   }
 })
 
-router.post('/signup', async (req, res, next) => {
+router.post('/signup', async (req: Request, res:Response, next: NextFunction) => {
   try {
-    const user = await User.create(req.body)
+    const user = await userRepository.create(req.body);
+    await userRepository.save(user);
     req.login(user, err => (err ? next(err) : res.json(user)))
   } catch (err) {
     if (err.name === 'SequelizeUniqueConstraintError') {
@@ -32,13 +41,13 @@ router.post('/signup', async (req, res, next) => {
   }
 })
 
-router.post('/logout', (req, res) => {
+router.post('/logout', (req: Request, res:Response) => {
   req.logout()
   req.session.destroy()
   res.redirect('/')
 })
 
-router.get('/me', (req, res) => {
+router.get('/me', (req: Request, res:Response) => {
   res.json(req.user)
 })
 
