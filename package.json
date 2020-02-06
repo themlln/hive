@@ -20,9 +20,9 @@
     "seed": "node script/seed.js",
     "start": "node server",
     "start-dev": "NODE_ENV='development' npm run build-client-watch & NODE_ENV='development' npm run start-server",
-    "start-server": "ts-node-dev server/index.ts",
-    "test-db": "ts-node-dev server/db.ts",
-    "test": "NODE_ENV='test' mocha \"./server/**/*.spec.js\" \"./client/**/*.spec.js\" \"./script/**/*.spec.js\" "
+    "start-server": "ts-node-dev src/index.ts",
+    "test-db": "ts-node-dev src/db.ts",
+    "test": "NODE_ENV='test' mocha \"./src/**/*.spec.js\" \"./client/**/*.spec.js\" \"./script/**/*.spec.js\" "
   },
   "lint-staged": {
     "*.{js,jsx}": [

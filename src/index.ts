@@ -3,11 +3,14 @@ import * as path from 'path'
 import * as express from 'express'
 import * as compression from 'compression'
 
-import { getConnection, createConnection } from 'typeorm'
+import { getConnection, createConnection, getManager, getRepository } from 'typeorm'
 import 'reflect-metadata'
 import { TypeormStore } from 'typeorm-store'
-import { Session } from './entity/session'
+import { User } from './entity/User'
+import { Session } from './entity/Session'
 // require('./db')
+
+
 
 import * as session from 'express-session'
 import * as passport from 'passport'
@@ -26,6 +29,8 @@ module.exports = app
 // console.log("db****", db);
 const repository = getConnection().getRepository(Session);
 console.log("***repository***", repository);
+const userRepository = getRepository(User)
+
 
 // if (process.env.NODE_ENV === 'test') {
 //   after('close the session store', () => sessionStore.stopExpiringSessions())
@@ -46,7 +51,7 @@ passport.serializeUser((user, done) => done(null, user.id))
 
 passport.deserializeUser(async (id, done) => {
   try {
-    const user = await db.models.user.findByPk(id)
+    const user = await userRepository.find({ where: {id: id}})
     done(null, user)
   } catch (err) {
     done(err)
@@ -122,8 +127,10 @@ const startListening = () => {
 
 async function bootApp() {
   // await sessionStore.sync()
-  await createApp()
   await createConnection()
+  console.log("connectioncreated")
+  await createApp()
+
   await startListening()
 
 
