@@ -1,4 +1,4 @@
-import axios from 'axios'
+const axios = require('axios')
 import history from '../history'
 
 /**
@@ -10,32 +10,55 @@ const REMOVE_USER = 'REMOVE_USER'
 /**
  * INITIAL STATE
  */
-const defaultUser = {}
+export interface User {
+  id: number,
+  email: string,
+  password: string
+}
+
+export interface UserState {
+  user: object
+}
+
+const initialState: UserState = {
+  user: {}
+}
 
 /**
  * ACTION CREATORS
  */
-const getUser = user => ({type: GET_USER, user})
+interface GetUserAction {
+  type: typeof GET_USER,
+  payload: User
+}
+
+interface RemoveUserAction {
+  type: typeof REMOVE_USER
+}
+
+type UserActionTypes = GetUserAction | RemoveUserAction
+
+const getUser = (user: User) => ({type: GET_USER, user})
 const removeUser = () => ({type: REMOVE_USER})
 
 /**
  * THUNK CREATORS
  */
-export const me = () => async dispatch => {
+export const me = () => async (dispatch: any) => {
   try {
     const res = await axios.get('/auth/me')
-    dispatch(getUser(res.data || defaultUser))
+    dispatch(getUser(res.data || initialState.user))
   } catch (err) {
     console.error(err)
   }
 }
 
-export const auth = (email, password, method) => async dispatch => {
+export const auth = (email: string, password: string, method: any) => async (dispatch: any) => {
   let res
   try {
     res = await axios.post(`/auth/${method}`, {email, password})
   } catch (authError) {
-    return dispatch(getUser({error: authError}))
+    console.error(authError)
   }
 
   try {
@@ -46,7 +69,7 @@ export const auth = (email, password, method) => async dispatch => {
   }
 }
 
-export const logout = () => async dispatch => {
+export const logout = () => async (dispatch: any) => {
   try {
     await axios.post('/auth/logout')
     dispatch(removeUser())
@@ -59,12 +82,12 @@ export const logout = () => async dispatch => {
 /**
  * REDUCER
  */
-export default function(state = defaultUser, action) {
+export default function(state: UserState = initialState, action: UserActionTypes) {
   switch (action.type) {
     case GET_USER:
-      return action.user
+      return action.payload
     case REMOVE_USER:
-      return defaultUser
+      return state.user
     default:
       return state
   }

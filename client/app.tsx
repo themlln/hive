@@ -1,7 +1,7 @@
 import * as React from 'react'
 
-import Navbar from './components/navbar'
-import Routes from './routes'
+import Navbar from './components/navbar.js'
+import Routes from './routes.js'
 
 export default class App extends React.Component {
   public render() {
