@@ -1,4 +1,4 @@
-import axios from 'axios'
+const axios = require('axios').default;
 import {clientSocket} from '../components/canvas'
 /**
  * INITIAL STATE
