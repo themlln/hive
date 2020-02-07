@@ -40,6 +40,7 @@
   "dependencies": {
     "@types/axios": "^0.14.0",
     "@types/redux": "^3.6.0",
+    "@types/fabric": "^3.6.1",
     "@types/socket.io": "^2.1.4",
     "@types/socket.io-client": "^1.4.32",
     "axios": "^0.19.2",
@@ -48,6 +49,7 @@
     "connect-session-sequelize": "^6.0.0",
     "express": "^4.16.4",
     "express-session": "^1.15.1",
+    "fabric": "^4.0.0-beta.6",
     "history": "^4.9.0",
     "morgan": "^1.9.1",
     "passport": "^0.4.0",
