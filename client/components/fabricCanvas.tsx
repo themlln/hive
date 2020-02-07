@@ -9,6 +9,7 @@ export const drawingName: String = '/canvas'
 import { fabric } from 'fabric'
 import { Socket } from 'net'
 import { runInThisContext } from 'vm'
+import { pathToFileURL } from 'url'
 
 let currentMousePosition: any = {x: 0, y: 0}
 let lastMousePosition: any = {x: 0, y: 0}
@@ -47,17 +48,18 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
     start: any = [0,0],
     end: any = [0,0],
     strokeColor: string = 'black',
-    shouldBroadcast: boolean
+    strokeWidth: number = 3
   ) {
     const canvas = this.state.canvas
     if(this.props.tool === 'erase'){
       strokeColor = 'white'
-      canvas.freeDrawingBrush.width = 10;
-    }
+      strokeWidth = 20;
+    } 
 
+    canvas.freeDrawingBrush.width = strokeWidth
     canvas.freeDrawingBrush.color = strokeColor
     canvas.isDrawingMode = true
-    this.state.shouldBroadcast && clientSocket.emit('draw-from-client', drawingName, start, end, strokeColor)
+    this.state.shouldBroadcast && clientSocket.emit('draw-from-client', drawingName, start, end, strokeColor, strokeWidth)
     }
 
   position(event) {
@@ -83,7 +85,7 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
   handleMouseMove(event) {
     lastMousePosition = currentMousePosition
     currentMousePosition = this.position(event.e)
-    lastMousePosition && currentMousePosition && this.drawErase(lastMousePosition, currentMousePosition, this.props.color, true)
+    lastMousePosition && currentMousePosition && this.drawErase(lastMousePosition, currentMousePosition, this.props.color, this.props.strokeWidth)
   }
 
   componentDidMount() {
@@ -100,12 +102,21 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
   })
 
     clientSocket.on('replay-drawing', (instructions) => {
+      instructions.forEach(instruction => {
+        let newPath = new fabric.Path(instruction[0])
+        newPath.set({stroke: instruction[1], strokeWidth: instruction[2]})
+        this.state.canvas.add(newPath)
+      })
     })
 
-    clientSocket.on('draw-from-server', (start: [number, number], end: [number, number], color: string) => {
-      this.state.canvas.add(new fabric.Line([...start,...end], {
-        stroke: color
-      }))
+    clientSocket.on('draw-from-server', (line: string, color: string, width: number) => {
+      // this.state.canvas.add(new fabric.Line([...start,...end], {
+      //   stroke: color, 
+      //   strokeWidth: width
+      // }))
+      let newPath = new fabric.Path(line)
+      newPath.set({stroke: color, strokeWidth: width})
+      this.state.canvas.add(newPath)
     })
 
 
@@ -124,10 +135,10 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
   public render() {
     return (
       <>
-        <button onClick={ () => this.drawErase([1,1], [100,100], 'black', true)}>Draw a Line!</button>
         <button onClick={ () => {
-          const path = new fabric.Path('M 1 1 L 100 100')
-          path.set({stroke: 'pink'})
+          const path = new fabric.Path('M 1 1 L 200 200')
+          path.set({stroke: 'pink',
+        strokeWidth: 10})
 
           this.state.canvas.add(path)
         }}>TESTINGG</button>
