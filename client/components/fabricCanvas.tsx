@@ -94,10 +94,12 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
       instructions.forEach(instruction => this.state.canvas.loadFromJSON(instruction, this.state.canvas.renderAll.bind(this.state.canvas)))
     })
 
-    clientSocket.on('draw-from-server', (line: string, color: string) => {
-      const path = new fabric.Path(line)
-      path.set({stroke: color})
-      this.state.canvas.add(path)
+    clientSocket.on('draw-from-server', (start: [number, number], end: [number, number], color: string) => {
+      this.state.canvas.add(new fabric.Line([...start,...end], {
+        left: 170,
+        top: 150,
+        stroke: color
+      }))
     })
 
 
