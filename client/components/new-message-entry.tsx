@@ -2,7 +2,7 @@ import * as React from 'react'
 import { gotNewMessage, Message, sendMessage } from '../store/Chat'
 import { connect } from 'react-redux'
 
-class NewMessageEntry extends React.Component<ChatDispatchToProps> {
+class NewMessageEntry extends React.Component<NewMessageDispatchToProps> {
   constructor(props) {
     super(props)
     this.handleSubmit = this.handleSubmit.bind(this)
@@ -44,11 +44,11 @@ class NewMessageEntry extends React.Component<ChatDispatchToProps> {
   }
 }
 
-interface ChatDispatchToProps {
+interface NewMessageDispatchToProps {
   sendMessage: (newMessage: Message) => {newMessage: Message}
 }
 
-const mapDispatchToProps = (dispatch: any): ChatDispatchToProps => {
+const mapDispatchToProps = (dispatch: any): NewMessageDispatchToProps => {
   return {
     sendMessage: (newMessage: Message) => dispatch(sendMessage(newMessage))
   }
