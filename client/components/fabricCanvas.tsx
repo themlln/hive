@@ -93,9 +93,9 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
   const fabricCanvas = new fabric.Canvas(this.state.canvasRef.current, {
     selection: false,
     preserveObjectStacking: true,
-    width: 1000,
-    height: 500
   })
+  fabricCanvas.setHeight(500)
+  fabricCanvas.setWidth(1000)
 
   this.setState({
     canvas: fabricCanvas
