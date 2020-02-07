@@ -5,8 +5,10 @@ import { connect } from 'react-redux'
 export const clientSocket: any = createClientSocket(window.location.origin)
 export const drawingName: String = '/canvas'
 
+
 import { fabric } from 'fabric'
 import { Socket } from 'net'
+import { runInThisContext } from 'vm'
 
 let currentMousePosition: any = {x: 0, y: 0}
 let lastMousePosition: any = {x: 0, y: 0}
@@ -19,7 +21,8 @@ clientSocket.on('connect', () => {
 interface State {
   canvas: any,
   canvasRef: any,
-  instructions: Array<any>
+  instructions: Array<any>, 
+  shouldBroadcast: boolean
 }
 
 class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, State> {
@@ -29,11 +32,13 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
     this.state = {
       canvas: {},
       canvasRef: React.createRef(),
-      instructions: []
+      instructions: [], 
+      shouldBroadcast: false
     }
 
     this.handleMouseMove = this.handleMouseMove.bind(this)
     this.handleMouseDown = this.handleMouseDown.bind(this)
+    this.handleMouseUp = this.handleMouseUp.bind(this)
     this.drawErase = this.drawErase.bind(this)
   }
 
@@ -42,7 +47,7 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
     start: any = [0,0],
     end: any = [0,0],
     strokeColor: string = 'black',
-    shouldBroadcast: boolean = true,
+    shouldBroadcast: boolean
   ) {
     const canvas = this.state.canvas
     if(this.props.tool === 'erase'){
@@ -52,29 +57,32 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
 
     canvas.freeDrawingBrush.color = strokeColor
     canvas.isDrawingMode = true
-    shouldBroadcast && clientSocket.emit('draw-from-client', drawingName, start, end, strokeColor)
+    this.state.shouldBroadcast && clientSocket.emit('draw-from-client', drawingName, start, end, strokeColor)
     }
 
   position(event) {
     return [
       event.pageX,
-      event.pageY
+      event.pageY - 270
     ]
   }
 
   handleMouseDown(event) {
-    console.log("MOUSE DOWNNNNN")
+    this.setState({
+      shouldBroadcast: true
+    })
     currentMousePosition = this.position(event.e)
+  }
+
+  handleMouseUp(event) {
+    this.setState({
+      shouldBroadcast: false
+    })
   }
 
   handleMouseMove(event) {
     lastMousePosition = currentMousePosition
     currentMousePosition = this.position(event.e)
-
-    // console.log(lastMousePosition, 'LAST MOUSE POSITION')
-    // console.log(currentMousePosition, 'CURRENT POSITION')
-
-    // console.log(event, 'EVENT IN MOUSE MOVE')
     lastMousePosition && currentMousePosition && this.drawErase(lastMousePosition, currentMousePosition, this.props.color, true)
   }
 
@@ -90,14 +98,12 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
   this.setState({
     canvas: fabricCanvas
   })
+
     clientSocket.on('replay-drawing', (instructions) => {
-      instructions.forEach(instruction => this.state.canvas.loadFromJSON(instruction, this.state.canvas.renderAll.bind(this.state.canvas)))
     })
 
     clientSocket.on('draw-from-server', (start: [number, number], end: [number, number], color: string) => {
       this.state.canvas.add(new fabric.Line([...start,...end], {
-        left: 170,
-        top: 150,
         stroke: color
       }))
     })
@@ -108,6 +114,7 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
 
     fabricCanvas.on('mouse:down', this.handleMouseDown)
     fabricCanvas.on('mouse:move', this.handleMouseMove)
+    fabricCanvas.on('mouse:up', this.handleMouseUp)
 
   }
 

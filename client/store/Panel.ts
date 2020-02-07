@@ -7,7 +7,6 @@ import * as React from 'react'
  const UPDATE_TOOL = 'UPDATE_TOOL'
  const UPDATE_COLOR = 'UPDATE_COLOR'
 
-
  //TYPES OF ACTION TYPES
  interface UpdateToolAction {
    type: typeof UPDATE_TOOL
@@ -19,7 +18,7 @@ import * as React from 'react'
    color: string
  }
 
- type PanelActionTypes = UpdateToolAction | UpdateColorAction
+ type PanelActionTypes = UpdateToolAction | UpdateColorAction 
  /**
  * INITIAL STATE
  */
@@ -57,6 +56,7 @@ const initialState: Panel = {
      color
    }
  }
+
  /**
  * THUNK CREATORS
  */
