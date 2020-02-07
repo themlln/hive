@@ -15,11 +15,21 @@ router.get('/', async (req:Request, res:Response, next:NextFunction) => {
   }
 })
 
+router.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const messageId: string = req.params.id
+    const message = await messageRepository.findOneOrFail(messageId)
+    res.json(message)
+  } catch (error) {
+    next(error)
+  }
+})
+
 router.post('/', async (req: Request, res: Response, next: NextFunction) => {
   try {
     const newMessage = await messageRepository.create(req.body)
-    const messageSaved = await messageRepository.save(newMessage)
-    res.json(messageSaved)
+    const newMessageSaved = await messageRepository.save(newMessage)
+    res.json(newMessageSaved).status(201)
   } catch (error) {
     next(error)
   }

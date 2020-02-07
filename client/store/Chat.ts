@@ -1,15 +1,15 @@
+import axios from 'axios'
 import {clientSocket} from '../components/canvas'
-
 /**
  * INITIAL STATE
  */
 export interface Message {
-  // user: {
-  //   name: string;
-  //   image: string;
-  // };
+  user: {
+    name: string;
+    image: string;
+  };
   content: string;
-  timestamp: Date;
+  timestamp: number;
 }
 
 export interface ChatState {
@@ -25,7 +25,7 @@ const initialState: ChatState = {
 const GOT_NEW_MESSAGE = "GOT_NEW_MESSAGE";
 const LOAD_MESSAGES = 'LOAD_MESSAGES'
 const DELETE_MESSAGE = "DELETE_MESSAGE";
-// const SET_USER = 'SET_USER'
+// const SET_USER = 'SET_USER';
 
 /**
  * TYPES OF ACTIONS
@@ -42,14 +42,14 @@ interface GotMessagesFromServerAction {
 
 // interface SetUserAction {
 //   type: typeof SET_USER
-//   meta: {
-//     user: string
+//   payload: {
+//     name: string
 //   }
 // }
 
 interface DeleteMessageAction {
   type: typeof DELETE_MESSAGE;
-  timestamp: Date;
+  timestamp: number;
 }
 /**
  * ACTION CREATORS
@@ -70,21 +70,55 @@ export const loadMessages = (messages: Message[]) => {
   }
 }
 
-// const setUser = (user: string) => {
+// const setUser = (name: string) => {
 //   return {
 //     type: SET_USER,
-//     meta: {
-//       user
+//     user: {
+//       name
 //     }
 //   }
 // }
-export const deleteMessage = (timestamp: number) => {
+export const deletedMessage = (timestamp: number) => {
   return {
     type: DELETE_MESSAGE,
     timestamp
   }
 }
 type ChatActionTypes = GotNewMessageAction | DeleteMessageAction | GotMessagesFromServerAction
+
+/**
+ * THUNKS
+ */
+
+export const fetchMessages = () => async (dispatch: any) => {
+  try {
+    const { data: messages } = await axios.get('/api/messages')
+    dispatch(loadMessages(messages))
+    clientSocket.emit('new-message', messages)
+  } catch (error) {
+    console.log('Error fetching messages: ', error)
+  }
+
+}
+export const sendMessage = (message: Message) => async (dispatch: any, getState: any) => {
+  try {
+    message.user = getState().user
+    const { data: newMessage } = await axios.post('/api/messages', message)
+    dispatch(gotNewMessage(newMessage))
+    clientSocket.emit('new-message', newMessage)
+  } catch (error) {
+    console.log('Error sending a message: ', error)
+  }
+}
+
+export const deleteMessage = (message: Message) => async (dispatch: any) => {
+  try {
+    await axios.delete(`/api/message/${message.timestamp}`, message)
+    dispatch(deletedMessage(message.timestamp))
+  } catch (error) {
+    console.log('Error deleting message: ', error)
+  }
+}
 
 /**
  * REDUCER
