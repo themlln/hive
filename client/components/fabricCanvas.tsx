@@ -7,9 +7,6 @@ export const drawingName: String = '/canvas'
 
 
 import { fabric } from 'fabric'
-import { Socket } from 'net'
-import { runInThisContext } from 'vm'
-import { pathToFileURL } from 'url'
 
 let currentMousePosition: any = {x: 0, y: 0}
 let lastMousePosition: any = {x: 0, y: 0}
@@ -22,7 +19,7 @@ clientSocket.on('connect', () => {
 interface State {
   canvas: any,
   canvasRef: any,
-  instructions: Array<any>, 
+  instructions: Array<any>,
   shouldBroadcast: boolean
 }
 
@@ -33,7 +30,7 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
     this.state = {
       canvas: {},
       canvasRef: React.createRef(),
-      instructions: [], 
+      instructions: [],
       shouldBroadcast: false
     }
 
@@ -54,7 +51,7 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
     if(this.props.tool === 'erase'){
       strokeColor = 'white'
       strokeWidth = 20;
-    } 
+    }
 
     canvas.freeDrawingBrush.width = strokeWidth
     canvas.freeDrawingBrush.color = strokeColor
@@ -76,6 +73,7 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
     currentMousePosition = this.position(event.e)
   }
 
+
   handleMouseUp(event) {
     this.setState({
       shouldBroadcast: false
@@ -83,9 +81,18 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
   }
 
   handleMouseMove(event) {
-    lastMousePosition = currentMousePosition
-    currentMousePosition = this.position(event.e)
-    lastMousePosition && currentMousePosition && this.drawErase(lastMousePosition, currentMousePosition, this.props.color, this.props.strokeWidth)
+    if(this.props.tool === 'draw' || this.props.tool === 'erase'){
+      lastMousePosition = currentMousePosition
+      currentMousePosition = this.position(event.e)
+      lastMousePosition && currentMousePosition && this.drawErase(lastMousePosition, currentMousePosition, this.props.color, this.props.strokeWidth)
+    } else {
+      this.state.canvas.isDrawingMode = false
+    }
+
+  }
+
+  handleObjectSelected(event) {
+
   }
 
   componentDidMount() {
@@ -103,7 +110,7 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
 
     clientSocket.on('replay-drawing', (instructions) => {
       instructions.forEach(instruction => {
-        let newPath = new fabric.Path(instruction[0])
+        const newPath = new fabric.Path(instruction[0])
         newPath.set({stroke: instruction[1], strokeWidth: instruction[2]})
         this.state.canvas.add(newPath)
       })
@@ -111,10 +118,10 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
 
     clientSocket.on('draw-from-server', (line: string, color: string, width: number) => {
       // this.state.canvas.add(new fabric.Line([...start,...end], {
-      //   stroke: color, 
+      //   stroke: color,
       //   strokeWidth: width
       // }))
-      let newPath = new fabric.Path(line)
+      const newPath = new fabric.Path(line)
       newPath.set({stroke: color, strokeWidth: width})
       this.state.canvas.add(newPath)
     })
@@ -126,6 +133,7 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
     fabricCanvas.on('mouse:down', this.handleMouseDown)
     fabricCanvas.on('mouse:move', this.handleMouseMove)
     fabricCanvas.on('mouse:up', this.handleMouseUp)
+    fabricCanvas.on('object:selected', this.handleObjectSelected)
 
   }
 
@@ -135,13 +143,29 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
   public render() {
     return (
       <>
-        <button onClick={ () => {
+        <button type="button" onClick={ () => {
           const path = new fabric.Path('M 1 1 L 200 200')
           path.set({stroke: 'pink',
         strokeWidth: 10})
-
           this.state.canvas.add(path)
         }}>TESTINGG</button>
+
+        <button type="button" onClick={ () => {
+          const text = new fabric.IText('Tap and Type', {
+            fontFamily: 'Times New Roman',
+            left: 100,
+            top: 100 ,
+          })
+          text.on('selected', function() {
+            console.log('selected text!')
+          })
+          this.state.canvas.add(text)
+
+        }}>Add Text Box</button>
+
+
+
+
 
         <canvas
           ref={this.state.canvasRef}
