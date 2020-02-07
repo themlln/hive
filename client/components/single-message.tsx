@@ -7,6 +7,7 @@ interface MessageProps {
 }
 
 export const SingleMessage: React.FunctionComponent<MessageProps> = ({message, deleteMessage, user}) => {
+  console.log()
   return (
     <>
       <li className="message">
