@@ -24,9 +24,15 @@ module.exports = io => {
       drawing.push([line, color, width])
       socket.broadcast.to(drawingName).emit('draw-from-server', line, color, width)
     })
+    socket.on('clear-canvas', (drawingName: any) => {
+      drawings[drawingName] = []
+      socket.broadcast.to(drawingName).emit('clear-canvas')
+    })
 
     socket.on('disconnect', () => {
       console.log(`Connection ${socket.id} has left the building`)
     })
+
+
   })
 }

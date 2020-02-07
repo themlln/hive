@@ -129,6 +129,10 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
       this.state.canvas.add(newPath)
     })
 
+    clientSocket.on('clear-canvas', () => {
+      this.state.canvas.clear()
+    })
+
     //bindings
 
     fabricCanvas.on('mouse:down', this.handleMouseDown)
