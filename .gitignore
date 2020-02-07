@@ -11,3 +11,5 @@ server/build/
 server/tmp/
 server/temp/
 server/ormconfig
+ormconfig.env
+ormconfig.json
