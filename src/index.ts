@@ -110,13 +110,15 @@ async function bootApp() {
 
     passport.deserializeUser(async (id, done) => {
       try {
-        const user = await userRepository.find({ where: { id: id } })
+        const user = await userRepository.findOne({
+          select:['id', 'email'],
+          where: { id: id },
+        });
         done(null, user)
       } catch (err) {
         done(err)
       }
     })
-
     await createApp(sessionRepository)
     await startListening()
   } catch (err) {
