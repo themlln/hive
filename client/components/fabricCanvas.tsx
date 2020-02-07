@@ -2,11 +2,11 @@ import * as React from 'react'
 
 import * as createClientSocket from 'socket.io-client'
 import { connect } from 'react-redux'
+import {updateCanvas} from '../store/Panel'
+import { fabric } from 'fabric'
+
 export const clientSocket: any = createClientSocket(window.location.origin)
 export const drawingName: String = '/canvas'
-
-
-import { fabric } from 'fabric'
 
 let currentMousePosition: any = {x: 0, y: 0}
 let lastMousePosition: any = {x: 0, y: 0}
@@ -66,7 +66,7 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
     ]
   }
 
-  handleMouseDown(event) {
+ handleMouseDown(event) {
     this.setState({
       shouldBroadcast: true
     })
@@ -92,21 +92,28 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
   }
 
   handleObjectSelected(event) {
+    console.log('OBJECT SELECTED')
+    if(event.options){
+      console.log(event.options.type)
+    }
 
   }
 
-  componentDidMount() {
+  async componentDidMount() {
 
-  const fabricCanvas = new fabric.Canvas(this.state.canvasRef.current, {
-    selection: false,
-    preserveObjectStacking: true,
-  })
-  fabricCanvas.setHeight(500)
-  fabricCanvas.setWidth(1000)
+    const fabricCanvas = new fabric.Canvas(this.state.canvasRef.current, {
+      selection: false,
+      preserveObjectStacking: true,
+    })
+    fabricCanvas.setHeight(500)
+    fabricCanvas.setWidth(1000)
 
-  this.setState({
-    canvas: fabricCanvas
-  })
+    await this.setState({
+      canvas: fabricCanvas
+    })
+
+    await this.props.setCanvas(this.state.canvas)
+
 
     clientSocket.on('replay-drawing', (instructions) => {
       instructions.forEach(instruction => {
@@ -117,16 +124,10 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
     })
 
     clientSocket.on('draw-from-server', (line: string, color: string, width: number) => {
-      // this.state.canvas.add(new fabric.Line([...start,...end], {
-      //   stroke: color,
-      //   strokeWidth: width
-      // }))
       const newPath = new fabric.Path(line)
       newPath.set({stroke: color, strokeWidth: width})
       this.state.canvas.add(newPath)
     })
-
-
 
     //bindings
 
@@ -150,23 +151,6 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
           this.state.canvas.add(path)
         }}>TESTINGG</button>
 
-        <button type="button" onClick={ () => {
-          const text = new fabric.IText('Tap and Type', {
-            fontFamily: 'Times New Roman',
-            left: 100,
-            top: 100 ,
-          })
-          text.on('selected', function() {
-            console.log('selected text!')
-          })
-          this.state.canvas.add(text)
-
-        }}>Add Text Box</button>
-
-
-
-
-
         <canvas
           ref={this.state.canvasRef}
           onMouseDown={this.handleMouseDown}
@@ -188,7 +172,7 @@ interface CanvasStateProps {
 }
 
 interface CanvasDispatchProps {
-
+  setCanvas: (canvas: any) => {canvas: any}
 }
 
 
@@ -204,6 +188,7 @@ const mapStateToProps = (state: any): CanvasStateProps => {
 
 const mapDispatchToProps = (dispatch: any): CanvasDispatchProps => {
   return {
+    setCanvas: (canvas) => dispatch(updateCanvas(canvas))
   }
 }
 

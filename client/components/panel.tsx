@@ -1,6 +1,7 @@
 import * as React from 'react'
 import {updateTool} from '../store/Panel'
 import { connect } from 'react-redux'
+import { fabric } from 'fabric'
 
 class Panel extends React.Component<PanelStateProps & PanelDispatchProps> {
 
@@ -20,6 +21,15 @@ class Panel extends React.Component<PanelStateProps & PanelDispatchProps> {
         <button onClick={() => this.handleClick('erase')} >Eraser
         </button>
         <button onClick={() => this.handleClick('select')}>Select/Move</button>
+        <button onClick={() => {
+          this.handleClick('text')
+          this.props.canvasRef.add(new fabric.IText('Insert Text Here', {
+            fontFamily: 'arial',
+            left: 100,
+            top: 100 ,
+          }))
+          }}>Text</button>
+
       </div>
     )
   }
@@ -28,6 +38,7 @@ class Panel extends React.Component<PanelStateProps & PanelDispatchProps> {
 //INTERFACE
 interface PanelStateProps {
   tool: string
+  canvasRef: any
 }
 
 interface PanelDispatchProps {
@@ -35,7 +46,8 @@ interface PanelDispatchProps {
 }
 const mapStateToProps = (state: any): PanelStateProps => {
   return {
-    tool: state.panel.tool
+    tool: state.panel.tool,
+    canvasRef: state.panel.canvasRef
   }
 }
 

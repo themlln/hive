@@ -7,6 +7,7 @@ import * as React from 'react'
  const UPDATE_TOOL = 'UPDATE_TOOL'
  const UPDATE_COLOR = 'UPDATE_COLOR'
  const UPDATE_STROKE_WIDTH = 'UPDATE_STROKE_WIDTH'
+ const UPDATE_CANVAS = 'UPDATE_CANVAS'
 
  //TYPES OF ACTION TYPES
  interface UpdateToolAction {
@@ -24,7 +25,12 @@ import * as React from 'react'
   strokeWidth: number
 }
 
- type PanelActionTypes = UpdateToolAction | UpdateColorAction | UpdateStrokeWidthAction
+ interface UpdateCanvasAction {
+   type: typeof UPDATE_CANVAS
+   canvas: any
+ }
+
+ type PanelActionTypes = UpdateToolAction | UpdateColorAction | UpdateStrokeWidthAction | UpdateCanvasAction
  /**
  * INITIAL STATE
  */
@@ -63,10 +69,17 @@ const initialState: Panel = {
    }
  }
 
- export function UpdateStrokeWidth(strokeWidth:number): PanelActionTypes {
+ export function updateStrokeWidth(strokeWidth: number): PanelActionTypes {
   return {
     type: UPDATE_STROKE_WIDTH,
     strokeWidth
+  }
+}
+
+export function updateCanvas(canvas: any): PanelActionTypes {
+  return {
+    type: UPDATE_CANVAS,
+    canvas
   }
 }
 
@@ -98,6 +111,11 @@ const initialState: Panel = {
           return {
             ...state,
             strokeWidth: action.strokeWidth
+          }
+        case UPDATE_CANVAS:
+          return {
+            ...state,
+            canvasRef: action.canvas
           }
        default:
         return state
