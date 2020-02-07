@@ -15,10 +15,6 @@ class NewMessageEntry extends React.Component<NewMessageDispatchToProps> {
     const timestamp: number = date.getMilliseconds()
     console.log('TIMESTAMP ==>', timestamp)
     const newMessage: Message = {
-      user: {
-        name: 'Lucy',
-        image: 'https://www.rover.com/blog/wp-content/uploads/2019/06/bernese-mountain-dog-1177074_1920-960x540.jpg'
-      },
       content: content,
       timestamp: timestamp
     }
@@ -44,8 +40,18 @@ class NewMessageEntry extends React.Component<NewMessageDispatchToProps> {
   }
 }
 
+interface NewMessageMapStateToProps {
+  user: object
+}
+
 interface NewMessageDispatchToProps {
   sendMessage: (newMessage: Message) => {newMessage: Message}
+}
+
+const mapStateToProps = (state: any): NewMessageMapStateToProps => {
+  return {
+    user: state.user
+  }
 }
 
 const mapDispatchToProps = (dispatch: any): NewMessageDispatchToProps => {

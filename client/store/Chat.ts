@@ -4,10 +4,6 @@ import {clientSocket} from '../components/canvas'
  * INITIAL STATE
  */
 export interface Message {
-  user: {
-    name: string;
-    image: string;
-  };
   content: string;
   timestamp: number;
 }

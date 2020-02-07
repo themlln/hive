@@ -3,16 +3,17 @@ import { Message } from '../store/Chat'
 
 type MessageProps = {
   message: Message,
-  deleteMessage: any
+  deleteMessage: any,
+  user: object
 }
 
-export const SingleMessage: React.FunctionComponent<MessageProps> = ({message, deleteMessage}) => {
+export const SingleMessage: React.FunctionComponent<MessageProps> = ({message, deleteMessage, user}) => {
   return (
     <>
       <li className="message">
         <div className="message-left">
-          {message.user.image}
-          {message.user.name}
+          {user.image}
+          {user.email}
         </div>
         <div className="message-body">
           { message.content }

@@ -13,6 +13,9 @@ export class Message {
     @CreateDateColumn()
     timestamp: Date;
 
+    @Column()
+    userId: number;
+
     @ManyToOne(type => User, user => user.message)
     user: User;
 }
