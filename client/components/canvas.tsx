@@ -156,6 +156,7 @@ const mapStateToProps = (state: any): CanvasStateProps => {
 
 const mapDispatchToProps = (dispatch: any): CanvasDispatchProps => {
   return {
+
   }
 }
 

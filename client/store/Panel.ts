@@ -6,7 +6,8 @@ import * as React from 'react'
  */
  const UPDATE_TOOL = 'UPDATE_TOOL'
  const UPDATE_COLOR = 'UPDATE_COLOR'
-
+ const UPDATE_STROKE_WIDTH = 'UPDATE_STROKE_WIDTH'
+ const UPDATE_CANVAS = 'UPDATE_CANVAS'
 
  //TYPES OF ACTION TYPES
  interface UpdateToolAction {
@@ -19,7 +20,17 @@ import * as React from 'react'
    color: string
  }
 
- type PanelActionTypes = UpdateToolAction | UpdateColorAction
+ interface UpdateStrokeWidthAction {
+  type: typeof UPDATE_STROKE_WIDTH
+  strokeWidth: number
+}
+
+ interface UpdateCanvasAction {
+   type: typeof UPDATE_CANVAS
+   canvas: any
+ }
+
+ type PanelActionTypes = UpdateToolAction | UpdateColorAction | UpdateStrokeWidthAction | UpdateCanvasAction
  /**
  * INITIAL STATE
  */
@@ -35,7 +46,7 @@ interface Panel {
 
 const initialState: Panel = {
   tool: 'draw',
-  strokeWidth: 5,
+  strokeWidth: 3,
   color: 'black',
   canvasRef: null,
   instructions: []
@@ -57,6 +68,21 @@ const initialState: Panel = {
      color
    }
  }
+
+ export function updateStrokeWidth(strokeWidth: number): PanelActionTypes {
+  return {
+    type: UPDATE_STROKE_WIDTH,
+    strokeWidth
+  }
+}
+
+export function updateCanvas(canvas: any): PanelActionTypes {
+  return {
+    type: UPDATE_CANVAS,
+    canvas
+  }
+}
+
  /**
  * THUNK CREATORS
  */
@@ -81,6 +107,16 @@ const initialState: Panel = {
           ...state,
           color: action.color
         }
+        case UPDATE_STROKE_WIDTH:
+          return {
+            ...state,
+            strokeWidth: action.strokeWidth
+          }
+        case UPDATE_CANVAS:
+          return {
+            ...state,
+            canvasRef: action.canvas
+          }
        default:
         return state
      }
