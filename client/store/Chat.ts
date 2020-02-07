@@ -1,16 +1,10 @@
 const axios = require('axios').default;
+import {ChatState, Message, ChatActionTypes} from '../types/storeTypes'
 import {clientSocket} from '../components/canvas'
+import { Dispatch } from 'react';
 /**
  * INITIAL STATE
  */
-export interface Message {
-  content: string;
-  timestamp: number;
-}
-
-export interface ChatState {
-  messages: Array<Message>
-}
 
 const initialState: ChatState = {
   messages: []
@@ -18,35 +12,11 @@ const initialState: ChatState = {
 /**
  * ACTIONS
  */
-const GOT_NEW_MESSAGE = "GOT_NEW_MESSAGE";
-const LOAD_MESSAGES = 'LOAD_MESSAGES'
-const DELETE_MESSAGE = "DELETE_MESSAGE";
+export const GOT_NEW_MESSAGE = "GOT_NEW_MESSAGE";
+export const LOAD_MESSAGES = 'LOAD_MESSAGES'
+export const DELETE_MESSAGE = "DELETE_MESSAGE";
 // const SET_USER = 'SET_USER';
 
-/**
- * TYPES OF ACTIONS
- */
-interface GotNewMessageAction {
-  type: typeof GOT_NEW_MESSAGE
-  payload: Message
-}
-
-interface GotMessagesFromServerAction {
-  type: typeof LOAD_MESSAGES
-  payload: Message
-}
-
-// interface SetUserAction {
-//   type: typeof SET_USER
-//   payload: {
-//     name: string
-//   }
-// }
-
-interface DeleteMessageAction {
-  type: typeof DELETE_MESSAGE;
-  timestamp: number;
-}
 /**
  * ACTION CREATORS
  */
@@ -74,19 +44,18 @@ export const loadMessages = (messages: Message[]) => {
 //     }
 //   }
 // }
-export const deletedMessage = (timestamp: number) => {
+export const deletedMessage = (id: number) => {
   return {
     type: DELETE_MESSAGE,
-    timestamp
+    id
   }
 }
-type ChatActionTypes = GotNewMessageAction | DeleteMessageAction | GotMessagesFromServerAction
 
 /**
  * THUNKS
  */
 
-export const fetchMessages = () => async (dispatch: any) => {
+export const fetchMessages = () => async (dispatch: Dispatch<any>) => {
   try {
     const { data: messages } = await axios.get('/api/messages')
     dispatch(loadMessages(messages))
@@ -96,9 +65,9 @@ export const fetchMessages = () => async (dispatch: any) => {
   }
 
 }
-export const sendMessage = (message: Message) => async (dispatch: any, getState: any) => {
+export const sendMessage = (message: Message) => async (dispatch: Dispatch<any>) => {
   try {
-    message.user = getState().user
+    // message.user = getState().user
     const { data: newMessage } = await axios.post('/api/messages', message)
     dispatch(gotNewMessage(newMessage))
     clientSocket.emit('new-message', newMessage)
@@ -107,10 +76,10 @@ export const sendMessage = (message: Message) => async (dispatch: any, getState:
   }
 }
 
-export const deleteMessage = (message: Message) => async (dispatch: any) => {
+export const deleteMessage = (message: Message) => async (dispatch: Dispatch<any>) => {
   try {
-    await axios.delete(`/api/message/${message.timestamp}`, message)
-    dispatch(deletedMessage(message.timestamp))
+    await axios.delete(`/api/message/${message.id}`, message)
+    dispatch(deletedMessage(message.id))
   } catch (error) {
     console.log('Error deleting message: ', error)
   }
@@ -128,11 +97,11 @@ export const chatReducer = (state = initialState, action: ChatActionTypes): Chat
       }
     case LOAD_MESSAGES:
       return {
-        messages: state.messages
+        messages: [...state.messages, action.payload]
       }
     case DELETE_MESSAGE:
       return {
-        messages: state.messages.filter(message => message.timestamp !== action.timestamp)
+        messages: state.messages.filter(message => message.id !== action.id)
       }
     default:
       return state

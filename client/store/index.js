@@ -4,8 +4,9 @@ import thunkMiddleware from 'redux-thunk'
 import {composeWithDevTools} from 'redux-devtools-extension'
 import user from './user'
 import panel from './Panel'
+import {chatReducer as chat} from './Chat'
 
-const reducer = combineReducers({user, panel})
+const reducer = combineReducers({user, panel, chat})
 const middleware = composeWithDevTools(
   applyMiddleware(thunkMiddleware, createLogger({collapsed: true}))
 )

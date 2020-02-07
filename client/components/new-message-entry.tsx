@@ -1,8 +1,10 @@
 import * as React from 'react'
-import { gotNewMessage, Message, sendMessage } from '../store/Chat'
+import { gotNewMessage, sendMessage } from '../store/Chat'
+import {Message} from '../types/storeTypes'
+import {NewMessageDispatchToProps, NewMessageMapStateToProps} from '../types/componentTypes'
 import { connect } from 'react-redux'
 
-class NewMessageEntry extends React.Component<NewMessageDispatchToProps> {
+class NewMessageEntry extends React.Component<NewMessageMapStateToProps & NewMessageDispatchToProps> {
   constructor(props) {
     super(props)
     this.handleSubmit = this.handleSubmit.bind(this)
@@ -11,13 +13,15 @@ class NewMessageEntry extends React.Component<NewMessageDispatchToProps> {
   handleSubmit = (event: any) => {
     event.preventDefault()
     const content: string = event.target.content.value
-    const date: Date = new Date()
-    const timestamp: number = date.getMilliseconds()
-    console.log('TIMESTAMP ==>', timestamp)
+    const timestamp: Date = new Date()
+    const userId: number = this.props.user[0].id
     const newMessage: Message = {
+      userId: userId,
       content: content,
       timestamp: timestamp
     }
+    console.log("THIS IS A NEW MESSAGE -->", newMessage)
+    console.log('PROOOOPPPPSSSS', this.props)
     this.props.sendMessage(newMessage)
   }
 
@@ -40,24 +44,16 @@ class NewMessageEntry extends React.Component<NewMessageDispatchToProps> {
   }
 }
 
-interface NewMessageMapStateToProps {
-  user: object
-}
-
-interface NewMessageDispatchToProps {
-  sendMessage: (newMessage: Message) => {newMessage: Message}
-}
-
-const mapStateToProps = (state: any): NewMessageMapStateToProps => {
+const mapStateToProps = (state: React.ComponentState): NewMessageMapStateToProps => {
   return {
     user: state.user
   }
 }
 
-const mapDispatchToProps = (dispatch: any): NewMessageDispatchToProps => {
+const mapDispatchToProps = (dispatch: React.Dispatch<any>): object => {
   return {
     sendMessage: (newMessage: Message) => dispatch(sendMessage(newMessage))
   }
 }
 
-export const ConnectNewMessageEntry = connect(mapDispatchToProps)(NewMessageEntry)
+export const ConnectNewMessageEntry = connect(mapStateToProps, mapDispatchToProps)(NewMessageEntry)

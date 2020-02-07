@@ -1,8 +1,7 @@
 import * as React from 'react'
-import { Message } from '../store/Chat'
 
-type MessageProps = {
-  message: Message,
+interface MessageProps {
+  message: object,
   deleteMessage: any,
   user: object
 }
@@ -12,8 +11,7 @@ export const SingleMessage: React.FunctionComponent<MessageProps> = ({message, d
     <>
       <li className="message">
         <div className="message-left">
-          {user.image}
-          {user.email}
+          {user[0].email}
         </div>
         <div className="message-body">
           { message.content }

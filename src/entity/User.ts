@@ -3,6 +3,7 @@ import { IsEmail } from 'class-validator'
 import { Canvas } from './Canvas'
 import { Collaborators } from './Collaborator'
 import * as crypto from 'crypto'
+import { Message } from "./Message";
 
 @Entity()
 export class User {
@@ -37,6 +38,9 @@ export class User {
 
   @OneToMany(type => Canvas, canvas => canvas.owner)
   canvas: Canvas[]
+
+  @OneToMany(type => Message, message => message.user)
+  message: Message[]
 
   @OneToMany(type => Collaborators, sharedCanvas => sharedCanvas.user)
   sharedCanvas: Collaborators[];
