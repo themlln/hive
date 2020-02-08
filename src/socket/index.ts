@@ -21,10 +21,13 @@ module.exports = io => {
     socket.on('draw-from-client', (drawingName: any, pathCommand: any) => {
       const drawing = getDrawing(drawingName)
       drawing.push(pathCommand)
-      console.log(pathCommand)
       socket.broadcast.to(drawingName).emit('draw-from-server', pathCommand)
     })
 
+    socket.on('modified-from-client', (drawingName: any) => {
+      console.log('modified-from-client, on server')
+      socket.broadcast.to(drawingName).emit('modified-from-server')
+    })
 
     socket.on('clear-canvas', (drawingName: any) => {
       drawings[drawingName] = []

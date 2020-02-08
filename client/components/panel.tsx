@@ -27,7 +27,11 @@ class Panel extends React.Component<PanelStateProps & PanelDispatchProps> {
       <div>
         <button type="button" onClick={() => this.handleClick('draw')}>Pen
         </button>
-        <button type="button" onClick={() => this.handleClick('erase')} >Eraser
+        <button type="button" onClick={() => {
+          this.handleClick('delete')
+          this.props.canvasRef.remove(this.props.canvasRef.getActiveObject())
+          }
+          } >Delete
         </button>
         <button type="button" onClick={() => this.handleClick('select')}>Select/Move</button>
         <button type="button" onClick={() => {

@@ -6,6 +6,7 @@ import {updateCanvas} from '../store/Panel'
 import { fabric } from 'fabric'
 import { Path, Object } from 'fabric/fabric-impl'
 import { object } from 'prop-types'
+import { Socket } from 'net'
 
 export const clientSocket: any = createClientSocket(window.location.origin)
 export const drawingName: String = '/canvas'
@@ -136,7 +137,7 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
 
   handleObjectSelected(event) {
     console.log('OBJECT SELECTED')
-    console.log(event.e)
+    console.log(event.target)
     this.setState({
       isSelected: true
     })
@@ -145,6 +146,7 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
   handleObjectModified(event) {
     console.log('OBJECT MODIFIED')
     console.log(event, 'event in object modified')
+    clientSocket.emit('modified-from-client', drawingName)
   }
 
   async componentDidMount() {
@@ -204,8 +206,11 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
         strokeWidth: pathCommand.path.strokeWidth
       })
       path["uid"] = pathCommand.id
-      console.log(path)
       this.props.canvasRef.add(path)
+    })
+
+    clientSocket.on('modified-from-server', () => {
+      console.log('modified-from-server on client side')
     })
 
     clientSocket.on('clear-canvas', () => {
