@@ -100,7 +100,6 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
   }
 
   handleMouseUp(event) {
-    console.log('mouse up')
     const index = this.props.canvasRef._objects.length - 1 
     const path = this.props.canvasRef._objects[index]
     const newId = this.generateId(path)
@@ -136,17 +135,18 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
   }
 
   handleObjectSelected(event) {
-    console.log('OBJECT SELECTED')
-    console.log(event.target)
     this.setState({
       isSelected: true
     })
   }
 
   handleObjectModified(event) {
-    console.log('OBJECT MODIFIED')
-    console.log(event, 'event in object modified')
-    clientSocket.emit('modified-from-client', drawingName)
+    const modifiedObject = event.target
+    const modifiedCommand = {
+      id: modifiedObject.uid, 
+      modifiedObject: modifiedObject
+    }
+    clientSocket.emit('modified-from-client', drawingName, modifiedCommand)
   }
 
   async componentDidMount() {
@@ -209,8 +209,21 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
       this.props.canvasRef.add(path)
     })
 
-    clientSocket.on('modified-from-server', () => {
-      console.log('modified-from-server on client side')
+    clientSocket.on('modified-from-server', (modifiedCommand: any) => {
+      const allObjects = this.props.canvasRef.getObjects()
+      const objectToModify = allObjects.filter(object => object.uid === modifiedCommand.id)
+      const modifiedObject = modifiedCommand.modifiedObject
+      
+      objectToModify[0].width = modifiedObject.width
+      objectToModify[0].height = modifiedObject.height,
+      objectToModify[0].left = modifiedObject.left,
+      objectToModify[0].top = modifiedObject.top,
+      objectToModify[0].scaleX = modifiedObject.scaleX, 
+      objectToModify[0].scaleY = modifiedObject.scaleY,
+      objectToModify[0].translateX =  modifiedObject.translateX,
+      objectToModify[0].translateY = modifiedObject.translateY
+      
+      this.props.canvasRef.requestRenderAll()
     })
 
     clientSocket.on('delete-object-from-server', (deleteCommand) => {
