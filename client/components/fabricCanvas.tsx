@@ -100,9 +100,12 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
 
   handleMouseUp(event) {
     console.log('mouse up')
-    let index = this.props.canvasRef._objects.length - 1 
-    let path = this.props.canvasRef._objects[index]
-    let newId = this.generateId(path)
+    const index = this.props.canvasRef._objects.length - 1 
+    const path = this.props.canvasRef._objects[index]
+    const newId = this.generateId(path)
+    path.set({
+      uid: newId
+    })
 
     let pathCommand: PathCommand = {
       id: newId, 
@@ -112,6 +115,7 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
     this.setState(
       this.state.objectHashMap[newId] = path
     )
+
     this.state.shouldBroadcast && !this.state.isSelected && clientSocket.emit('draw-from-client', drawingName, pathCommand)
     this.setState({
       shouldBroadcast: false,
@@ -175,8 +179,9 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
           stroke: instruction.path.stroke,
           scaleX: instruction.path.scaleX,
           scaleY: instruction.path.scaleY, 
-          strokeWidth: instruction.path.strokeWidth
+          strokeWidth: instruction.path.strokeWidth,
         })
+        path["uid"] = instruction.id
         this.props.canvasRef.add(path)
       })
     })
@@ -198,6 +203,8 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
         scaleY: pathCommand.path.scaleY, 
         strokeWidth: pathCommand.path.strokeWidth
       })
+      path["uid"] = pathCommand.id
+      console.log(path)
       this.props.canvasRef.add(path)
     })
 
