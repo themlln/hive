@@ -24,6 +24,13 @@ module.exports = io => {
       socket.broadcast.to(drawingName).emit('draw-from-server', pathCommand)
     })
 
+    socket.on('delete-object-from-client', (drawingName: String, deleteCommand: any) => {
+      const instructions = getDrawing(drawingName)
+      const newInstructions = instructions.filter( instruction => instruction.id !== deleteCommand.id)
+      drawings[drawingName] = newInstructions
+      socket.broadcast.to(drawingName).emit('delete-object-from-server', deleteCommand)
+    })
+
     socket.on('modified-from-client', (drawingName: any) => {
       console.log('modified-from-client, on server')
       socket.broadcast.to(drawingName).emit('modified-from-server')

@@ -213,6 +213,12 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
       console.log('modified-from-server on client side')
     })
 
+    clientSocket.on('delete-object-from-server', (deleteCommand) => {
+      const allObjects = this.props.canvasRef.getObjects()
+      const objectToDelete = allObjects.filter(object => object.uid === deleteCommand.id)
+      this.props.canvasRef.remove(objectToDelete[0])
+    })
+
     clientSocket.on('clear-canvas', () => {
       this.state.canvas.clear()
     })

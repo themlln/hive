@@ -29,7 +29,13 @@ class Panel extends React.Component<PanelStateProps & PanelDispatchProps> {
         </button>
         <button type="button" onClick={() => {
           this.handleClick('delete')
-          this.props.canvasRef.remove(this.props.canvasRef.getActiveObject())
+          let activeObject = this.props.canvasRef.getActiveObject()
+          let deleteCommand = {
+            id: activeObject.uid,
+            path: activeObject
+          }
+          this.props.canvasRef.remove(activeObject)
+          clientSocket.emit('delete-object-from-client', drawingName, deleteCommand)
           }
           } >Delete
         </button>
