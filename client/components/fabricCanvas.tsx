@@ -4,6 +4,7 @@ import * as createClientSocket from 'socket.io-client'
 import { connect } from 'react-redux'
 import {updateCanvas} from '../store/Panel'
 import { fabric } from 'fabric'
+import { Path } from 'fabric/fabric-impl'
 
 export const clientSocket: any = createClientSocket(window.location.origin)
 export const drawingName: String = '/canvas'
@@ -20,7 +21,8 @@ interface State {
   canvas: any,
   canvasRef: any,
   instructions: Array<any>,
-  shouldBroadcast: boolean
+  shouldBroadcast: boolean, 
+  currentObject: Object
 }
 
 class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, State> {
@@ -31,7 +33,8 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
       canvas: {},
       canvasRef: React.createRef(),
       instructions: [],
-      shouldBroadcast: false
+      shouldBroadcast: false,
+      currentObject: {}
     }
 
     this.handleMouseMove = this.handleMouseMove.bind(this)
@@ -56,8 +59,7 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
     canvas.freeDrawingBrush.width = strokeWidth
     canvas.freeDrawingBrush.color = strokeColor
     canvas.isDrawingMode = true
-    this.state.shouldBroadcast && clientSocket.emit('draw-from-client', drawingName, start, end, strokeColor, strokeWidth)
-    }
+  }
 
   position(event) {
     return [
@@ -75,6 +77,13 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
 
 
   handleMouseUp(event) {
+    console.log('mouse up')
+    let index = this.props.canvasRef._objects.length - 1 
+    console.log(index)
+    console.log('object last drawn in mouse up', this.props.canvasRef._objects[index])
+    let lastObject = this.props.canvasRef._objects[index]
+    console.log(this.state.shouldBroadcast, 'should broadcast')
+    this.state.shouldBroadcast && clientSocket.emit('draw-from-client', drawingName, lastObject)
     this.setState({
       shouldBroadcast: false
     })
@@ -93,10 +102,12 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
 
   handleObjectSelected(event) {
     console.log('OBJECT SELECTED')
-    if(event.options){
-      console.log(event.options.type)
-    }
+    console.log(event.e)
+  }
 
+  handleObjectModified(event) {
+    console.log('OBJECT MODIFIED')
+    console.log(event, 'event in object modified')
   }
 
   async componentDidMount() {
@@ -123,10 +134,29 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
       })
     })
 
-    clientSocket.on('draw-from-server', (line: string, color: string, width: number) => {
-      const newPath = new fabric.Path(line)
-      newPath.set({stroke: color, strokeWidth: width})
-      this.state.canvas.add(newPath)
+    // clientSocket.on('draw-from-server', (line: string, color: string, width: number) => {
+  
+    //   const newPath = new fabric.Path(line)
+    //   newPath.set({stroke: color, strokeWidth: width})
+    //   this.state.canvas.add(newPath)
+    // })
+
+    clientSocket.on('draw-from-server', (newObject: any) => {
+      console.log(newObject, 'draw-from-server')
+      console.log(newObject.path, 'draw-from server, new object path')
+      const object = new fabric.Path(newObject.path)
+      object.set({
+        left: newObject.left,
+        top: newObject.top,
+        width: newObject.width,
+        height: newObject.height,
+        fill: newObject.fill,
+        stroke: newObject.stroke,
+        scaleX: newObject.scaleX,
+        scaleY: newObject.scaleY, 
+        strokeWidth: newObject.strokeWidth
+      })
+      this.props.canvasRef.add(object)
     })
 
     clientSocket.on('clear-canvas', () => {
@@ -139,6 +169,7 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
     fabricCanvas.on('mouse:move', this.handleMouseMove)
     fabricCanvas.on('mouse:up', this.handleMouseUp)
     fabricCanvas.on('object:selected', this.handleObjectSelected)
+    fabricCanvas.on('object:modified', this.handleObjectModified)
 
   }
 
