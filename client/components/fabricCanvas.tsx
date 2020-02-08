@@ -4,7 +4,8 @@ import * as createClientSocket from 'socket.io-client'
 import { connect } from 'react-redux'
 import {updateCanvas} from '../store/Panel'
 import { fabric } from 'fabric'
-import { Path } from 'fabric/fabric-impl'
+import { Path, Object } from 'fabric/fabric-impl'
+import { object } from 'prop-types'
 
 export const clientSocket: any = createClientSocket(window.location.origin)
 export const drawingName: String = '/canvas'
@@ -23,7 +24,13 @@ interface State {
   instructions: Array<any>,
   shouldBroadcast: boolean, 
   isSelected: boolean,
-  currentObject: Object
+  currentObject: any, 
+  objectHashMap: any
+}
+
+interface PathCommand {
+  id: string, 
+  path: any
 }
 
 class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, State> {
@@ -36,7 +43,8 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
       instructions: [],
       shouldBroadcast: false,
       isSelected: false,
-      currentObject: {}
+      currentObject: {}, 
+      objectHashMap: {}
     }
 
     this.handleMouseMove = this.handleMouseMove.bind(this)
@@ -46,6 +54,7 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
     this.handleObjectSelected = this.handleObjectSelected.bind(this)
     this.drawErase = this.drawErase.bind(this)
   }
+
 
 
   drawErase (
@@ -83,16 +92,27 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
     currentMousePosition = this.position(event.e)
   }
 
+  generateId (object: any) {
+    let idArray = [object.left, object.top, object.width, object.height]
+    let idString = idArray.join("").split(".").join("")
+    return idString
+  }
 
   handleMouseUp(event) {
     console.log('mouse up')
     let index = this.props.canvasRef._objects.length - 1 
-    console.log(index)
-    console.log('object last drawn in mouse up', this.props.canvasRef._objects[index])
-    let lastObject = this.props.canvasRef._objects[index]
-    console.log(this.state.shouldBroadcast, 'should broadcast')
-    console.log(this.state.isSelected, "isselected")
-    this.state.shouldBroadcast && !this.state.isSelected && clientSocket.emit('draw-from-client', drawingName, lastObject)
+    let path = this.props.canvasRef._objects[index]
+    let newId = this.generateId(path)
+
+    let pathCommand: PathCommand = {
+      id: newId, 
+      path: path
+    }
+
+    this.setState(
+      this.state.objectHashMap[newId] = path
+    )
+    this.state.shouldBroadcast && !this.state.isSelected && clientSocket.emit('draw-from-client', drawingName, pathCommand)
     this.setState({
       shouldBroadcast: false,
       currentObject:{}
@@ -141,45 +161,44 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
 
     clientSocket.on('replay-drawing', (instructions) => {
       instructions.forEach(instruction => {
-        const object = new fabric.Path(instruction.path)
-        object.set({
-          left: instruction.left,
-          top: instruction.top,
-          width: instruction.width,
-          height: instruction.height,
-          fill: instruction.fill,
-          stroke: instruction.stroke,
-          scaleX: instruction.scaleX,
-          scaleY: instruction.scaleY, 
-          strokeWidth: instruction.strokeWidth
+        this.setState(
+          this.state.objectHashMap[instruction.id] = instruction.path
+        )
+        
+        const path = new fabric.Path(instruction.path.path)
+        path.set({
+          left: instruction.path.left,
+          top: instruction.path.top,
+          width: instruction.path.width,
+          height: instruction.path.height,
+          fill: instruction.path.fill,
+          stroke: instruction.path.stroke,
+          scaleX: instruction.path.scaleX,
+          scaleY: instruction.path.scaleY, 
+          strokeWidth: instruction.path.strokeWidth
         })
-        this.props.canvasRef.add(object)
+        this.props.canvasRef.add(path)
       })
     })
 
-    // clientSocket.on('draw-from-server', (line: string, color: string, width: number) => {
-  
-    //   const newPath = new fabric.Path(line)
-    //   newPath.set({stroke: color, strokeWidth: width})
-    //   this.state.canvas.add(newPath)
-    // })
+    clientSocket.on('draw-from-server', (pathCommand: any) => {
+      this.setState(
+        this.state.objectHashMap[pathCommand.id] = pathCommand.path
+      )
 
-    clientSocket.on('draw-from-server', (newObject: any) => {
-      console.log(newObject, 'draw-from-server')
-      console.log(newObject.path, 'draw-from server, new object path')
-      const object = new fabric.Path(newObject.path)
-      object.set({
-        left: newObject.left,
-        top: newObject.top,
-        width: newObject.width,
-        height: newObject.height,
-        fill: newObject.fill,
-        stroke: newObject.stroke,
-        scaleX: newObject.scaleX,
-        scaleY: newObject.scaleY, 
-        strokeWidth: newObject.strokeWidth
+      const path = new fabric.Path(pathCommand.path.path)
+      path.set({
+        left: pathCommand.path.left,
+        top: pathCommand.path.top,
+        width: pathCommand.path.width,
+        height: pathCommand.path.height,
+        fill: pathCommand.path.fill,
+        stroke: pathCommand.path.stroke,
+        scaleX: pathCommand.path.scaleX,
+        scaleY: pathCommand.path.scaleY, 
+        strokeWidth: pathCommand.path.strokeWidth
       })
-      this.props.canvasRef.add(object)
+      this.props.canvasRef.add(path)
     })
 
     clientSocket.on('clear-canvas', () => {
