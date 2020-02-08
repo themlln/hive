@@ -22,6 +22,7 @@ interface State {
   canvasRef: any,
   instructions: Array<any>,
   shouldBroadcast: boolean, 
+  isSelected: boolean,
   currentObject: Object
 }
 
@@ -34,12 +35,15 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
       canvasRef: React.createRef(),
       instructions: [],
       shouldBroadcast: false,
+      isSelected: false,
       currentObject: {}
     }
 
     this.handleMouseMove = this.handleMouseMove.bind(this)
     this.handleMouseDown = this.handleMouseDown.bind(this)
     this.handleMouseUp = this.handleMouseUp.bind(this)
+    this.handleObjectModified = this.handleObjectModified.bind(this)
+    this.handleObjectSelected = this.handleObjectSelected.bind(this)
     this.drawErase = this.drawErase.bind(this)
   }
 
@@ -59,6 +63,10 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
     canvas.freeDrawingBrush.width = strokeWidth
     canvas.freeDrawingBrush.color = strokeColor
     canvas.isDrawingMode = true
+
+    this.setState({
+      isSelected: false
+    })
   }
 
   position(event) {
@@ -83,9 +91,11 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
     console.log('object last drawn in mouse up', this.props.canvasRef._objects[index])
     let lastObject = this.props.canvasRef._objects[index]
     console.log(this.state.shouldBroadcast, 'should broadcast')
-    this.state.shouldBroadcast && clientSocket.emit('draw-from-client', drawingName, lastObject)
+    console.log(this.state.isSelected, "isselected")
+    this.state.shouldBroadcast && !this.state.isSelected && clientSocket.emit('draw-from-client', drawingName, lastObject)
     this.setState({
-      shouldBroadcast: false
+      shouldBroadcast: false,
+      currentObject:{}
     })
   }
 
@@ -103,6 +113,9 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
   handleObjectSelected(event) {
     console.log('OBJECT SELECTED')
     console.log(event.e)
+    this.setState({
+      isSelected: true
+    })
   }
 
   handleObjectModified(event) {
@@ -128,9 +141,19 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
 
     clientSocket.on('replay-drawing', (instructions) => {
       instructions.forEach(instruction => {
-        const newPath = new fabric.Path(instruction[0])
-        newPath.set({stroke: instruction[1], strokeWidth: instruction[2]})
-        this.state.canvas.add(newPath)
+        const object = new fabric.Path(instruction.path)
+        object.set({
+          left: instruction.left,
+          top: instruction.top,
+          width: instruction.width,
+          height: instruction.height,
+          fill: instruction.fill,
+          stroke: instruction.stroke,
+          scaleX: instruction.scaleX,
+          scaleY: instruction.scaleY, 
+          strokeWidth: instruction.strokeWidth
+        })
+        this.props.canvasRef.add(object)
       })
     })
 
