@@ -18,12 +18,31 @@ module.exports = io => {
       socket.emit('replay-drawing', instructions)
     })
 
-    socket.on('draw-from-client', (drawingName: any, start: [number, number], end: [number, number], color: string, width: number) => {
+    socket.on('draw-from-client', (drawingName: any, command: any) => {
       const drawing = getDrawing(drawingName)
-      const line = `M ${start[0]} ${start[1]} L ${end[0]} ${end[1]} z`
-      drawing.push([line, color, width])
-      socket.broadcast.to(drawingName).emit('draw-from-server', line, color, width)
+      drawing.push(command)
+      if(command.textObject) {
+        socket.broadcast.to(drawingName).emit('text-from-server', command)
+      } else {
+        socket.broadcast.to(drawingName).emit('draw-from-server', command)
+      }
     })
+
+    socket.on('delete-object-from-client', (drawingName: String, deleteCommand: any) => {
+      const instructions = getDrawing(drawingName)
+      const newInstructions = instructions.filter( instruction => instruction.id !== deleteCommand.id)
+      drawings[drawingName] = newInstructions
+      socket.broadcast.to(drawingName).emit('delete-object-from-server', deleteCommand)
+    })
+
+    socket.on('modified-from-client', (drawingName: any, modifiedCommand: any) => {
+      const instructions = getDrawing(drawingName), 
+      const modifiedObject = instructions.filter(instruction => instruction.id === modifiedCommand.id)
+      modifiedObject[0].path = modifiedCommand.modifiedObject
+      modifiedObject[0].textObject = modifiedCommand.modifiedObject
+      socket.broadcast.to(drawingName).emit('modified-from-server', modifiedCommand)
+    })
+
     socket.on('clear-canvas', (drawingName: any) => {
       drawings[drawingName] = []
       socket.broadcast.to(drawingName).emit('clear-canvas')
