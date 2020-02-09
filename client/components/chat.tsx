@@ -15,7 +15,6 @@ class Chat extends React.Component<ChatStateProps & ChatDispatchProps> {
   render() {
     return (
       <div>
-        <p>This is a test!</p>
         <ul className="message-list">
           {this.props.chat.messages.map((message: object) => <SingleMessage
           message={message}
@@ -30,7 +29,6 @@ class Chat extends React.Component<ChatStateProps & ChatDispatchProps> {
 }
 
 const mapStateToProps = (state: ChatState): ChatStateProps => {
-  console.log('STATE of CHAT', state)
   return {
     chat: {
       messages: state.chat.messages

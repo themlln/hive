@@ -10,7 +10,7 @@ const userRepository = getRepository(User)
 
 router.post('/login', async (req: Request, res:Response, next: NextFunction) => {
   try {
-    const user = await userRepository.findOneOrFail({
+    const user: any = await userRepository.findOneOrFail({
       email: req.body.email
     })
     if (!user) {
@@ -18,7 +18,7 @@ router.post('/login', async (req: Request, res:Response, next: NextFunction) => 
     } else if (!user.correctPassword(req.body.password)) {
       res.json('Wrong username and/or password').status(401)
     } else {
-      const modifiedUser = {id: user.id, email: user.email}
+      const modifiedUser = {id: user.id, email: user.email, name: user.name, profileImage: user.profileImage}
       req.login(modifiedUser, err => (err ? next(err) : res.json(modifiedUser)))
     }
   } catch (err) {
@@ -28,12 +28,12 @@ router.post('/login', async (req: Request, res:Response, next: NextFunction) => 
 
 router.post('/signup', async (req: Request, res:Response, next: NextFunction) => {
   try {
-    const user = await userRepository.create(req.body);
+    const user: any = await userRepository.create(req.body);
     await userRepository.save(user);
-    const modifiedUser = {id: user.id, email: user.email}
+    const modifiedUser: object = {id: user.id, email: user.email, name: user.name, profileImage: user.profileImage}
     req.login(modifiedUser, err => (err ? next(err) : res.json(modifiedUser)))
   } catch (err) {
-    if (err.name === 'SequelizeUniqueConstraintError') {
+    if (err.name === 'TypeORMUniqueConstraintError') {
       res.status(401).send('User already exists')
     } else {
       next(err)

@@ -5,7 +5,7 @@ export interface ChatStateProps {
   chat: {
     messages: Array<Message>
   },
-  user: Array<object>
+  user: object
 }
 
 export interface ChatDispatchProps {
