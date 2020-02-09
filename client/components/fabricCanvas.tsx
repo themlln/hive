@@ -170,7 +170,32 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
 
     clientSocket.on('replay-drawing', (instructions) => {
       instructions.forEach(instruction => {
-        if (!instruction.textObject) {
+        if(instruction.textObject) {
+          this.setState(
+            this.state.objectHashMap[instruction.id] = instruction.textObject
+          )
+
+          const newText = new fabric.IText(instruction.textObject.text, {
+            fontFamily: instruction.textObject.fontFamily,
+            left: instruction.textObject.left,
+            top: instruction.textObject.top,
+          })
+          newText["uid"] = instruction.id
+          this.props.canvasRef.add(newText)
+        } else if (instruction.circleObject) {
+          this.setState(
+            this.state.objectHashMap[instruction.id] = instruction.circleObject
+          )
+
+          const newCircle = new fabric.Circle({
+            radius: instruction.circleObject.radius,
+            left: instruction.circleObject.left,
+            top: instruction.circleObject.top, 
+            fill: instruction.circleObject.fill
+          });
+          newCircle["uid"] = instruction.id
+          this.props.canvasRef.add(newCircle)
+        } else if (instruction.path) {
           this.setState(
             this.state.objectHashMap[instruction.id] = instruction.path
           )
@@ -189,19 +214,7 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
           })
           path["uid"] = instruction.id
           this.props.canvasRef.add(path)
-        } else {
-          this.setState(
-            this.state.objectHashMap[instruction.id] = instruction.textObject
-          )
-
-          const newText = new fabric.IText(instruction.textObject.text, {
-            fontFamily: instruction.textObject.fontFamily,
-            left: instruction.textObject.left,
-            top: instruction.textObject.top,
-          })
-          newText["uid"] = instruction.id
-          this.props.canvasRef.add(newText)
-        }
+        } 
       })
     })
 
@@ -256,6 +269,29 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
       })
       newText["uid"] = textCommand.id
       this.props.canvasRef.add(newText)
+    })
+
+    clientSocket.on('circle-from-server', (circleCommand) => {
+      const newCircle = new fabric.Circle({
+        radius: circleCommand.circleObject.radius,
+        left: circleCommand.circleObject.left,
+        top: circleCommand.circleObject.top, 
+        fill: circleCommand.circleObject.fill
+      });
+      newCircle["uid"] = circleCommand.id
+      this.props.canvasRef.add(newCircle)
+    })
+
+    clientSocket.on('rectangle-from-server', (rectangleCommand) => {
+      const newRectangle = new fabric.Rect({
+        left: rectangleCommand.rectangleObject.left,
+        top: rectangleCommand.rectangleObject.top,
+        fill: rectangleCommand.rectangleObject.fill,
+        width: rectangleCommand.rectangleObject.width,
+        height: rectangleCommand.rectangleObject.height
+      })
+      newRectangle["uid"] = rectangleCommand.id
+      this.props.canvasRef.add(newRectangle)
     })
 
     clientSocket.on('delete-object-from-server', (deleteCommand) => {

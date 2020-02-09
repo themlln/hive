@@ -23,6 +23,10 @@ module.exports = io => {
       drawing.push(command)
       if(command.textObject) {
         socket.broadcast.to(drawingName).emit('text-from-server', command)
+      } else if (command.circleObject) {
+        socket.broadcast.to(drawingName).emit('circle-from-server', command)
+      } else if (command.rectangleObject) {
+        socket.broadcast.to(drawingName).emit('rectangle-from-server', command)
       } else {
         socket.broadcast.to(drawingName).emit('draw-from-server', command)
       }
@@ -36,10 +40,12 @@ module.exports = io => {
     })
 
     socket.on('modified-from-client', (drawingName: any, modifiedCommand: any) => {
-      const instructions = getDrawing(drawingName), 
+      const instructions = getDrawing(drawingName) 
       const modifiedObject = instructions.filter(instruction => instruction.id === modifiedCommand.id)
-      modifiedObject[0].path = modifiedCommand.modifiedObject
-      modifiedObject[0].textObject = modifiedCommand.modifiedObject
+
+      if (modifiedObject[0].circleObject) {modifiedObject[0].circleObject = modifiedCommand.modifiedObject}
+      if (modifiedObject[0].path) { modifiedObject[0].path = modifiedCommand.modifiedObject }
+      if (modifiedObject[0].textObject) {modifiedObject[0].textObject = modifiedCommand.modifiedObject}
       socket.broadcast.to(drawingName).emit('modified-from-server', modifiedCommand)
     })
 

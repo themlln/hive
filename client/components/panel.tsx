@@ -14,6 +14,8 @@ class Panel extends React.Component<PanelStateProps & PanelDispatchProps> {
     this.handleClick = this.handleClick.bind(this)
     this.generateId = this.generateId.bind(this)
     this.addText = this.addText.bind(this)
+    this.addCircle = this.addCircle.bind(this)
+    this.addRectangle = this.addRectangle.bind(this)
   }
   componentDidMount() {
   }
@@ -49,6 +51,39 @@ class Panel extends React.Component<PanelStateProps & PanelDispatchProps> {
     this.props.canvasRef.add(newText)
   }
 
+  addCircle() {
+    const newCircle = new fabric.Circle({
+      radius: 15,
+      left: 100,
+      top: 100, 
+      fill: this.props.color
+    });
+    newCircle["uid"] = this.generateId(newCircle)
+    let circleCommand = {
+      id: newCircle["uid"],
+      circleObject: newCircle
+    }
+    clientSocket.emit('draw-from-client', drawingName, circleCommand)
+    this.props.canvasRef.add(newCircle)
+  }
+
+  addRectangle() {
+    const newRectangle = new fabric.Rect({
+      left: 100,
+      top: 100,
+      fill: this.props.color,
+      width: 20,
+      height: 20
+    })
+    newRectangle["uid"] = this.generateId(newRectangle)
+    let rectangleCommand = {
+      id: newRectangle["uid"],
+      rectangleObject: newRectangle
+    }
+    clientSocket.emit('draw-from-client', drawingName, rectangleCommand)
+    this.props.canvasRef.add(newRectangle)
+  }
+
   render() {
     return(
       <div>
@@ -67,10 +102,22 @@ class Panel extends React.Component<PanelStateProps & PanelDispatchProps> {
           } >Delete
         </button>
         <button type="button" onClick={() => this.handleClick('select')}>Select/Move</button>
+        
         <button type="button" onClick={() => {
           this.handleClick('text')
           this.addText()
           }}>Text</button>
+
+        <button type="button" onClick={() => {
+          this.handleClick('circle')
+          this.addCircle()
+          }}>Circle</button>
+
+        <button type="button" onClick={() => {
+          this.handleClick('rectangle')
+          this.addRectangle()
+          }}>Rectangle</button>
+
 
         <button type="button" onClick={() => this.clearCanvas('clearCanvas')}>Clear Canvas</button>
 
@@ -95,6 +142,7 @@ class Panel extends React.Component<PanelStateProps & PanelDispatchProps> {
 interface PanelStateProps {
   tool: string
   canvasRef: any
+  color: string
 }
 
 interface PanelDispatchProps {
@@ -103,7 +151,8 @@ interface PanelDispatchProps {
 const mapStateToProps = (state: any): PanelStateProps => {
   return {
     tool: state.panel.tool,
-    canvasRef: state.panel.canvasRef
+    canvasRef: state.panel.canvasRef, 
+    color: state.panel.color
   }
 }
 
