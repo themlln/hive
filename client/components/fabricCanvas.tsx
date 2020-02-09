@@ -23,14 +23,14 @@ interface State {
   canvas: any,
   canvasRef: any,
   instructions: Array<any>,
-  shouldBroadcast: boolean, 
+  shouldBroadcast: boolean,
   isSelected: boolean,
-  currentObject: any, 
+  currentObject: any,
   objectHashMap: any
 }
 
 interface PathCommand {
-  id: string, 
+  id: string,
   path: any
 }
 
@@ -44,7 +44,7 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
       instructions: [],
       shouldBroadcast: false,
       isSelected: false,
-      currentObject: {}, 
+      currentObject: {},
       objectHashMap: {}
     }
 
@@ -145,7 +145,7 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
   handleObjectModified(event) {
     const modifiedObject = event.target
     const modifiedCommand = {
-      id: modifiedObject.uid, 
+      id: modifiedObject.uid,
       modifiedObject: modifiedObject
     }
     clientSocket.emit('modified-from-client', drawingName, modifiedCommand)
@@ -156,6 +156,7 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
     const fabricCanvas = new fabric.Canvas(this.state.canvasRef.current, {
       selection: false,
       preserveObjectStacking: true,
+      backgroundColor: 'white'
     })
     fabricCanvas.setHeight(500)
     fabricCanvas.setWidth(1000)
@@ -218,7 +219,7 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
         fill: pathCommand.path.fill,
         stroke: pathCommand.path.stroke,
         scaleX: pathCommand.path.scaleX,
-        scaleY: pathCommand.path.scaleY, 
+        scaleY: pathCommand.path.scaleY,
         strokeWidth: pathCommand.path.strokeWidth
       })
       path["uid"] = pathCommand.id
@@ -230,6 +231,7 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
       const objectToModify = allObjects.filter(object => object.uid === modifiedCommand.id)
       const modifiedObject = modifiedCommand.modifiedObject
 
+
       if(objectToModify[0].text) {
         objectToModify[0].text = modifiedObject.text
       } 
@@ -238,7 +240,7 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
       objectToModify[0].height = modifiedObject.height,
       objectToModify[0].left = modifiedObject.left,
       objectToModify[0].top = modifiedObject.top,
-      objectToModify[0].scaleX = modifiedObject.scaleX, 
+      objectToModify[0].scaleX = modifiedObject.scaleX,
       objectToModify[0].scaleY = modifiedObject.scaleY,
       objectToModify[0].translateX =  modifiedObject.translateX,
       objectToModify[0].translateY = modifiedObject.translateY
@@ -255,7 +257,7 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
       newText["uid"] = textCommand.id
       this.props.canvasRef.add(newText)
     })
-    
+
     clientSocket.on('delete-object-from-server', (deleteCommand) => {
       const allObjects = this.props.canvasRef.getObjects()
       const objectToDelete = allObjects.filter(object => object.uid === deleteCommand.id)
