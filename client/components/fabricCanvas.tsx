@@ -148,6 +148,7 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
       id: modifiedObject.uid,
       modifiedObject: modifiedObject
     }
+
     clientSocket.emit('modified-from-client', drawingName, modifiedCommand)
   }
 
@@ -191,10 +192,28 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
             radius: instruction.circleObject.radius,
             left: instruction.circleObject.left,
             top: instruction.circleObject.top, 
-            fill: instruction.circleObject.fill
+            fill: instruction.circleObject.fill, 
+            scaleX: instruction.circleObject.scaleX,
+            scaleY: instruction.circleObject.scaleY
           });
           newCircle["uid"] = instruction.id
           this.props.canvasRef.add(newCircle)
+        } else if (instruction.rectangleObject) {
+          this.setState(
+            this.state.objectHashMap[instruction.id] = instruction.rectangleObject
+          )
+          let rect = instruction.rectangleObject
+          const newRectangle = new fabric.Rect({
+            left: rect.left,
+            top: rect.top,
+            fill: rect.fill,
+            width: rect.width,
+            height: rect.height, 
+            scaleX: rect.scaleX,
+            scaleY: rect.scaleY
+          })
+          newRectangle["uid"] = instruction.id
+          this.props.canvasRef.add(newRectangle)
         } else if (instruction.path) {
           this.setState(
             this.state.objectHashMap[instruction.id] = instruction.path
@@ -243,8 +262,8 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
       const allObjects = this.props.canvasRef.getObjects()
       const objectToModify = allObjects.filter(object => object.uid === modifiedCommand.id)
       const modifiedObject = modifiedCommand.modifiedObject
-
-
+      // this might be causing the select bug in multiuser experience
+  
       if(objectToModify[0].text) {
         objectToModify[0].text = modifiedObject.text
       } 
