@@ -169,7 +169,6 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
 
     clientSocket.on('replay-drawing', (instructions) => {
       instructions.forEach(instruction => {
-        console.log(instruction)
         if (!instruction.textObject) {
           this.setState(
             this.state.objectHashMap[instruction.id] = instruction.path
@@ -199,7 +198,6 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
             left: instruction.textObject.left,
             top: instruction.textObject.top,
           })
-          console.log(newText)
           newText["uid"] = instruction.id
           this.props.canvasRef.add(newText)
         }
