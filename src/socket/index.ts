@@ -36,10 +36,10 @@ module.exports = io => {
     })
 
     socket.on('modified-from-client', (drawingName: any, modifiedCommand: any) => {
-      // const instructions = getDrawing(drawingName), 
-      // const modifiedObject = instructions.filter(instruction => instruction.id === modifiedCommand.id)
-      // modifiedObject[0].path = modifiedCommand.modifiedObject
-      // socket.broadcast.to(drawingName).emit('modified-from-server', modifiedCommand)
+      const instructions = getDrawing(drawingName), 
+      const modifiedObject = instructions.filter(instruction => instruction.id === modifiedCommand.id)
+      modifiedObject[0].path = modifiedCommand.modifiedObject
+      socket.broadcast.to(drawingName).emit('modified-from-server', modifiedCommand)
     })
 
     socket.on('clear-canvas', (drawingName: any) => {
@@ -50,6 +50,7 @@ module.exports = io => {
     socket.on('disconnect', () => {
       console.log(`Connection ${socket.id} has left the building`)
     })
+
 
   })
 }

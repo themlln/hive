@@ -101,6 +101,7 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
   }
 
   handleMouseUp(event) {
+    console.log('mouse up')
     const index = this.props.canvasRef._objects.length - 1 
     const path = this.props.canvasRef._objects[index]
     const newId = this.generateId(path)
