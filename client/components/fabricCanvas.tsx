@@ -53,12 +53,12 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
     this.handleMouseUp = this.handleMouseUp.bind(this)
     this.handleObjectModified = this.handleObjectModified.bind(this)
     this.handleObjectSelected = this.handleObjectSelected.bind(this)
-    this.drawErase = this.drawErase.bind(this)
+    this.draw = this.draw.bind(this)
   }
 
 
 
-  drawErase (
+  draw (
     start: any = [0,0],
     end: any = [0,0],
     strokeColor: string = 'black',
@@ -100,37 +100,36 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
   }
 
   handleMouseUp(event) {
-    console.log('mouse up')
     if (this.props.tool === 'draw'){
-    const index = this.props.canvasRef._objects.length - 1
-    const path = this.props.canvasRef._objects[index]
-    const newId = this.generateId(path)
-    path.set({
-      uid: newId
-    })
+      const index = this.props.canvasRef._objects.length - 1 
+      const path = this.props.canvasRef._objects[index]
+      const newId = this.generateId(path)
+      path.set({
+        uid: newId
+      })
 
-    let pathCommand: PathCommand = {
-      id: newId,
-      path: path
-    }
+      let pathCommand: PathCommand = {
+        id: newId, 
+        path: path
+      }
 
-    this.setState(
-      this.state.objectHashMap[newId] = path
-    )
+      this.setState(
+        this.state.objectHashMap[newId] = path
+      )
 
-    this.state.shouldBroadcast && !this.state.isSelected && clientSocket.emit('draw-from-client', drawingName, pathCommand)
-    this.setState({
-      shouldBroadcast: false,
-      currentObject:{}
-    })
+      this.state.shouldBroadcast && !this.state.isSelected && clientSocket.emit('draw-from-client', drawingName, pathCommand)
+      this.setState({
+        shouldBroadcast: false,
+        currentObject:{}
+      })
     }
   }
 
   handleMouseMove(event) {
-    if(this.props.tool === 'draw' || this.props.tool === 'erase'){
+    if(this.props.tool === 'draw'){
       lastMousePosition = currentMousePosition
       currentMousePosition = this.position(event.e)
-      lastMousePosition && currentMousePosition && this.drawErase(lastMousePosition, currentMousePosition, this.props.color, this.props.strokeWidth)
+      lastMousePosition && currentMousePosition && this.draw(lastMousePosition, currentMousePosition, this.props.color, this.props.strokeWidth)
     } else {
       this.state.canvas.isDrawingMode = false
     }
@@ -138,16 +137,12 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
   }
 
   handleObjectSelected(event) {
-    console.log("is selected")
-    console.log(event)
     this.setState({
       isSelected: true
     })
   }
 
   handleObjectModified(event) {
-    console.log("is modified")
-    console.log(event)
     const modifiedObject = event.target
     const modifiedCommand = {
       id: modifiedObject.uid,
@@ -175,24 +170,38 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
 
     clientSocket.on('replay-drawing', (instructions) => {
       instructions.forEach(instruction => {
-        this.setState(
-          this.state.objectHashMap[instruction.id] = instruction.path
-        )
+        if (!instruction.textObject) {
+          this.setState(
+            this.state.objectHashMap[instruction.id] = instruction.path
+          )
+          
+          const path = new fabric.Path(instruction.path.path)
+          path.set({
+            left: instruction.path.left,
+            top: instruction.path.top,
+            width: instruction.path.width,
+            height: instruction.path.height,
+            fill: instruction.path.fill,
+            stroke: instruction.path.stroke,
+            scaleX: instruction.path.scaleX,
+            scaleY: instruction.path.scaleY, 
+            strokeWidth: instruction.path.strokeWidth,
+          })
+          path["uid"] = instruction.id
+          this.props.canvasRef.add(path)
+        } else {
+          this.setState(
+            this.state.objectHashMap[instruction.id] = instruction.textObject
+          )
 
-        const path = new fabric.Path(instruction.path.path)
-        path.set({
-          left: instruction.path.left,
-          top: instruction.path.top,
-          width: instruction.path.width,
-          height: instruction.path.height,
-          fill: instruction.path.fill,
-          stroke: instruction.path.stroke,
-          scaleX: instruction.path.scaleX,
-          scaleY: instruction.path.scaleY,
-          strokeWidth: instruction.path.strokeWidth,
-        })
-        path["uid"] = instruction.id
-        this.props.canvasRef.add(path)
+          const newText = new fabric.IText(instruction.textObject.text, {
+            fontFamily: instruction.textObject.fontFamily,
+            left: instruction.textObject.left,
+            top: instruction.textObject.top,
+          })
+          newText["uid"] = instruction.id
+          this.props.canvasRef.add(newText)
+        }
       })
     })
 
@@ -222,6 +231,11 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
       const objectToModify = allObjects.filter(object => object.uid === modifiedCommand.id)
       const modifiedObject = modifiedCommand.modifiedObject
 
+
+      if(objectToModify[0].text) {
+        objectToModify[0].text = modifiedObject.text
+      } 
+      
       objectToModify[0].width = modifiedObject.width
       objectToModify[0].height = modifiedObject.height,
       objectToModify[0].left = modifiedObject.left,

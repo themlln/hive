@@ -8,14 +8,18 @@ export const drawingName: String = '/canvas'
 
 class Panel extends React.Component<PanelStateProps & PanelDispatchProps> {
 
+  constructor(props) {
+    super(props)
+    this.clearCanvas = this.clearCanvas.bind(this)
+    this.handleClick = this.handleClick.bind(this)
+    this.generateId = this.generateId.bind(this)
+    this.addText = this.addText.bind(this)
+  }
   componentDidMount() {
-    console.log(this.props, "******PROPS*******")
   }
 
  async clearCanvas(action: string) {
     await this.props.canvasRef.clear()
-    console.log('CANVAS CLEARED')
-
     clientSocket.emit('clear-canvas', drawingName)
  }
  async handleClick(action: string) {
@@ -28,6 +32,21 @@ class Panel extends React.Component<PanelStateProps & PanelDispatchProps> {
     let idArray = [randomNumber, object.left, object.top, object.width, object.height]
     let idString = idArray.join("").split(".").join("")
     return idString
+  }
+
+  addText() {
+    const newText = new fabric.IText('Insert Text Here', {
+      fontFamily: 'arial',
+      left: 100,
+      top: 100 ,
+    })
+    newText["uid"] = this.generateId(newText)
+    let textCommand = {
+      id: newText["uid"],
+      textObject: newText
+    }
+    clientSocket.emit('draw-from-client', drawingName, textCommand)
+    this.props.canvasRef.add(newText)
   }
 
   render() {
@@ -50,19 +69,7 @@ class Panel extends React.Component<PanelStateProps & PanelDispatchProps> {
         <button type="button" onClick={() => this.handleClick('select')}>Select/Move</button>
         <button type="button" onClick={() => {
           this.handleClick('text')
-          const newText = new fabric.IText('Insert Text Here', {
-            fontFamily: 'arial',
-            left: 100,
-            top: 100 ,
-          })
-          newText["uid"] = this.generateId(newText)
-          let textCommand = {
-            id: newText["uid"],
-            textObject: newText
-          }
-          console.log("text-from-client", textCommand)
-          clientSocket.emit('draw-from-client', drawingName, textCommand)
-          this.props.canvasRef.add(newText)
+          this.addText()
           }}>Text</button>
 
         <button type="button" onClick={() => this.clearCanvas('clearCanvas')}>Clear Canvas</button>
