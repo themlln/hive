@@ -5,10 +5,10 @@ import { User } from "./User";
 @Entity()
 export class Canvas {
 
-    @PrimaryGeneratedColumn()
-    id: number;
+    @PrimaryGeneratedColumn("uuid")
+    id: string;
 
-    @Column()
+    @Column({nullable: true})
     canvasObj: string;
 
     @CreateDateColumn()

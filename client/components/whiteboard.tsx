@@ -10,9 +10,7 @@ interface State {
 export class Whiteboard extends React.Component < {}, {} > {
     constructor(props) {
         super(props)
-
         this.state = {
-
         }
     }
 

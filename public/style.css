@@ -32,3 +32,74 @@ canvas {
   border-width: 5px;
 }
 
+main {
+  margin: 78px 25px 25px 25px;
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.message-list {
+  overflow-y: scroll;
+  flex: 1 1 auto;
+  border: solid;
+  border-color: #fdbcb4;
+
+}
+
+.message {
+  position: relative;
+  display: flex;
+  flex-flow: row-wrap;
+}
+
+.message img {
+  height: 64px;
+  width: 64px;
+}
+
+.message-left {
+  display: flex;
+  flex-direction: column;
+  margin: 1em;
+}
+
+.message-body {
+  border-radius: 5px;
+  margin: 1em;
+}
+
+.timestamp {
+  color: black;
+  margin: 1em;
+}
+
+.edit-message {
+  justify-content: end;
+  margin: 1em;
+}
+
+.delete-message {
+  justify-content: end;
+  margin: 1em;
+}
+
+main > div {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+}
+
+/* message form */
+
+#new-message-form {
+  position: relative;
+}
+
+#new-message-form .form-control {
+  border-width: 3px 1.5px 3px 3px;
+}
+
+#new-message-form.btn {
+  border-width: 3px;
+}

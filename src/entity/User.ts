@@ -3,6 +3,7 @@ import { IsEmail } from 'class-validator'
 import { Canvas } from './Canvas'
 import { Collaborators } from './Collaborator'
 import * as crypto from 'crypto'
+import { Message } from "./Message";
 
 @Entity()
 export class User {
@@ -16,6 +17,12 @@ export class User {
 
   @Column()
   password: string;
+
+  @Column({default: 'Anonymous mlln'})
+  name: string;
+
+  @Column({default: "https://visualpharm.com/assets/751/Melon-595b40b75ba036ed117d8629.svg"})
+  profileImage: string;
 
   @Column({ select: false, nullable: true })
   private tempPassword: string;
@@ -37,6 +44,9 @@ export class User {
 
   @OneToMany(type => Canvas, canvas => canvas.owner)
   canvas: Canvas[]
+
+  @OneToMany(type => Message, message => message.user)
+  message: Message[]
 
   @OneToMany(type => Collaborators, sharedCanvas => sharedCanvas.user)
   sharedCanvas: Collaborators[];
