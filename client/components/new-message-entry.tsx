@@ -15,9 +15,13 @@ class NewMessageEntry extends React.Component<NewMessageMapStateToProps & NewMes
     const content: string = event.target.content.value
     const timestamp: string = new Date().toLocaleTimeString()
     const userId: number = this.props.user.id
+    const username: string = this.props.user.name
+    const profileImage: string = this.props.user.profileImage
     if (userId) {
       const newMessage: Message = {
         userId: userId,
+        username: username,
+        profileImage: profileImage,
         content: content,
         timestamp: timestamp
       }

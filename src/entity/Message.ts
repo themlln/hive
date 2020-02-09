@@ -14,7 +14,13 @@ export class Message {
     timestamp: Date;
 
     @Column()
-    userId: number;
+    userId?: number;
+
+    @Column({nullable: true})
+    username?: string;
+
+    @Column({nullable: true})
+    profileImage?: string;
 
     @ManyToOne(type => User, user => user.message)
     user: User;

@@ -10,7 +10,6 @@ export interface ChatStateProps {
 
 export interface ChatDispatchProps {
   fetchMessages: () => {},
-  updateMessage: (message: Message) => {message: Message},
   deleteMessage: (message: Message) => {message: Message}
 }
 

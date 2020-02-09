@@ -15,7 +15,6 @@ const initialState: ChatState = {
 export const GOT_NEW_MESSAGE = "GOT_NEW_MESSAGE";
 export const LOAD_MESSAGES = 'LOAD_MESSAGES'
 export const DELETE_MESSAGE = "DELETE_MESSAGE";
-export const UPDATE_MESSAGE = "UPDATE_MESSAGE";
 // const SET_USER = 'SET_USER';
 
 /**
@@ -33,13 +32,6 @@ export const loadMessages = (messages: Message[]) => {
   return {
     type: LOAD_MESSAGES,
     payload: messages
-  }
-}
-
-export const updatedMessage = (message: Message) => {
-  return {
-    type: UPDATE_MESSAGE,
-    payload: message
   }
 }
 
@@ -82,16 +74,6 @@ export const sendMessage = (message: Message) => async (dispatch: Dispatch<any>)
   }
 }
 
-export const updateMessage = (message: Message) => async (dispatch: Dispatch<any>) => {
-  try {
-    const {data: updatedMessage} = await axios.put(`/api/messages/${message.id}`, message)
-    dispatch(updatedMessage(message))
-    clientSocket.emit('update-message', message)
-  } catch (error) {
-    console.log('Error updating a message: ', error)
-  }
-}
-
 export const deleteMessage = (message: Message) => async (dispatch: Dispatch<any>) => {
   try {
     await axios.delete(`/api/messages/${message.id}`, message)
@@ -115,10 +97,6 @@ export const chatReducer = (state = initialState, action: ChatActionTypes): Chat
     case LOAD_MESSAGES:
       return {
         messages: [...state.messages, ...action.payload]
-      }
-    case UPDATE_MESSAGE:
-      return {
-        messages: [...state.messages, action.payload]
       }
     case DELETE_MESSAGE:
       return {

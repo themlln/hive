@@ -1,17 +1,17 @@
-import {GOT_NEW_MESSAGE, LOAD_MESSAGES, DELETE_MESSAGE, UPDATE_MESSAGE} from '../store/Chat'
+import {GOT_NEW_MESSAGE, LOAD_MESSAGES, DELETE_MESSAGE} from '../store/Chat'
 
 export interface Message {
   id?: number;
   content: string;
   timestamp: string;
-  userId?: number
+  userId?: number;
+  username?: string;
+  profileImage?: string;
 }
 
 export interface ChatState {
-  chat: {
-    messages: Array<Message>
-  },
-  user: Array<object>
+  messages: Array<Message>
+  user?: Array<object>
 }
 
 /**
@@ -27,17 +27,12 @@ interface GotMessagesFromServerAction {
   payload: Message[]
 }
 
-interface UpdateMessageAction {
-  type: typeof UPDATE_MESSAGE;
-  payload: Message
-}
-
 interface DeleteMessageAction {
   type: typeof DELETE_MESSAGE;
   payload: Message
 }
 
-export type ChatActionTypes = GotNewMessageAction | DeleteMessageAction | GotMessagesFromServerAction | UpdateMessageAction
+export type ChatActionTypes = GotNewMessageAction | DeleteMessageAction | GotMessagesFromServerAction
 
 // interface SetUserAction {
 //   type: typeof SET_USER

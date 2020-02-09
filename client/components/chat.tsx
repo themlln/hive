@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { fetchMessages, deleteMessage, updateMessage } from '../store/Chat'
+import { fetchMessages, deleteMessage } from '../store/Chat'
 import { Message, ChatState } from '../types/storeTypes'
 import { ChatStateProps, ChatDispatchProps } from '../types/componentTypes'
 import { SingleMessage } from './single-message'
@@ -20,7 +20,6 @@ class Chat extends React.Component<ChatStateProps & ChatDispatchProps> {
           {this.props.chat.messages.map((message: object) => <SingleMessage
           message={message}
           key={message.id}
-          updateMessage={this.props.updateMessage}
           deleteMessage={this.props.deleteMessage}
           user={this.props.user} />)}
         </ul>
@@ -43,7 +42,6 @@ const mapStateToProps = (state: ChatState): ChatStateProps => {
 const mapDispatchToProps = (dispatch: any): ChatDispatchProps => {
   return {
     fetchMessages: () => dispatch(fetchMessages()),
-    updateMessage: (message: Message) => dispatch(updateMessage(message)),
     deleteMessage: (message: Message) => dispatch(deleteMessage(message))
   }
 }

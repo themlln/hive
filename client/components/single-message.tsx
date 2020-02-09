@@ -4,10 +4,10 @@ interface MessageProps {
   message: object,
   updateMessage: any,
   deleteMessage: any,
+  user: object
 }
 
 export const SingleMessage: React.FunctionComponent<MessageProps> = ({message, updateMessage, deleteMessage, user}) => {
-  console.log()
   return (
     <>
       <div className="message">
@@ -19,13 +19,6 @@ export const SingleMessage: React.FunctionComponent<MessageProps> = ({message, u
         </div>
         <div className="timestamp">
           { message.timestamp }
-        </div>
-        <div className="edit-message">
-          <button className="message-edit-btn"
-          type="button"
-          onClick={() => updateMessage(message)} >
-          Edit
-          </button>
         </div>
         <div className="delete-message">
           <button className="message-remove-btn"

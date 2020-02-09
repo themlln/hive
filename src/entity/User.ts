@@ -19,10 +19,10 @@ export class User {
   password: string;
 
   @Column({nullable: true})
-  firstName?: string;
+  name?: string;
 
   @Column({nullable: true})
-  lastName?: string;
+  profileImage?: string;
 
   @Column({ select: false, nullable: true })
   private tempPassword: string;
