@@ -13,16 +13,18 @@ class NewMessageEntry extends React.Component<NewMessageMapStateToProps & NewMes
   handleSubmit = (event: any) => {
     event.preventDefault()
     const content: string = event.target.content.value
-    const timestamp: Date = new Date()
+    const timestamp: string = new Date().toLocaleTimeString()
     const userId: number = this.props.user.id
-    const newMessage: Message = {
-      userId: userId,
-      content: content,
-      timestamp: timestamp
+    if (userId) {
+      const newMessage: Message = {
+        userId: userId,
+        content: content,
+        timestamp: timestamp
+      }
+      this.props.sendMessage(newMessage)
+    } else {
+      alert('You need to sign up to use mlln Chat.')
     }
-    console.log("THIS IS A NEW MESSAGE -->", newMessage)
-    console.log('PROOOOPPPPSSSS', this.props)
-    this.props.sendMessage(newMessage)
   }
 
   render () {
