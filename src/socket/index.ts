@@ -38,7 +38,10 @@ module.exports = io => {
     socket.on('modified-from-client', (drawingName: any, modifiedCommand: any) => {
       const instructions = getDrawing(drawingName), 
       const modifiedObject = instructions.filter(instruction => instruction.id === modifiedCommand.id)
+      console.log(modifiedObject[0])
+      console.log(modifiedObject[0].textObject)
       modifiedObject[0].path = modifiedCommand.modifiedObject
+      modifiedObject[0].textObject = modifiedCommand.modifiedObject
       socket.broadcast.to(drawingName).emit('modified-from-server', modifiedCommand)
     })
 
