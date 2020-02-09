@@ -10,13 +10,13 @@ const userRepository = getRepository(User)
 
 router.post('/login', async (req: Request, res:Response, next: NextFunction) => {
   try {
-    const user = await userRepository.findOne({
+    const user = await userRepository.findOneOrFail({
       email: req.body.email
     })
     if (!user) {
-      res.status(401).send('Wrong username and/or password')
+      res.json('Wrong username and/or password').status(401)
     } else if (!user.correctPassword(req.body.password)) {
-      res.status(401).send('Wrong username and/or password')
+      res.json('Wrong username and/or password').status(401)
     } else {
       const modifiedUser = {id: user.id, email: user.email}
       req.login(modifiedUser, err => (err ? next(err) : res.json(modifiedUser)))
