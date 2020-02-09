@@ -3,6 +3,7 @@ import {updateTool} from '../store/Panel'
 import { connect } from 'react-redux'
 import { fabric } from 'fabric'
 import { clientSocket } from './fabricCanvas'
+import { Socket } from 'net'
 export const drawingName: String = '/canvas'
 
 class Panel extends React.Component<PanelStateProps & PanelDispatchProps> {
@@ -20,6 +21,13 @@ class Panel extends React.Component<PanelStateProps & PanelDispatchProps> {
  async handleClick(action: string) {
    await this.props.updateTool(action)
 
+  }
+
+  generateId (object: any) {
+    let randomNumber = Math.floor(Math.random()* 1000)
+    let idArray = [randomNumber, object.left, object.top, object.width, object.height]
+    let idString = idArray.join("").split(".").join("")
+    return idString
   }
 
   render() {
@@ -42,11 +50,19 @@ class Panel extends React.Component<PanelStateProps & PanelDispatchProps> {
         <button type="button" onClick={() => this.handleClick('select')}>Select/Move</button>
         <button type="button" onClick={() => {
           this.handleClick('text')
-          this.props.canvasRef.add(new fabric.IText('Insert Text Here', {
+          const newText = new fabric.IText('Insert Text Here', {
             fontFamily: 'arial',
             left: 100,
             top: 100 ,
-          }))
+          })
+          newText["uid"] = this.generateId(newText)
+          let textCommand = {
+            id: newText["uid"],
+            textObject: newText
+          }
+          console.log("text-from-client", textCommand)
+          clientSocket.emit('draw-from-client', drawingName, textCommand)
+          this.props.canvasRef.add(newText)
           }}>Text</button>
 
         <button type="button" onClick={() => this.clearCanvas('clearCanvas')}>Clear Canvas</button>

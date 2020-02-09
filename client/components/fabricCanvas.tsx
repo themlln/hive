@@ -94,7 +94,8 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
   }
 
   generateId (object: any) {
-    let idArray = [object.left, object.top, object.width, object.height]
+    let randomNumber = Math.floor(Math.random()* 1000)
+    let idArray = [randomNumber, object.left, object.top, object.width, object.height]
     let idString = idArray.join("").split(".").join("")
     return idString
   }
@@ -135,12 +136,16 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
   }
 
   handleObjectSelected(event) {
+    console.log("is selected")
+    console.log(event)
     this.setState({
       isSelected: true
     })
   }
 
   handleObjectModified(event) {
+    console.log("is modified")
+    console.log(event)
     const modifiedObject = event.target
     const modifiedCommand = {
       id: modifiedObject.uid, 
@@ -222,10 +227,20 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
       objectToModify[0].scaleY = modifiedObject.scaleY,
       objectToModify[0].translateX =  modifiedObject.translateX,
       objectToModify[0].translateY = modifiedObject.translateY
-      
+
       this.props.canvasRef.requestRenderAll()
     })
 
+    clientSocket.on('text-from-server', (textCommand) => {
+      const newText = new fabric.IText(textCommand.textObject.text, {
+        fontFamily: textCommand.textObject.fontFamily,
+        left: textCommand.textObject.left,
+        top: textCommand.textObject.top,
+      })
+      newText["uid"] = textCommand.id
+      this.props.canvasRef.add(newText)
+    })
+    
     clientSocket.on('delete-object-from-server', (deleteCommand) => {
       const allObjects = this.props.canvasRef.getObjects()
       const objectToDelete = allObjects.filter(object => object.uid === deleteCommand.id)
