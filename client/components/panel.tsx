@@ -74,6 +74,18 @@ class Panel extends React.Component<PanelStateProps & PanelDispatchProps> {
 
         <button type="button" onClick={() => this.clearCanvas('clearCanvas')}>Clear Canvas</button>
 
+        <button type="button" onClick={ () => {
+          const dataURL = this.props.canvasRef.toDataURL({
+            format: 'jpeg'
+          })
+          const a = document.createElement('a');
+          a.href = `${dataURL}`;
+          a.download = "canvas.png";
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+        }}>Download Canvas</button>
+
       </div>
     )
   }
