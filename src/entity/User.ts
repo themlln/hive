@@ -18,6 +18,12 @@ export class User {
   @Column()
   password: string;
 
+  @Column({default: 'Anonymous mlln'})
+  name: string;
+
+  @Column({default: "https://visualpharm.com/assets/751/Melon-595b40b75ba036ed117d8629.svg"})
+  profileImage: string;
+
   @Column({ select: false, nullable: true })
   private tempPassword: string;
 

@@ -111,7 +111,7 @@ async function bootApp() {
     passport.deserializeUser(async (id, done) => {
       try {
         const user = await userRepository.findOne({
-          select:['id', 'email'],
+          select:['id', 'email', 'name', 'profileImage'],
           where: { id: id },
         });
         done(null, user)

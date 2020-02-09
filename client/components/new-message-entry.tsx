@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { gotNewMessage, sendMessage } from '../store/Chat'
+import { sendMessage } from '../store/Chat'
 import {Message} from '../types/storeTypes'
 import {NewMessageDispatchToProps, NewMessageMapStateToProps} from '../types/componentTypes'
 import { connect } from 'react-redux'
@@ -13,16 +13,22 @@ class NewMessageEntry extends React.Component<NewMessageMapStateToProps & NewMes
   handleSubmit = (event: any) => {
     event.preventDefault()
     const content: string = event.target.content.value
-    const timestamp: Date = new Date()
+    const timestamp: string = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
     const userId: number = this.props.user.id
-    const newMessage: Message = {
-      userId: userId,
-      content: content,
-      timestamp: timestamp
+    const username: string = this.props.user.name
+    const profileImage: string = this.props.user.profileImage
+    if (userId) {
+      const newMessage: Message = {
+        content: content,
+        timestamp: timestamp,
+        userId: userId,
+        username: username,
+        profileImage: profileImage
+      }
+      this.props.sendMessage(newMessage)
+    } else {
+      alert('You need to sign up to use mlln Chat.')
     }
-    console.log("THIS IS A NEW MESSAGE -->", newMessage)
-    console.log('PROOOOPPPPSSSS', this.props)
-    this.props.sendMessage(newMessage)
   }
 
   render () {

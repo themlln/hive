@@ -39,22 +39,49 @@ main {
   flex-direction: column;
 }
 
-main .message-list {
+.message-list {
   overflow-y: scroll;
   flex: 1 1 auto;
+  border: solid;
+  border-color: #fdbcb4;
+
 }
 
-main .message img {
+.message {
+  position: relative;
+  display: flex;
+  flex-flow: row-wrap;
+}
+
+.message img {
   height: 64px;
   width: 64px;
 }
 
-main .message-body {
-  border-radius: 5px;
+.message-left {
+  display: flex;
+  flex-direction: column;
+  margin: 1em;
 }
 
-main .timestamp {
-  color: blue
+.message-body {
+  border-radius: 5px;
+  margin: 1em;
+}
+
+.timestamp {
+  color: black;
+  margin: 1em;
+}
+
+.edit-message {
+  justify-content: end;
+  margin: 1em;
+}
+
+.delete-message {
+  justify-content: end;
+  margin: 1em;
 }
 
 main > div {

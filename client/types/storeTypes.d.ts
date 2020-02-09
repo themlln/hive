@@ -3,16 +3,15 @@ import {GOT_NEW_MESSAGE, LOAD_MESSAGES, DELETE_MESSAGE} from '../store/Chat'
 export interface Message {
   id?: number;
   content: string;
-  timestamp: Date;
-  userId?: number
+  timestamp: string;
+  userId?: number;
+  username?: string;
+  profileImage?: string;
 }
 
 export interface ChatState {
-  chat: {
-    messages: Array<Message>
-  },
-  user: Array<object>
-
+  messages: Array<Message>
+  user?: Array<object>
 }
 
 /**
@@ -25,8 +24,15 @@ interface GotNewMessageAction {
 
 interface GotMessagesFromServerAction {
   type: typeof LOAD_MESSAGES
+  payload: Message[]
+}
+
+interface DeleteMessageAction {
+  type: typeof DELETE_MESSAGE;
   payload: Message
 }
+
+export type ChatActionTypes = GotNewMessageAction | DeleteMessageAction | GotMessagesFromServerAction
 
 // interface SetUserAction {
 //   type: typeof SET_USER
@@ -34,10 +40,3 @@ interface GotMessagesFromServerAction {
 //     name: string
 //   }
 // }
-
-interface DeleteMessageAction {
-  type: typeof DELETE_MESSAGE;
-  id: number;
-}
-
-export type ChatActionTypes = GotNewMessageAction | DeleteMessageAction | GotMessagesFromServerAction
