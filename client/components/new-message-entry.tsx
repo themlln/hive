@@ -14,7 +14,7 @@ class NewMessageEntry extends React.Component<NewMessageMapStateToProps & NewMes
     event.preventDefault()
     const content: string = event.target.content.value
     const timestamp: Date = new Date()
-    const userId: number = this.props.user[0].id
+    const userId: number = this.props.user.id
     const newMessage: Message = {
       userId: userId,
       content: content,

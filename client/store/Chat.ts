@@ -30,6 +30,7 @@ export const gotNewMessage = (newMessage: Message) => {
 
 export const loadMessages = (messages: Message[]) => {
   clientSocket.emit('load-messages', messages)
+  console.log("CHAT ACTION MESSAGES", messages, "TYPE", typeof messages)
   return {
     type: LOAD_MESSAGES,
     payload: messages
@@ -97,7 +98,7 @@ export const chatReducer = (state = initialState, action: ChatActionTypes): Chat
       }
     case LOAD_MESSAGES:
       return {
-        messages: [...state.messages, action.payload]
+        messages: [...state.messages, ...action.payload]
       }
     case DELETE_MESSAGE:
       return {

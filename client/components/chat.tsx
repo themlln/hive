@@ -16,7 +16,7 @@ class Chat extends React.Component<ChatStateProps & ChatDispatchProps> {
       <div>
         <p>This is a test!</p>
         <ul className="message-list">
-          {this.props.chat.messages.map((message: object) => <SingleMessage message={message} key={message[0].id} deleteMessage={this.props.deleteMessage} user={this.props.user} />)}
+          {this.props.chat.messages.map((message: object) => <SingleMessage message={message} key={message.id} deleteMessage={this.props.deleteMessage} user={this.props.user} />)}
         </ul>
         <ConnectNewMessageEntry />
       </div>
@@ -27,7 +27,7 @@ class Chat extends React.Component<ChatStateProps & ChatDispatchProps> {
 //INTERFACE
 interface ChatStateProps {
   chat: {
-    messages: Message[]
+    messages: Array<Message>
   },
   user: Array<object>
 }

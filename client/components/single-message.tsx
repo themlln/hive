@@ -3,16 +3,15 @@ import * as React from 'react'
 interface MessageProps {
   message: object,
   deleteMessage: any,
-  user: object
 }
 
 export const SingleMessage: React.FunctionComponent<MessageProps> = ({message, deleteMessage, user}) => {
   console.log()
   return (
     <>
-      <li className="message">
+      <div className="message">
         <div className="message-left">
-          {user[0].email}
+          {message.userId}
         </div>
         <div className="message-body">
           { message.content }
@@ -27,7 +26,7 @@ export const SingleMessage: React.FunctionComponent<MessageProps> = ({message, d
           x
           </button>
         </div>
-      </li>
+      </div>
     </>
   )
 }
