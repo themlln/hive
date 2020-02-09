@@ -94,14 +94,14 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
   }
 
   generateId (object: any) {
-    let randomNumber = Math.floor(Math.random()* 1000)
-    let idArray = [randomNumber, object.left, object.top, object.width, object.height]
+    let idArray = [object.left, object.top, object.width, object.height]
     let idString = idArray.join("").split(".").join("")
     return idString
   }
 
   handleMouseUp(event) {
     console.log('mouse up')
+    if (this.props.tool === 'draw'){
     const index = this.props.canvasRef._objects.length - 1 
     const path = this.props.canvasRef._objects[index]
     const newId = this.generateId(path)
@@ -123,6 +123,7 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
       shouldBroadcast: false,
       currentObject:{}
     })
+    }
   }
 
   handleMouseMove(event) {
