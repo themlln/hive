@@ -28,7 +28,6 @@ export const gotNewMessage = (newMessage: Message) => {
 }
 
 export const loadMessages = (messages: Message[]) => {
-  console.log("CHAT ACTION MESSAGES", messages, "TYPE", typeof messages)
   return {
     type: LOAD_MESSAGES,
     payload: messages
