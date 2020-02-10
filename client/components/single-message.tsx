@@ -3,10 +3,11 @@ import * as React from 'react'
 interface MessageProps {
   message: object,
   deleteMessage: any,
+  user: object,
   channelId: string
 }
 
-export const SingleMessage: React.FunctionComponent<MessageProps> = ({message,deleteMessage, channelId}) => {
+export const SingleMessage: React.FunctionComponent<MessageProps> = ({message, deleteMessage, user, channelId}) => {
   return (
     <>
       <div className="message">

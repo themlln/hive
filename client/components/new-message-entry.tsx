@@ -3,7 +3,6 @@ import { sendMessage } from '../store/Chat'
 import {Message} from '../types/storeTypes'
 import {NewMessageDispatchToProps, NewMessageMapStateToProps} from '../types/componentTypes'
 import { connect } from 'react-redux'
-import { clientSocket } from './fabricCanvas'
 
 class NewMessageEntry extends React.Component<NewMessageMapStateToProps & NewMessageDispatchToProps> {
   constructor(props) {
@@ -25,7 +24,7 @@ class NewMessageEntry extends React.Component<NewMessageMapStateToProps & NewMes
       username: username,
       profileImage: profileImage
     }
-    this.props.sendMessage(newMessage)
+    this.props.sendMessage(newMessage, this.props.channelId)
   }
 
   render () {
@@ -49,13 +48,14 @@ class NewMessageEntry extends React.Component<NewMessageMapStateToProps & NewMes
 
 const mapStateToProps = (state: React.ComponentState): NewMessageMapStateToProps => {
   return {
-    user: state.user
+    user: state.user,
+    channelId: state.channelId
   }
 }
 
 const mapDispatchToProps = (dispatch: React.Dispatch<any>): object => {
   return {
-    sendMessage: (newMessage: Message) => dispatch(sendMessage(newMessage))
+    sendMessage: (newMessage: Message, channelId: string) => dispatch(sendMessage(newMessage, channelId))
   }
 }
 
