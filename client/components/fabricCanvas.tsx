@@ -11,6 +11,9 @@ import { draw, sendDrawing, drawPath} from './canvasTools/draw'
 import {line, drawLine} from './canvasTools/line'
 import {generateId} from './canvasTools/id'
 import { copyText } from './canvasTools/text'
+import { drawCircle } from './canvasTools/circle'
+import { drawRectangle } from './canvasTools/rectangle'
+import { drawTriangle } from './canvasTools/triangle'
 
 export const clientSocket: any = createClientSocket(window.location.origin)
 export const channelId: String = '/canvas'
@@ -143,46 +146,11 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
         if(instruction.textObject) {
           copyText(instruction, this.props.canvasRef)
         } else if (instruction.circleObject) {
-
-          const newCircle = new fabric.Circle({
-            radius: instruction.circleObject.radius,
-            left: instruction.circleObject.left,
-            top: instruction.circleObject.top, 
-            fill: instruction.circleObject.fill, 
-            scaleX: instruction.circleObject.scaleX,
-            scaleY: instruction.circleObject.scaleY
-          });
-          newCircle["uid"] = instruction.id
-          this.props.canvasRef.add(newCircle)
+          drawCircle(instruction, this.props.canvasRef)
         } else if (instruction.rectangleObject) {
-
-          let rect = instruction.rectangleObject
-          const newRectangle = new fabric.Rect({
-            left: rect.left,
-            top: rect.top,
-            fill: rect.fill,
-            width: rect.width,
-            height: rect.height, 
-            scaleX: rect.scaleX,
-            scaleY: rect.scaleY
-          })
-          newRectangle["uid"] = instruction.id
-          this.props.canvasRef.add(newRectangle)
+          drawRectangle(instruction, this.props.canvasRef)
         } else if (instruction.triangleObject) {
-
-          const triangle = instruction.triangleObject
-          const newTriangle = new fabric.Triangle({
-            left: triangle.left, 
-            top: triangle.top,
-            width: triangle.width, 
-            height: triangle.height,
-            fill: triangle.fill,
-            scaleX: triangle.scaleX,
-            scaleY: triangle.scaleY
-          })
-      
-          newTriangle["uid"] = instruction.id
-          this.props.canvasRef.add(newTriangle)
+          drawTriangle(instruction, this.props.canvasRef)
         } else if (instruction.lineObject) {
           drawLine(instruction, this.props.canvasRef)
         } else if (instruction.path) {
@@ -220,42 +188,16 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
     clientSocket.on('text-from-server', (textCommand) => {
       copyText(textCommand, this.props.canvasRef)
     })
-
     clientSocket.on('circle-from-server', (circleCommand) => {
-      const newCircle = new fabric.Circle({
-        radius: circleCommand.circleObject.radius,
-        left: circleCommand.circleObject.left,
-        top: circleCommand.circleObject.top, 
-        fill: circleCommand.circleObject.fill
-      });
-      newCircle["uid"] = circleCommand.id
-      this.props.canvasRef.add(newCircle)
+      drawCircle(circleCommand, this.props.canvasRef)
     })
 
     clientSocket.on('rectangle-from-server', (rectangleCommand) => {
-      const newRectangle = new fabric.Rect({
-        left: rectangleCommand.rectangleObject.left,
-        top: rectangleCommand.rectangleObject.top,
-        fill: rectangleCommand.rectangleObject.fill,
-        width: rectangleCommand.rectangleObject.width,
-        height: rectangleCommand.rectangleObject.height
-      })
-      newRectangle["uid"] = rectangleCommand.id
-      this.props.canvasRef.add(newRectangle)
+      drawRectangle(rectangleCommand, this.props.canvasRef)
     })
 
     clientSocket.on('triangle-from-server', (triangleCommand) => {
-      const triangle = triangleCommand.triangleObject
-      const newTriangle = new fabric.Triangle({
-        left: triangle.left, 
-        top: triangle.top,
-        width: triangle.width, 
-        height: triangle.height,
-        fill: triangle.fill
-      })
-  
-      newTriangle["uid"] = triangleCommand.id
-      this.props.canvasRef.add(newTriangle)
+      drawTriangle(triangleCommand, this.props.canvasRef)
     })
 
     clientSocket.on('line-from-server', (lineCommand)=> {

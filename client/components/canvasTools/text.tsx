@@ -4,7 +4,6 @@ import {generateId} from './id'
 
 export function addText(
     color: string, 
-    channelId: String,
     canvas: any
 ) {
     const newText = new fabric.IText('Insert Text Here', {
