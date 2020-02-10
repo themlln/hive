@@ -22,8 +22,8 @@ export class Home extends React.Component < {}, {} > {
 
     componentDidMount() {
       clientSocket.on('connect', () => {
-        console.log('Client-Socket: I have a made a persistent two-way connection!')
-        clientSocket.emit('join-drawing', this.props.location.search.id)
+        console.log('Client-Socket: I have a made a persistent two-way connection!', this.props.location.search)
+        clientSocket.emit('join-drawing', this.props.location.search)
       })
     }
 
@@ -32,8 +32,8 @@ export class Home extends React.Component < {}, {} > {
         return (
         <div>
           <Navbar />
-          <Whiteboard channelId={this.props.location.search.id}/>
-          <Chat channelId={this.props.location.search.id}/>
+          <Whiteboard channelId={this.props.location.search}/>
+          <Chat channelId={this.props.location.search}/>
         </div>
         )
     }

@@ -23,7 +23,7 @@ export class Whiteboard extends React.Component < {}, {} > {
         <>
         <div>
           <Panel />
-          <ColorPicker />
+          <ColorPicker channelId={this.props.channelId}/>
           <FabricCanvas channelId={this.props.channelId}/>
         </div>
         </>

@@ -4,7 +4,6 @@ import { connect } from 'react-redux'
 import { fabric } from 'fabric'
 import { clientSocket } from './home'
 import { Socket } from 'net'
-export const drawingName: String = '/canvas'
 
 class Panel extends React.Component<PanelStateProps & PanelDispatchProps> {
 
@@ -21,7 +20,7 @@ class Panel extends React.Component<PanelStateProps & PanelDispatchProps> {
  async clearCanvas(action: string) {
     await this.props.canvasRef.clear()
     this.props.canvasRef.backgroundColor = 'white'
-    clientSocket.emit('clear-canvas', drawingName)
+    clientSocket.emit('clear-canvas', this.props.channelId)
  }
  async handleClick(action: string) {
    await this.props.updateTool(action)
@@ -46,7 +45,7 @@ class Panel extends React.Component<PanelStateProps & PanelDispatchProps> {
       id: newText["uid"],
       textObject: newText
     }
-    clientSocket.emit('draw-from-client', drawingName, textCommand)
+    clientSocket.emit('draw-from-client', this.props.channelId, textCommand)
     this.props.canvasRef.add(newText)
   }
 
@@ -63,7 +62,7 @@ class Panel extends React.Component<PanelStateProps & PanelDispatchProps> {
             path: activeObject
           }
           this.props.canvasRef.remove(activeObject)
-          clientSocket.emit('delete-object-from-client', drawingName, deleteCommand)
+          clientSocket.emit('delete-object-from-client', this.props.channelId, deleteCommand)
           }
           } >Delete
         </button>
@@ -95,16 +94,18 @@ class Panel extends React.Component<PanelStateProps & PanelDispatchProps> {
 //INTERFACE
 interface PanelStateProps {
   tool: string
-  canvasRef: any
+  canvasRef: any,
+  channelId: String
 }
 
 interface PanelDispatchProps {
   updateTool: (tool: string) => {tool: string}
 }
-const mapStateToProps = (state: any): PanelStateProps => {
+const mapStateToProps = (state: any, ownProps: {channelId: String}): PanelStateProps => {
   return {
     tool: state.panel.tool,
-    canvasRef: state.panel.canvasRef
+    canvasRef: state.panel.canvasRef,
+    channelId: ownProps.channelId
   }
 }
 
