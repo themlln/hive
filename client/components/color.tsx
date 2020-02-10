@@ -19,13 +19,13 @@ class ColorPicker extends React.Component<ColorStateProps & ColorDispatchProps> 
     return (
     <div id="colorPickers">
       <div id="strokeColor">
-      <h5>Stroke Color</h5>
+      <h6 id="colortitle">Stroke Color</h6>
       <CompactPicker color={this.props.color}
       onChangeComplete={this.handleChangeComplete}/>
       </div>
 
       <div id="fillColor">
-      <h5>Fill Color</h5>
+      <h6 id="colortitle">Fill Color</h6>
       <CompactPicker color={this.props.fill}
       onChangeComplete={this.handleFillChange}/>
       </div>

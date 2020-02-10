@@ -12,7 +12,7 @@ export class Whiteboard extends React.Component < {}, State > {
     constructor(props) {
       super(props)
       this.state = {
-        active: true,
+        active: false,
       }
 
       this.handleToggle = this.handleToggle.bind(this)
