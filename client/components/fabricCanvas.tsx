@@ -206,6 +206,7 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
             fontFamily: instruction.textObject.fontFamily,
             left: instruction.textObject.left,
             top: instruction.textObject.top,
+            fill: instruction.textObject.fill
           })
           newText["uid"] = instruction.id
           this.props.canvasRef.add(newText)
@@ -347,6 +348,7 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
         fontFamily: textCommand.textObject.fontFamily,
         left: textCommand.textObject.left,
         top: textCommand.textObject.top,
+        fill: textCommand.textObject.fill
       })
       newText["uid"] = textCommand.id
       this.props.canvasRef.add(newText)

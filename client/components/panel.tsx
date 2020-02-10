@@ -17,7 +17,6 @@ class Panel extends React.Component<PanelStateProps & PanelDispatchProps> {
     this.addCircle = this.addCircle.bind(this)
     this.addRectangle = this.addRectangle.bind(this)
     this.addTriangle = this.addTriangle.bind(this)
-    this.addLine = this.addLine.bind(this)
   }
   componentDidMount() {
   }
@@ -44,6 +43,7 @@ class Panel extends React.Component<PanelStateProps & PanelDispatchProps> {
       fontFamily: 'arial',
       left: 100,
       top: 100 ,
+      fill: this.props.color
     })
     newText["uid"] = this.generateId(newText)
     let textCommand = {
@@ -54,15 +54,7 @@ class Panel extends React.Component<PanelStateProps & PanelDispatchProps> {
     this.props.canvasRef.add(newText)
   }
 
-  addLine() {
-    const newLine = new fabric.Line([50, 100, 100, 100], {
-      fill: this.props.color, 
-      stroke: this.props.color, 
-      strokeWidth: 3, 
-      selectable: true
-    })
-    this.props.canvasRef.add(newLine)
-  }
+
 
   addCircle() {
     const newCircle = new fabric.Circle({
