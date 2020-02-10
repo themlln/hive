@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { fetchMessages, deleteMessage } from '../store/Chat'
+import { joinRoomMessage, deleteMessage } from '../store/Chat'
 import { Message, ChatState } from '../types/storeTypes'
 import { ChatStateProps, ChatDispatchProps } from '../types/componentTypes'
 import { SingleMessage } from './single-message'
@@ -10,10 +10,7 @@ import { connect } from 'react-redux'
 class Chat extends React.Component<ChatStateProps & ChatDispatchProps> {
 
   componentDidMount() {
-    this.props.fetchMessages()
-    clientSocket.on('replay-messages', (instructions) => {
-      
-    })
+    this.props.joinRoomMessage(this.props.user, this.props.channelId)
   }
 
   render() {
@@ -37,13 +34,14 @@ const mapStateToProps = (state: ChatState): ChatStateProps => {
     chat: {
       messages: state.chat.messages
     },
-    user: state.user
+    user: state.user,
+    channelId: state.channelId
   }
 }
 
 const mapDispatchToProps = (dispatch: any): ChatDispatchProps => {
   return {
-    fetchMessages: () => dispatch(fetchMessages()),
+    joinRoomMessage: (user: object, channelId: string) => dispatch(joinRoomMessage(user, channelId)),
     deleteMessage: (message: Message) => dispatch(deleteMessage(message))
   }
 }

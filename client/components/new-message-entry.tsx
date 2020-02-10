@@ -3,6 +3,7 @@ import { sendMessage } from '../store/Chat'
 import {Message} from '../types/storeTypes'
 import {NewMessageDispatchToProps, NewMessageMapStateToProps} from '../types/componentTypes'
 import { connect } from 'react-redux'
+import { clientSocket } from './fabricCanvas'
 
 class NewMessageEntry extends React.Component<NewMessageMapStateToProps & NewMessageDispatchToProps> {
   constructor(props) {
@@ -17,18 +18,14 @@ class NewMessageEntry extends React.Component<NewMessageMapStateToProps & NewMes
     const userId: number = this.props.user.id
     const username: string = this.props.user.name
     const profileImage: string = this.props.user.profileImage
-    if (userId) {
-      const newMessage: Message = {
-        content: content,
-        timestamp: timestamp,
-        userId: userId,
-        username: username,
-        profileImage: profileImage
-      }
-      this.props.sendMessage(newMessage)
-    } else {
-      alert('You need to sign up to use mlln Chat.')
+    const newMessage: Message = {
+      content: content,
+      timestamp: timestamp,
+      userId: userId,
+      username: username,
+      profileImage: profileImage
     }
+    this.props.sendMessage(newMessage)
   }
 
   render () {

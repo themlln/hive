@@ -1,4 +1,4 @@
-import {GOT_NEW_MESSAGE, LOAD_MESSAGES, DELETE_MESSAGE} from '../store/Chat'
+import {GOT_NEW_MESSAGE, JOIN_MESSAGE, DELETE_MESSAGE} from '../store/Chat'
 
 export interface Message {
   id?: number;
@@ -23,7 +23,7 @@ interface GotNewMessageAction {
 }
 
 interface GotMessagesFromServerAction {
-  type: typeof LOAD_MESSAGES
+  type: typeof JOIN_MESSAGE
   payload: Message[]
 }
 
