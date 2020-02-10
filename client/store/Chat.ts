@@ -1,6 +1,6 @@
 const axios = require('axios').default;
 import {ChatState, Message, ChatActionTypes} from '../types/storeTypes'
-import {clientSocket} from '../components/canvas'
+import {clientSocket} from '../components/fabricCanvas'
 import { Dispatch } from 'react';
 /**
  * INITIAL STATE
@@ -28,7 +28,6 @@ export const gotNewMessage = (newMessage: Message) => {
 }
 
 export const loadMessages = (messages: Message[]) => {
-  console.log("CHAT ACTION MESSAGES", messages, "TYPE", typeof messages)
   return {
     type: LOAD_MESSAGES,
     payload: messages
@@ -58,12 +57,14 @@ export const fetchMessages = () => async (dispatch: Dispatch<any>) => {
   try {
     const { data: messages } = await axios.get('/api/messages')
     dispatch(loadMessages(messages))
-    clientSocket.emit('new-message', messages)
+    clientSocket.emit('load-messages', messages)
   } catch (error) {
     console.log('Error fetching messages: ', error)
   }
-
 }
+
+
+
 export const sendMessage = (message: Message) => async (dispatch: Dispatch<any>) => {
   try {
     const { data: newMessage } = await axios.post('/api/messages', message)
