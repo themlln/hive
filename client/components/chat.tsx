@@ -4,12 +4,16 @@ import { Message, ChatState } from '../types/storeTypes'
 import { ChatStateProps, ChatDispatchProps } from '../types/componentTypes'
 import { SingleMessage } from './single-message'
 import { ConnectNewMessageEntry } from './new-message-entry'
+import { clientSocket } from './fabricCanvas'
 import { connect } from 'react-redux'
 
 class Chat extends React.Component<ChatStateProps & ChatDispatchProps> {
 
   componentDidMount() {
     this.props.fetchMessages()
+    clientSocket.on('replay-messages', (instructions) => {
+      
+    })
   }
 
   render() {

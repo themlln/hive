@@ -7,6 +7,9 @@ export class Message {
     @PrimaryGeneratedColumn()
     id: number;
 
+    @Column({nullable: true})
+    channelId: string;
+
     @Column()
     content: string;
 

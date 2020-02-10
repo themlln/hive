@@ -1,57 +1,73 @@
 const drawings: object = {}
+const messages: object = {}
 
-const getDrawing = (drawingName: String) => {
-  if (!drawings[drawingName]) {
-    drawings[drawingName] = []
+const getType = (channelId: string, type: object) => {
+  if (!type[channelId]) {
+    type[channelId] = []
   }
-  return drawings[drawingName]
+  return type[channelId]
 }
-
 
 module.exports = io => {
   io.on('connection', socket => {
     console.log(`A socket connection to the server has been made: ${socket.id}`)
 
-    socket.on('join-drawing', (drawingName: any) => {
-      socket.join(drawingName)
-      const instructions = getDrawing(drawingName)
+    socket.on('join-drawing', (channelId: any) => {
+      socket.join(channelId)
+      const instructions = getType(channelId, drawings)
       socket.emit('replay-drawing', instructions)
     })
 
-    socket.on('draw-from-client', (drawingName: any, command: any) => {
-      const drawing = getDrawing(drawingName)
+    socket.on('draw-from-client', (channelId: any, command: any) => {
+      const drawing = getType(channelId, drawings)
       drawing.push(command)
       if(command.textObject) {
-        socket.broadcast.to(drawingName).emit('text-from-server', command)
+        socket.broadcast.to(channelId).emit('text-from-server', command)
       } else {
-        socket.broadcast.to(drawingName).emit('draw-from-server', command)
+        socket.broadcast.to(channelId).emit('draw-from-server', command)
       }
     })
 
-    socket.on('delete-object-from-client', (drawingName: String, deleteCommand: any) => {
-      const instructions = getDrawing(drawingName)
+    socket.on('delete-object-from-client', (channelId: String, deleteCommand: any) => {
+      const instructions = getType(channelId, drawings)
       const newInstructions = instructions.filter( instruction => instruction.id !== deleteCommand.id)
-      drawings[drawingName] = newInstructions
-      socket.broadcast.to(drawingName).emit('delete-object-from-server', deleteCommand)
+      drawings[channelId] = newInstructions
+      socket.broadcast.to(channelId).emit('delete-object-from-server', deleteCommand)
     })
 
-    socket.on('modified-from-client', (drawingName: any, modifiedCommand: any) => {
-      const instructions = getDrawing(drawingName), 
+    socket.on('modified-from-client', (channelId: any, modifiedCommand: any) => {
+      const instructions = getType(channelId, drawings)
       const modifiedObject = instructions.filter(instruction => instruction.id === modifiedCommand.id)
       modifiedObject[0].path = modifiedCommand.modifiedObject
       modifiedObject[0].textObject = modifiedCommand.modifiedObject
-      socket.broadcast.to(drawingName).emit('modified-from-server', modifiedCommand)
+      socket.broadcast.to(channelId).emit('modified-from-server', modifiedCommand)
     })
 
-    socket.on('clear-canvas', (drawingName: any) => {
-      drawings[drawingName] = []
-      socket.broadcast.to(drawingName).emit('clear-canvas')
+    socket.on('clear-canvas', (channelId: any) => {
+      drawings[channelId] = []
+      socket.broadcast.to(channelId).emit('clear-canvas')
+    })
+
+    socket.on('load-messages', (channelId: any, messagesToLoad: Array<object>) => {
+      const channelMessages = getType(channelId, messages)
+      socket.broadcast.to(channelId.emit('replay-messages', channelMessages))
+    })
+
+    socket.on('new-message', (channelId: any, message: object) => {
+      const channelMessages = getType(channelId, messages)
+      channelMessages.push(message)
+      socket.broadcast.to(channelId.emit('receive-message', message))
+    })
+
+    socket.on('delete-message', (channelId: any, messageToDelete: object) => {
+      const channelMessages = getType(channelId, messages)
+      const updatedMessages = channelMessages.filter((message: object) => message.id !== messageToDelete.id)
+      channelMessages[channelId] = updatedMessages
+      socket.broadcast.to(channelId).emit('delete-object-from-server', messageToDelete)
     })
 
     socket.on('disconnect', () => {
       console.log(`Connection ${socket.id} has left the building`)
     })
-
-
   })
 }
