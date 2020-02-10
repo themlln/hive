@@ -20,7 +20,6 @@ class Panel extends React.Component<PanelStateProps & PanelDispatchProps> {
  async clearCanvas(action: string) {
     await this.props.canvasRef.clear()
     this.props.canvasRef.backgroundColor = 'white'
-    console.log("CHANNELID****", this.props.channelId)
     clientSocket.emit('clear-canvas', this.props.channelId)
  }
  async handleClick(action: string) {

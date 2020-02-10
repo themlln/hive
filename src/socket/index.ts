@@ -14,8 +14,10 @@ module.exports = io => {
 
     socket.on('join-drawing', (channelId: any) => {
       socket.join(channelId)
+      console.log("CHANNEL****", channelId)
       const instructions = getType(channelId, drawings)
       socket.emit('replay-drawing', instructions)
+      console.log("REPLAY FROM DRAWING****", instructions)
     })
 
     socket.on('draw-from-client', (channelId: any, command: any) => {

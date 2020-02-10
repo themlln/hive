@@ -6,6 +6,8 @@ import * as createClientSocket from 'socket.io-client'
 
 export const clientSocket: any = createClientSocket(window.location.origin)
 
+let channelId: String
+
 
 export class Home extends React.Component < {}, {} > {
     constructor(props) {
@@ -14,6 +16,7 @@ export class Home extends React.Component < {}, {} > {
           showLogin: false
         }
         this.toggleLogin = this.toggleLogin.bind(this)
+        channelId = this.props.location.search
     }
 
     toggleLogin() {
@@ -21,10 +24,6 @@ export class Home extends React.Component < {}, {} > {
     }
 
     componentDidMount() {
-      clientSocket.on('connect', () => {
-        console.log('Client-Socket: I have a made a persistent two-way connection!', this.props.location.search)
-        clientSocket.emit('join-drawing', this.props.location.search)
-      })
     }
 
     public render() {
@@ -33,8 +32,13 @@ export class Home extends React.Component < {}, {} > {
         <div>
           <Navbar />
           <Whiteboard channelId={this.props.location.search}/>
-          <Chat channelId={this.props.location.search}/>
+          <Chat channelId={this.props.location.search.id}/>
         </div>
         )
     }
 }
+
+clientSocket.on('connect', () => {
+  console.log('Client-Socket: I have a made a persistent two-way connection!', channelId)
+  clientSocket.emit('join-drawing', channelId)
+})
