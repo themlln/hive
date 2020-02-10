@@ -1,6 +1,7 @@
 import * as React from 'react'
 import { fetchMessages, deleteMessage } from '../store/Chat'
 import { Message, ChatState } from '../types/storeTypes'
+import { ChatStateProps, ChatDispatchProps } from '../types/componentTypes'
 import { SingleMessage } from './single-message'
 import { ConnectNewMessageEntry } from './new-message-entry'
 import { connect } from 'react-redux'
@@ -14,9 +15,12 @@ class Chat extends React.Component<ChatStateProps & ChatDispatchProps> {
   render() {
     return (
       <div>
-        <p>This is a test!</p>
         <ul className="message-list">
-          {this.props.chat.messages.map((message: object) => <SingleMessage message={message} key={message.id} deleteMessage={this.props.deleteMessage} user={this.props.user} />)}
+          {this.props.chat.messages.map((message: object) => <SingleMessage
+          message={message}
+          key={message.id}
+          deleteMessage={this.props.deleteMessage}
+          user={this.props.user} />)}
         </ul>
         <ConnectNewMessageEntry />
       </div>
@@ -24,20 +28,7 @@ class Chat extends React.Component<ChatStateProps & ChatDispatchProps> {
   }
 }
 
-//INTERFACE
-interface ChatStateProps {
-  chat: {
-    messages: Array<Message>
-  },
-  user: Array<object>
-}
-
-interface ChatDispatchProps {
-  fetchMessages: () => {},
-  deleteMessage: (message: Message) => {message: Message}
-}
 const mapStateToProps = (state: ChatState): ChatStateProps => {
-  console.log('STATE of CHAT', state.chat.messages)
   return {
     chat: {
       messages: state.chat.messages

@@ -16,12 +16,14 @@ class Panel extends React.Component<PanelStateProps & PanelDispatchProps> {
     this.addText = this.addText.bind(this)
     this.addCircle = this.addCircle.bind(this)
     this.addRectangle = this.addRectangle.bind(this)
+    this.addTriangle = this.addTriangle.bind(this)
   }
   componentDidMount() {
   }
 
  async clearCanvas(action: string) {
     await this.props.canvasRef.clear()
+    this.props.canvasRef.backgroundColor = 'white'
     clientSocket.emit('clear-canvas', drawingName)
  }
  async handleClick(action: string) {
@@ -84,6 +86,25 @@ class Panel extends React.Component<PanelStateProps & PanelDispatchProps> {
     this.props.canvasRef.add(newRectangle)
   }
 
+  addTriangle() {
+    const newTriangle = new fabric.Triangle({
+      left: 50, 
+      top: 50,
+      width: 30, 
+      height: 30,
+      fill: this.props.color
+    })
+
+    newTriangle["uid"] = this.generateId(newTriangle) 
+    let triangleCommand = {
+      id: newTriangle["uid"],
+      triangleObject: newTriangle
+    }
+
+    clientSocket.emit('draw-from-client', drawingName, triangleCommand)
+    this.props.canvasRef.add(newTriangle)
+  }
+
   render() {
     return(
       <div>
@@ -117,6 +138,11 @@ class Panel extends React.Component<PanelStateProps & PanelDispatchProps> {
           this.handleClick('rectangle')
           this.addRectangle()
           }}>Rectangle</button>
+
+        <button type="button" onClick={() => {
+          this.handleClick('triangle')
+          this.addTriangle()
+          }}>Triangle</button>
 
 
         <button type="button" onClick={() => this.clearCanvas('clearCanvas')}>Clear Canvas</button>

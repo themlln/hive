@@ -21,7 +21,6 @@ export const DELETE_MESSAGE = "DELETE_MESSAGE";
  * ACTION CREATORS
  */
 export const gotNewMessage = (newMessage: Message) => {
-  clientSocket.emit('new-message', newMessage)
   return {
     type: GOT_NEW_MESSAGE,
     payload: newMessage
@@ -29,7 +28,6 @@ export const gotNewMessage = (newMessage: Message) => {
 }
 
 export const loadMessages = (messages: Message[]) => {
-  clientSocket.emit('load-messages', messages)
   console.log("CHAT ACTION MESSAGES", messages, "TYPE", typeof messages)
   return {
     type: LOAD_MESSAGES,
@@ -37,6 +35,12 @@ export const loadMessages = (messages: Message[]) => {
   }
 }
 
+export const deletedMessage = (message: Message) => {
+  return {
+    type: DELETE_MESSAGE,
+    payload: message
+  }
+}
 // const setUser = (name: string) => {
 //   return {
 //     type: SET_USER,
@@ -45,12 +49,6 @@ export const loadMessages = (messages: Message[]) => {
 //     }
 //   }
 // }
-export const deletedMessage = (id: number) => {
-  return {
-    type: DELETE_MESSAGE,
-    id
-  }
-}
 
 /**
  * THUNKS
@@ -68,7 +66,6 @@ export const fetchMessages = () => async (dispatch: Dispatch<any>) => {
 }
 export const sendMessage = (message: Message) => async (dispatch: Dispatch<any>) => {
   try {
-    // message.user = getState().user
     const { data: newMessage } = await axios.post('/api/messages', message)
     dispatch(gotNewMessage(newMessage))
     clientSocket.emit('new-message', newMessage)
@@ -79,8 +76,9 @@ export const sendMessage = (message: Message) => async (dispatch: Dispatch<any>)
 
 export const deleteMessage = (message: Message) => async (dispatch: Dispatch<any>) => {
   try {
-    await axios.delete(`/api/message/${message.id}`, message)
-    dispatch(deletedMessage(message.id))
+    await axios.delete(`/api/messages/${message.id}`, message)
+    dispatch(deletedMessage(message))
+    clientSocket.emit('delete-message', message)
   } catch (error) {
     console.log('Error deleting message: ', error)
   }
@@ -102,7 +100,7 @@ export const chatReducer = (state = initialState, action: ChatActionTypes): Chat
       }
     case DELETE_MESSAGE:
       return {
-        messages: state.messages.filter(message => message.id !== action.id)
+        messages: state.messages.filter(message => message.id !== action.payload.id)
       }
     default:
       return state

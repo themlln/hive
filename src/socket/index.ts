@@ -27,7 +27,9 @@ module.exports = io => {
         socket.broadcast.to(drawingName).emit('circle-from-server', command)
       } else if (command.rectangleObject) {
         socket.broadcast.to(drawingName).emit('rectangle-from-server', command)
-      } else {
+      } else if (command.triangleObject) {
+        socket.broadcast.to(drawingName).emit('triangle-from-server', command)
+      }else {
         socket.broadcast.to(drawingName).emit('draw-from-server', command)
       }
     })
@@ -42,10 +44,9 @@ module.exports = io => {
     socket.on('modified-from-client', (drawingName: any, modifiedCommand: any) => {
       const instructions = getDrawing(drawingName) 
       const modifiedObject = instructions.filter(instruction => instruction.id === modifiedCommand.id)
-      console.log("modified object in client", modifiedObject)
-      console.log("modified command", modifiedCommand)
       if (modifiedObject[0].rectangleObject) {modifiedObject[0].rectangleObject = modifiedCommand.modifiedObject}
       if (modifiedObject[0].circleObject) {modifiedObject[0].circleObject = modifiedCommand.modifiedObject}
+      if (modifiedObject[0].triangleObject) {modifiedObject[0].triangleObject = modifiedCommand.modifiedObject}
       if (modifiedObject[0].path) { modifiedObject[0].path = modifiedCommand.modifiedObject }
       if (modifiedObject[0].textObject) {modifiedObject[0].textObject = modifiedCommand.modifiedObject}
       socket.broadcast.to(drawingName).emit('modified-from-server', modifiedCommand)

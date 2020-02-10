@@ -101,7 +101,7 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
 
   handleMouseUp(event) {
     if (this.props.tool === 'draw'){
-      const index = this.props.canvasRef._objects.length - 1 
+      const index = this.props.canvasRef._objects.length - 1
       const path = this.props.canvasRef._objects[index]
       const newId = this.generateId(path)
       path.set({
@@ -109,7 +109,7 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
       })
 
       let pathCommand: PathCommand = {
-        id: newId, 
+        id: newId,
         path: path
       }
 
@@ -214,11 +214,28 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
           })
           newRectangle["uid"] = instruction.id
           this.props.canvasRef.add(newRectangle)
-        } else if (instruction.path) {
+        } else if (instruction.triangleObject) {
+          this.setState(
+            this.state.objectHashMap[instruction.id] = instruction.triangleObject
+          )
+          const triangle = instruction.triangleObject
+          const newTriangle = new fabric.Triangle({
+            left: triangle.left, 
+            top: triangle.top,
+            width: triangle.width, 
+            height: triangle.height,
+            fill: triangle.fill,
+            scaleX: triangle.scaleX,
+            scaleY: triangle.scaleY
+          })
+      
+          newTriangle["uid"] = instruction.id
+          this.props.canvasRef.add(newTriangle)
+        }else if (instruction.path) {
           this.setState(
             this.state.objectHashMap[instruction.id] = instruction.path
           )
-          
+
           const path = new fabric.Path(instruction.path.path)
           path.set({
             left: instruction.path.left,
@@ -228,7 +245,7 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
             fill: instruction.path.fill,
             stroke: instruction.path.stroke,
             scaleX: instruction.path.scaleX,
-            scaleY: instruction.path.scaleY, 
+            scaleY: instruction.path.scaleY,
             strokeWidth: instruction.path.strokeWidth,
           })
           path["uid"] = instruction.id
@@ -266,8 +283,8 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
   
       if(objectToModify[0].text) {
         objectToModify[0].text = modifiedObject.text
-      } 
-      
+      }
+
       objectToModify[0].width = modifiedObject.width
       objectToModify[0].height = modifiedObject.height,
       objectToModify[0].left = modifiedObject.left,
@@ -313,6 +330,20 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
       this.props.canvasRef.add(newRectangle)
     })
 
+    clientSocket.on('triangle-from-server', (triangleCommand) => {
+      const triangle = triangleCommand.triangleObject
+      const newTriangle = new fabric.Triangle({
+        left: triangle.left, 
+        top: triangle.top,
+        width: triangle.width, 
+        height: triangle.height,
+        fill: triangle.fill
+      })
+  
+      newTriangle["uid"] = triangleCommand.id
+      this.props.canvasRef.add(newTriangle)
+    })
+
     clientSocket.on('delete-object-from-server', (deleteCommand) => {
       const allObjects = this.props.canvasRef.getObjects()
       const objectToDelete = allObjects.filter(object => object.uid === deleteCommand.id)
@@ -320,7 +351,8 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
     })
 
     clientSocket.on('clear-canvas', () => {
-      this.state.canvas.clear()
+      this.props.canvasRef.clear()
+      this.props.canvasRef.backgroundColor = 'white'
     })
 
     //bindings
