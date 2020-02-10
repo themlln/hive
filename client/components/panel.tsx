@@ -4,7 +4,8 @@ import { connect } from 'react-redux'
 import { fabric } from 'fabric'
 import { clientSocket } from './fabricCanvas'
 import { Socket } from 'net'
-export const drawingName: String = '/canvas'
+import { addText } from './canvasTools/text'
+export const channelId: String = '/canvas'
 
 class Panel extends React.Component<PanelStateProps & PanelDispatchProps> {
 
@@ -13,7 +14,6 @@ class Panel extends React.Component<PanelStateProps & PanelDispatchProps> {
     this.clearCanvas = this.clearCanvas.bind(this)
     this.handleClick = this.handleClick.bind(this)
     this.generateId = this.generateId.bind(this)
-    this.addText = this.addText.bind(this)
     this.addCircle = this.addCircle.bind(this)
     this.addRectangle = this.addRectangle.bind(this)
     this.addTriangle = this.addTriangle.bind(this)
@@ -24,7 +24,7 @@ class Panel extends React.Component<PanelStateProps & PanelDispatchProps> {
  async clearCanvas(action: string) {
     await this.props.canvasRef.clear()
     this.props.canvasRef.backgroundColor = 'white'
-    clientSocket.emit('clear-canvas', drawingName)
+    clientSocket.emit('clear-canvas', channelId)
  }
  async handleClick(action: string) {
    await this.props.updateTool(action)
@@ -38,24 +38,6 @@ class Panel extends React.Component<PanelStateProps & PanelDispatchProps> {
     return idString
   }
 
-  addText() {
-    const newText = new fabric.IText('Insert Text Here', {
-      fontFamily: 'arial',
-      left: 100,
-      top: 100 ,
-      fill: this.props.color
-    })
-    newText["uid"] = this.generateId(newText)
-    let textCommand = {
-      id: newText["uid"],
-      textObject: newText
-    }
-    clientSocket.emit('draw-from-client', drawingName, textCommand)
-    this.props.canvasRef.add(newText)
-  }
-
-
-
   addCircle() {
     const newCircle = new fabric.Circle({
       radius: 15,
@@ -68,7 +50,7 @@ class Panel extends React.Component<PanelStateProps & PanelDispatchProps> {
       id: newCircle["uid"],
       circleObject: newCircle
     }
-    clientSocket.emit('draw-from-client', drawingName, circleCommand)
+    clientSocket.emit('draw-from-client', channelId, circleCommand)
     this.props.canvasRef.add(newCircle)
   }
 
@@ -85,7 +67,7 @@ class Panel extends React.Component<PanelStateProps & PanelDispatchProps> {
       id: newRectangle["uid"],
       rectangleObject: newRectangle
     }
-    clientSocket.emit('draw-from-client', drawingName, rectangleCommand)
+    clientSocket.emit('draw-from-client', channelId, rectangleCommand)
     this.props.canvasRef.add(newRectangle)
   }
 
@@ -104,7 +86,7 @@ class Panel extends React.Component<PanelStateProps & PanelDispatchProps> {
       triangleObject: newTriangle
     }
 
-    clientSocket.emit('draw-from-client', drawingName, triangleCommand)
+    clientSocket.emit('draw-from-client', channelId, triangleCommand)
     this.props.canvasRef.add(newTriangle)
   }
 
@@ -122,7 +104,7 @@ class Panel extends React.Component<PanelStateProps & PanelDispatchProps> {
             path: activeObject
           }
           this.props.canvasRef.remove(activeObject)
-          clientSocket.emit('delete-object-from-client', drawingName, deleteCommand)
+          clientSocket.emit('delete-object-from-client', channelId, deleteCommand)
           }
           } >Delete
         </button>
@@ -130,7 +112,7 @@ class Panel extends React.Component<PanelStateProps & PanelDispatchProps> {
         
         <button type="button" onClick={() => {
           this.handleClick('text')
-          this.addText()
+          addText(this.props.color, channelId, this.props.canvasRef)
           }}>Text</button>
 
         <button type="button" onClick={() => {

@@ -10,6 +10,7 @@ import { Socket } from 'net'
 import { draw, sendDrawing, drawPath} from './canvasTools/draw'
 import {line, drawLine} from './canvasTools/line'
 import {generateId} from './canvasTools/id'
+import { copyText } from './canvasTools/text'
 
 export const clientSocket: any = createClientSocket(window.location.origin)
 export const channelId: String = '/canvas'
@@ -140,15 +141,7 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
     clientSocket.on('replay-drawing', (instructions) => {
       instructions.forEach(instruction => {
         if(instruction.textObject) {
-
-          const newText = new fabric.IText(instruction.textObject.text, {
-            fontFamily: instruction.textObject.fontFamily,
-            left: instruction.textObject.left,
-            top: instruction.textObject.top,
-            fill: instruction.textObject.fill
-          })
-          newText["uid"] = instruction.id
-          this.props.canvasRef.add(newText)
+          copyText(instruction, this.props.canvasRef)
         } else if (instruction.circleObject) {
 
           const newCircle = new fabric.Circle({
@@ -225,14 +218,7 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
     })
 
     clientSocket.on('text-from-server', (textCommand) => {
-      const newText = new fabric.IText(textCommand.textObject.text, {
-        fontFamily: textCommand.textObject.fontFamily,
-        left: textCommand.textObject.left,
-        top: textCommand.textObject.top,
-        fill: textCommand.textObject.fill
-      })
-      newText["uid"] = textCommand.id
-      this.props.canvasRef.add(newText)
+      copyText(textCommand, this.props.canvasRef)
     })
 
     clientSocket.on('circle-from-server', (circleCommand) => {
