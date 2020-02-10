@@ -1,6 +1,4 @@
 import * as React from 'react'
-
-import * as createClientSocket from 'socket.io-client'
 import { connect } from 'react-redux'
 import {updateCanvas} from '../store/Panel'
 import { fabric } from 'fabric'
@@ -110,7 +108,7 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
         this.state.objectHashMap[newId] = path
       )
 
-      this.state.shouldBroadcast && !this.state.isSelected && clientSocket.emit('draw-from-client', this.props.id, pathCommand)
+      this.state.shouldBroadcast && !this.state.isSelected && clientSocket.emit('draw-from-client', this.props.channelId, pathCommand)
       this.setState({
         shouldBroadcast: false,
         currentObject:{}
@@ -141,7 +139,7 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
       id: modifiedObject.uid,
       modifiedObject: modifiedObject
     }
-    clientSocket.emit('modified-from-client', this.props.id, modifiedCommand)
+    clientSocket.emit('modified-from-client', this.props.channelId, modifiedCommand)
   }
 
   async componentDidMount() {

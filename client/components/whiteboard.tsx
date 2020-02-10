@@ -24,7 +24,7 @@ export class Whiteboard extends React.Component < {}, {} > {
         <div>
           <Panel />
           <ColorPicker />
-          <FabricCanvas id={this.props.id}/>
+          <FabricCanvas channelId={this.props.channelId}/>
         </div>
         </>
         )

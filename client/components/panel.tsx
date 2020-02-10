@@ -2,7 +2,7 @@ import * as React from 'react'
 import {updateTool} from '../store/Panel'
 import { connect } from 'react-redux'
 import { fabric } from 'fabric'
-import { clientSocket } from './fabricCanvas'
+import { clientSocket } from './home'
 import { Socket } from 'net'
 export const drawingName: String = '/canvas'
 

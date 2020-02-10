@@ -32,8 +32,8 @@ export class Home extends React.Component < {}, {} > {
         return (
         <div>
           <Navbar />
-          <Whiteboard id={this.props.location.search.id}/>
-          <Chat id={this.props.location.search.id}/>
+          <Whiteboard channelId={this.props.location.search.id}/>
+          <Chat channelId={this.props.location.search.id}/>
         </div>
         )
     }
