@@ -45,6 +45,4 @@ const mapDispatchToProps = (dispatch: any): ChatDispatchProps => {
   }
 }
 
-const ConnectChat = connect(mapStateToProps, mapDispatchToProps)(Chat)
-
-export default ConnectChat
+export default connect(mapStateToProps, mapDispatchToProps)(Chat)
