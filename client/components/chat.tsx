@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { joinRoomMessage, deleteMessage } from '../store/Chat'
+import { fetchingMessages, deleteMessage } from '../store/Chat'
 import { Message, ChatState } from '../types/storeTypes'
 import { ChatStateProps, ChatDispatchProps } from '../types/componentTypes'
 import { SingleMessage } from './single-message'
@@ -9,10 +9,11 @@ import { connect } from 'react-redux'
 class Chat extends React.Component<ChatStateProps & ChatDispatchProps> {
 
   componentDidMount() {
-    this.props.joinRoomMessage(this.props.user, this.props.channelId)
+    this.props.fetchingMessages(this.props.channelId)
   }
 
   render() {
+    console.log("PROPS IN CHAT COMPONENT", this.props)
     return (
       <div>
         <ul className="message-list">
@@ -30,20 +31,21 @@ class Chat extends React.Component<ChatStateProps & ChatDispatchProps> {
   }
 }
 
-const mapStateToProps = (state: ChatState): ChatStateProps => {
+const mapStateToProps = (state: ChatState, ownProps:{channelId:string}): ChatStateProps => {
   return {
     chat: {
       messages: state.chat.messages
     },
     user: state.user,
-    channelId: state.channelId
+    channelId: ownProps.channelId
   }
 }
 
 const mapDispatchToProps = (dispatch: any): ChatDispatchProps => {
   return {
-    joinRoomMessage: (user: object, channelId: string) => dispatch(joinRoomMessage(user, channelId)),
+    fetchingMessages:(channelId: string) => dispatch((fetchingMessages(channelId))),
     deleteMessage: (message: Message, channelId: string) => dispatch(deleteMessage(message, channelId))
+
   }
 }
 

@@ -14,10 +14,8 @@ module.exports = io => {
 
     socket.on('join-drawing', (channelId: any) => {
       socket.join(channelId)
-      console.log("CHANNEL****", channelId)
       const instructions = getType(channelId, drawings)
       socket.emit('replay-drawing', instructions)
-      console.log("REPLAY FROM DRAWING****", instructions)
     })
 
     socket.on('draw-from-client', (channelId: any, command: any) => {
@@ -32,18 +30,14 @@ module.exports = io => {
 
     socket.on('delete-object-from-client', (channelId: string, deleteCommand: any) => {
       const instructions = getType(channelId, drawings)
-      const newInstructions = instructions.filter( instruction => instruction.id !== deleteCommand.id)
+      const newInstructions = instructions.filter( (instruction:object) => instruction.id !== deleteCommand.id)
       drawings[channelId] = newInstructions
       socket.broadcast.to(channelId).emit('delete-object-from-server', deleteCommand)
     })
 
-    socket.on('modified-from-client', (channelId: any, modifiedCommand: any) => {
+    socket.on('modified-from-client', (channelId: string, modifiedCommand: any) => {
       const instructions = getType(channelId, drawings)
-      console.log("LINE 40*** instructions", instructions)
-      const modifiedObject = instructions.filter(instruction => instruction.id === modifiedCommand.id)
-      console.log("modified from client")
-      console.log("modifiedObj", modifiedObject)
-      console.log("indstructions", instructions)
+      const modifiedObject = instructions.filter((instruction: object) => instruction.id === modifiedCommand.id)
       modifiedObject[0].path = modifiedCommand.modifiedObject
       modifiedObject[0].textObject = modifiedCommand.modifiedObject
       socket.broadcast.to(channelId).emit('modified-from-server', modifiedCommand)
@@ -54,16 +48,15 @@ module.exports = io => {
       socket.broadcast.to(channelId).emit('clear-canvas')
     })
 
-    socket.on('join-room-message', (channelId: string, message: object) => {
+    socket.on('load-messages', (channelId: string, messagesToLoad: Array<object>) => {
       const channelMessages = getType(channelId, messages)
-      channelMessages.push(message)
-      socket.broadcast.to(channelId).emit('user-joined-message', message)
+      socket.broadcast.to(channelId).emit('replay-messages', channelMessages)
     })
 
     socket.on('new-message', (channelId: string, message: object) => {
       const channelMessages = getType(channelId, messages)
       channelMessages.push(message)
-      socket.broadcast.to(channelId.emit('receive-message', message))
+      socket.broadcast.to(channelId).emit('receive-message', message)
     })
 
     socket.on('delete-message', (channelId: string, messageToDelete: object) => {

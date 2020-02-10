@@ -10,7 +10,7 @@ export interface ChatStateProps {
 }
 
 export interface ChatDispatchProps {
-  joinRoomMessage: (user: object, channelId: string) => {message: Message},
+  fetchingMessages: (channelId: string) => {messages: Array<Message>},
   deleteMessage: (message: Message, channelId: string) => {message: Message}
 }
 

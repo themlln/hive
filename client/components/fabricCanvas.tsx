@@ -160,7 +160,7 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
 
 
     clientSocket.on('replay-drawing', (instructions) => {
-      console.log("INSTRUCTIONS ON CLIENT SIDE TRIGGERED****", instructions)
+
       instructions.forEach(instruction => {
         if (!instruction.textObject) {
           this.setState(

@@ -17,13 +17,16 @@ class NewMessageEntry extends React.Component<NewMessageMapStateToProps & NewMes
     const userId: number = this.props.user.id
     const username: string = this.props.user.name
     const profileImage: string = this.props.user.profileImage
+    const channelId: string = this.props.channelId
     const newMessage: Message = {
       content: content,
       timestamp: timestamp,
       userId: userId,
       username: username,
-      profileImage: profileImage
+      profileImage: profileImage,
+      channelId: channelId
     }
+    console.log("SENDING MESSAGE WITH***", newMessage, this.props.channelId)
     this.props.sendMessage(newMessage, this.props.channelId)
   }
 
@@ -46,10 +49,10 @@ class NewMessageEntry extends React.Component<NewMessageMapStateToProps & NewMes
   }
 }
 
-const mapStateToProps = (state: React.ComponentState): NewMessageMapStateToProps => {
+const mapStateToProps = (state: React.ComponentState, ownProps:{channelId:string}): NewMessageMapStateToProps => {
   return {
     user: state.user,
-    channelId: state.channelId
+    channelId: ownProps.channelId
   }
 }
 

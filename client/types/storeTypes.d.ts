@@ -7,6 +7,7 @@ export interface Message {
   userId?: number;
   username?: string;
   profileImage?: string;
+  channelId?: string;
 }
 
 export interface ChatState {

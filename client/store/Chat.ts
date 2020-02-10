@@ -12,7 +12,7 @@ const initialState: ChatState = {
 /**
  * ACTIONS
  */
-export const JOIN_MESSAGE = "JOIN_MESSAGE";
+export const LOAD_MESSAGES = "LOAD_MESSAGES ";
 export const GOT_NEW_MESSAGE = "GOT_NEW_MESSAGE";
 export const DELETE_MESSAGE = "DELETE_MESSAGE";
 // const SET_USER = 'SET_USER';
@@ -21,10 +21,10 @@ export const DELETE_MESSAGE = "DELETE_MESSAGE";
  * ACTION CREATORS
  */
 
-export const joinedRoomMessage = (joinMessage: Message) => {
+export const loadMessages = (messages: Array<Message>) => {
   return {
-    type: JOIN_MESSAGE,
-    payload: joinMessage
+    type: LOAD_MESSAGES,
+    payload: messages
   }
 }
 
@@ -53,14 +53,15 @@ export const deletedMessage = (message: Message) => {
 /**
  * THUNKS
  */
-export const joinRoomMessage = (user: object, channelId: string) => async (dispatch: Dispatch<any>) => {
+export const fetchingMessages = (channelId: string) => async (dispatch: Dispatch<any>) => {
   try {
-    const joinMessage = `${user.name} has joined the room.`
-    const { data: message } = await axios.post('/api/messages', joinMessage)
-    dispatch(joinedRoomMessage(message))
-    clientSocket.emit('join-room-message', channelId, message)
+    console.log("fetchingmessages in store, channelID", channelId)
+    console.log("/api/messages/id"+channelId);
+    const { data: messages } = await axios.get("/api/messages/id"+channelId)
+    dispatch(loadMessages(messages))
+    clientSocket.emit('load-messages', channelId, messages)
   } catch (error) {
-    console.log('Error sending join message: ', error)
+    console.log('Error fetching messages: ', error)
   }
 }
 
@@ -90,7 +91,7 @@ export const deleteMessage = (message: Message, channelId: string) => async (dis
 
 export const chatReducer = (state = initialState, action: ChatActionTypes): ChatState => {
   switch(action.type) {
-    case JOIN_MESSAGE:
+    case LOAD_MESSAGES:
       return {
         messages: [...state.messages, ...action.payload]
       }

@@ -4,6 +4,11 @@ import Navbar from './navbar'
 import Chat from './chat'
 import * as createClientSocket from 'socket.io-client'
 
+import store from '../store/index.js'
+import { loadMessages, gotNewMessage, deletedMessage } from '../store/Chat'
+import { Message } from '../types/storeTypes'
+
+
 export const clientSocket: any = createClientSocket(window.location.origin)
 
 let channelId: String
@@ -27,12 +32,11 @@ export class Home extends React.Component < {}, {} > {
     }
 
     public render() {
-        console.log("PROPS in HOME***", this.props);
         return (
         <div>
           <Navbar />
           <Whiteboard channelId={this.props.location.search}/>
-          <Chat channelId={this.props.location.search.id}/>
+          <Chat channelId={this.props.location.search}/>
         </div>
         )
     }
@@ -41,4 +45,15 @@ export class Home extends React.Component < {}, {} > {
 clientSocket.on('connect', () => {
   console.log('Client-Socket: I have a made a persistent two-way connection!', channelId)
   clientSocket.emit('join-drawing', channelId)
+  clientSocket.on('replay-messages', (messages: Array<Message>) => {
+    store.dispatch(loadMessages(messages))
+  })
+
+  clientSocket.on('receive-message', (message: Message) => {
+    store.dispatch(gotNewMessage(message))
+  })
+
+  clientSocket.on('delete-message-from-server', (message: Message) => {
+    store.dispatch(deletedMessage(message))
+  })
 })

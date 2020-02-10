@@ -16,7 +16,7 @@ export class Message {
     @Column()
     timestamp: string;
 
-    @Column()
+    @Column({nullable: true})
     userId?: number;
 
     @Column({nullable: true})
