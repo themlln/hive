@@ -21,7 +21,7 @@ const mapState = state => {
   }
 }
 
-export default mapState)(UserHome)
+export default (mapState)(UserHome)
 /**
  * PROP TYPES
  */
