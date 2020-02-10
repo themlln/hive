@@ -5,18 +5,20 @@ export interface ChatStateProps {
   chat: {
     messages: Array<Message>
   },
-  user: object
+  user: object,
+  channelId: string
 }
 
 export interface ChatDispatchProps {
-  fetchMessages: () => {},
-  deleteMessage: (message: Message) => {message: Message}
+  joinRoomMessage: (user: object, channelId: string) => {message: Message},
+  deleteMessage: (message: Message, channelId: string) => {message: Message}
 }
 
 export interface NewMessageMapStateToProps {
-  user: ComponentState
+  user: ComponentState,
+  channelId: ComponentState
 }
 
 export interface NewMessageDispatchToProps {
-  sendMessage: (newMessage: Message) => {newMessage: Message}
+  sendMessage: (newMessage: Message, channelId: string) => {newMessage: Message}
 }

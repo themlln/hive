@@ -17,18 +17,14 @@ class NewMessageEntry extends React.Component<NewMessageMapStateToProps & NewMes
     const userId: number = this.props.user.id
     const username: string = this.props.user.name
     const profileImage: string = this.props.user.profileImage
-    if (userId) {
-      const newMessage: Message = {
-        content: content,
-        timestamp: timestamp,
-        userId: userId,
-        username: username,
-        profileImage: profileImage
-      }
-      this.props.sendMessage(newMessage)
-    } else {
-      alert('You need to sign up to use mlln Chat.')
+    const newMessage: Message = {
+      content: content,
+      timestamp: timestamp,
+      userId: userId,
+      username: username,
+      profileImage: profileImage
     }
+    this.props.sendMessage(newMessage, this.props.channelId)
   }
 
   render () {
@@ -52,13 +48,14 @@ class NewMessageEntry extends React.Component<NewMessageMapStateToProps & NewMes
 
 const mapStateToProps = (state: React.ComponentState): NewMessageMapStateToProps => {
   return {
-    user: state.user
+    user: state.user,
+    channelId: state.channelId
   }
 }
 
 const mapDispatchToProps = (dispatch: React.Dispatch<any>): object => {
   return {
-    sendMessage: (newMessage: Message) => dispatch(sendMessage(newMessage))
+    sendMessage: (newMessage: Message, channelId: string) => dispatch(sendMessage(newMessage, channelId))
   }
 }
 
