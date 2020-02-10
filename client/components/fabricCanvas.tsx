@@ -65,7 +65,7 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
     strokeColor: string = 'black',
     strokeWidth: number = 3
   ) {
-    const canvas = this.state.canvas
+    const canvas = this.props.canvasRef
     if(this.props.tool === 'erase'){
       strokeColor = 'white'
       strokeWidth = 20;
@@ -155,7 +155,7 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
       currentMousePosition = this.position(event.e)
       lastMousePosition && currentMousePosition && this.draw(lastMousePosition, currentMousePosition, this.props.color, this.props.strokeWidth)
     } else {
-      this.state.canvas.isDrawingMode = false
+      this.props.canvasRef.isDrawingMode = false
     }
 
   }
@@ -182,7 +182,7 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
 
     const fabricCanvas = new fabric.Canvas(this.state.canvasRef.current, {
       selection: false,
-      preserveObjectStacking: true,
+      preserveObjectStacking: false,
       backgroundColor: 'white'
     })
     fabricCanvas.setHeight(500)
@@ -435,13 +435,6 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
   public render() {
     return (
       <>
-        <button type="button" onClick={ () => {
-          const path = new fabric.Path('M 1 1 L 200 200')
-          path.set({stroke: 'pink',
-        strokeWidth: 10})
-          this.state.canvas.add(path)
-        }}>TESTINGG</button>
-
         <canvas
           ref={this.state.canvasRef}
           onMouseDown={this.handleMouseDown}
