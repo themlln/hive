@@ -14,6 +14,7 @@ import { copyText } from './canvasTools/text'
 import { drawCircle } from './canvasTools/circle'
 import { drawRectangle } from './canvasTools/rectangle'
 import { drawTriangle } from './canvasTools/triangle'
+import { modifyObject } from './canvasTools/modifyObject'
 
 export const clientSocket: any = createClientSocket(window.location.origin)
 export const channelId: String = '/canvas'
@@ -153,41 +154,25 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
           drawTriangle(instruction, this.props.canvasRef)
         } else if (instruction.lineObject) {
           drawLine(instruction, this.props.canvasRef)
+          console.log("draw line from replay drawing", instruction)
         } else if (instruction.path) {
           drawPath(instruction, this.props.canvasRef)
         } 
       })
     })
 
-    clientSocket.on('draw-from-server', (pathCommand: any) => {
-      drawPath(pathCommand, this.props.canvasRef)
+    clientSocket.on('modified-from-server', (modifiedCommand: any) => {
+      modifyObject(this.props.canvasRef, modifiedCommand)
     })
 
-    clientSocket.on('modified-from-server', (modifiedCommand: any) => {
-      const allObjects = this.props.canvasRef.getObjects()
-      const objectToModify = allObjects.filter(object => object.uid === modifiedCommand.id)
-      const modifiedObject = modifiedCommand.modifiedObject
-      // this might be causing the select bug in multiuser experience
-  
-      if(objectToModify[0].text) {
-        objectToModify[0].text = modifiedObject.text
-      }
-
-      objectToModify[0].width = modifiedObject.width
-      objectToModify[0].height = modifiedObject.height,
-      objectToModify[0].left = modifiedObject.left,
-      objectToModify[0].top = modifiedObject.top,
-      objectToModify[0].scaleX = modifiedObject.scaleX,
-      objectToModify[0].scaleY = modifiedObject.scaleY,
-      objectToModify[0].translateX =  modifiedObject.translateX,
-      objectToModify[0].translateY = modifiedObject.translateY
-
-      this.props.canvasRef.requestRenderAll()
+    clientSocket.on('draw-from-server', (pathCommand: any) => {
+      drawPath(pathCommand, this.props.canvasRef)
     })
 
     clientSocket.on('text-from-server', (textCommand) => {
       copyText(textCommand, this.props.canvasRef)
     })
+
     clientSocket.on('circle-from-server', (circleCommand) => {
       drawCircle(circleCommand, this.props.canvasRef)
     })
@@ -201,7 +186,7 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
     })
 
     clientSocket.on('line-from-server', (lineCommand)=> {
-      drawLine(lineCommand)
+      drawLine(lineCommand, this.props.canvasRef)
     }) 
 
     clientSocket.on('delete-object-from-server', (deleteCommand) => {

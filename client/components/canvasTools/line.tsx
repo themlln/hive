@@ -38,9 +38,15 @@ export function line (
       scaleX: line.scaleX,
       scaleY: line.scaleY,
       fill: line.fill, 
+      width: line.width,
+      height: line.height,
       stroke: line.stroke, 
       strokeWidth: line.strokeWidth, 
-      selectable: true
+      selectable: true, 
+      x1: line.x1,
+      x2: line.x2, 
+      y1: line.y1, 
+      y2:line.y2
     })
 
     newLine["uid"] = lineCommand.id

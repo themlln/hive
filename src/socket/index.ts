@@ -31,7 +31,6 @@ module.exports = io => {
         socket.broadcast.to(channelId).emit('triangle-from-server', command)
       } else if (command.lineObject) {
         socket.broadcast.to(channelId).emit('line-from-server', command)
-
       } else {
         socket.broadcast.to(channelId).emit('draw-from-server', command)
       }
