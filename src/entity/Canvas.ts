@@ -5,8 +5,8 @@ import { User } from "./User";
 @Entity()
 export class Canvas {
 
-    @PrimaryGeneratedColumn()
-    id: number;
+    @PrimaryGeneratedColumn("uuid")
+    id: string;
 
     @Column({nullable: true})
     canvasObj: string;

@@ -20,7 +20,9 @@ class Chat extends React.Component<ChatStateProps & ChatDispatchProps> {
           message={message}
           key={message.id}
           deleteMessage={this.props.deleteMessage}
-          user={this.props.user} />)}
+          user={this.props.user}
+          channelId={this.props.channelId}
+          />)}
         </ul>
         <ConnectNewMessageEntry />
       </div>
@@ -41,7 +43,7 @@ const mapStateToProps = (state: ChatState): ChatStateProps => {
 const mapDispatchToProps = (dispatch: any): ChatDispatchProps => {
   return {
     joinRoomMessage: (user: object, channelId: string) => dispatch(joinRoomMessage(user, channelId)),
-    deleteMessage: (message: Message) => dispatch(deleteMessage(message))
+    deleteMessage: (message: Message, channelId: string) => dispatch(deleteMessage(message, channelId))
   }
 }
 

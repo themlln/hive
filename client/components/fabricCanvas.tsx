@@ -1,23 +1,14 @@
 import * as React from 'react'
-
-import * as createClientSocket from 'socket.io-client'
 import { connect } from 'react-redux'
 import {updateCanvas} from '../store/Panel'
 import { fabric } from 'fabric'
 import { Path, Object } from 'fabric/fabric-impl'
 import { object } from 'prop-types'
 import { Socket } from 'net'
-
-export const clientSocket: any = createClientSocket(window.location.origin)
-export const drawingName: String = '/canvas'
+import {clientSocket} from './home'
 
 let currentMousePosition: any = {x: 0, y: 0}
 let lastMousePosition: any = {x: 0, y: 0}
-
-clientSocket.on('connect', () => {
-  console.log('Client-Socket: I have a made a persistent two-way connection!')
-  clientSocket.emit('join-drawing', drawingName)
-})
 
 interface State {
   canvas: any,
@@ -117,7 +108,7 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
         this.state.objectHashMap[newId] = path
       )
 
-      this.state.shouldBroadcast && !this.state.isSelected && clientSocket.emit('draw-from-client', drawingName, pathCommand)
+      this.state.shouldBroadcast && !this.state.isSelected && clientSocket.emit('draw-from-client', this.props.channelId, pathCommand)
       this.setState({
         shouldBroadcast: false,
         currentObject:{}
@@ -148,7 +139,7 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
       id: modifiedObject.uid,
       modifiedObject: modifiedObject
     }
-    clientSocket.emit('modified-from-client', drawingName, modifiedCommand)
+    clientSocket.emit('modified-from-client', this.props.channelId, modifiedCommand)
   }
 
   async componentDidMount() {

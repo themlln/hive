@@ -37,7 +37,11 @@ module.exports = io => {
 
     socket.on('modified-from-client', (channelId: any, modifiedCommand: any) => {
       const instructions = getType(channelId, drawings)
+      console.log("LINE 40*** instructions", instructions)
       const modifiedObject = instructions.filter(instruction => instruction.id === modifiedCommand.id)
+      console.log("modified from client")
+      console.log("modifiedObj", modifiedObject)
+      console.log("indstructions", instructions)
       modifiedObject[0].path = modifiedCommand.modifiedObject
       modifiedObject[0].textObject = modifiedCommand.modifiedObject
       socket.broadcast.to(channelId).emit('modified-from-server', modifiedCommand)

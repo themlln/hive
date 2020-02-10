@@ -1,6 +1,5 @@
 import * as React from 'react'
 import Panel from './panel'
-import Canvas from './canvas'
 import FabricCanvas from './fabricCanvas'
 import ColorPicker from './color'
 interface State {
@@ -10,9 +9,7 @@ interface State {
 export class Whiteboard extends React.Component < {}, {} > {
     constructor(props) {
         super(props)
-
         this.state = {
-
         }
     }
 
@@ -24,9 +21,9 @@ export class Whiteboard extends React.Component < {}, {} > {
         return (
         <>
         <div>
-          <Panel />
+          <Panel channelId={this.props.channelId}/>
           <ColorPicker />
-          <FabricCanvas />
+          <FabricCanvas channelId={this.props.channelId}/>
         </div>
         </>
         )
