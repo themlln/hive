@@ -29,7 +29,9 @@ module.exports = io => {
         socket.broadcast.to(drawingName).emit('rectangle-from-server', command)
       } else if (command.triangleObject) {
         socket.broadcast.to(drawingName).emit('triangle-from-server', command)
-      }else {
+      } else if (command.lineObject) {
+        socket.broadcast.to(drawingName).emit('line-from-server', command)
+      } else {
         socket.broadcast.to(drawingName).emit('draw-from-server', command)
       }
     })

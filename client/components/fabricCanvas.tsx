@@ -13,6 +13,7 @@ export const drawingName: String = '/canvas'
 
 let currentMousePosition: any = {x: 0, y: 0}
 let lastMousePosition: any = {x: 0, y: 0}
+let firstMousePosition: any = {x: 0, y: 0}
 
 clientSocket.on('connect', () => {
   console.log('Client-Socket: I have a made a persistent two-way connection!')
@@ -79,6 +80,27 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
     })
   }
 
+  line(
+    start: any = [0,0],
+    end: any = [0,0]
+  ) {
+    const newLine = new fabric.Line([...start, ...end], {
+      fill: this.props.color, 
+      stroke: this.props.color, 
+      strokeWidth: 3, 
+      selectable: true
+    })
+
+    newLine["uid"] = this.generateId(newLine)
+    let lineCommand = {
+      id: newLine["uid"],
+      lineObject: newLine
+    }
+
+    clientSocket.emit('draw-from-client', drawingName, lineCommand)
+    this.props.canvasRef.add(newLine)
+  }
+
   position(event) {
     return [
       event.pageX,
@@ -91,6 +113,7 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
       shouldBroadcast: true
     })
     currentMousePosition = this.position(event.e)
+    firstMousePosition = this.position(event.e)
   }
 
   generateId (object: any) {
@@ -104,12 +127,10 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
       const index = this.props.canvasRef._objects.length - 1
       const path = this.props.canvasRef._objects[index]
       const newId = this.generateId(path)
-      path.set({
-        uid: newId
-      })
+      path["uid"] = newId
 
       let pathCommand: PathCommand = {
-        id: newId,
+        id: path["uid"],
         path: path
       }
 
@@ -122,6 +143,9 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
         shouldBroadcast: false,
         currentObject:{}
       })
+    } else if (this.props.tool === "line") {
+      let currentMousePosition = this.position(event.e)
+      this.line(firstMousePosition, currentMousePosition)
     }
   }
 
@@ -140,10 +164,12 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
     this.setState({
       isSelected: true
     })
+    console.log(event)
   }
 
   handleObjectModified(event) {
     const modifiedObject = event.target
+    modifiedObject.selectable = true
     const modifiedCommand = {
       id: modifiedObject.uid,
       modifiedObject: modifiedObject
@@ -231,7 +257,26 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
       
           newTriangle["uid"] = instruction.id
           this.props.canvasRef.add(newTriangle)
-        }else if (instruction.path) {
+        } else if (instruction.lineObject) {
+          this.setState(
+            this.state.objectHashMap[instruction.id] = instruction.lineObject
+          )
+
+          let line = instruction.lineObject
+          const newLine = new fabric.Line([line.x1, line.y1, line.x2, line.y2], {
+            top: line.top, 
+            left: line.left, 
+            scaleX: line.scaleX,
+            scaleY: line.scaleY,
+            fill: line.fill, 
+            stroke: line.stroke, 
+            strokeWidth: line.strokeWidth, 
+            selectable: true
+          })
+      
+          newLine["uid"] = instruction.id
+          this.props.canvasRef.add(newLine)
+        } else if (instruction.path) {
           this.setState(
             this.state.objectHashMap[instruction.id] = instruction.path
           )
@@ -342,6 +387,23 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
   
       newTriangle["uid"] = triangleCommand.id
       this.props.canvasRef.add(newTriangle)
+    })
+
+    clientSocket.on('line-from-server', (lineCommand)=> {
+      let line = lineCommand.lineObject
+      const newLine = new fabric.Line([line.x1, line.y1, line.x2, line.y2], {
+        top: line.top, 
+        left: line.left, 
+        scaleX: line.scaleX,
+        scaleY: line.scaleY,
+        fill: line.fill, 
+        stroke: line.stroke, 
+        strokeWidth: line.strokeWidth, 
+        selectable: true
+      })
+  
+      newLine["uid"] = lineCommand.id
+      this.props.canvasRef.add(newLine)
     })
 
     clientSocket.on('delete-object-from-server', (deleteCommand) => {

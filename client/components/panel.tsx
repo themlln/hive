@@ -17,6 +17,7 @@ class Panel extends React.Component<PanelStateProps & PanelDispatchProps> {
     this.addCircle = this.addCircle.bind(this)
     this.addRectangle = this.addRectangle.bind(this)
     this.addTriangle = this.addTriangle.bind(this)
+    this.addLine = this.addLine.bind(this)
   }
   componentDidMount() {
   }
@@ -51,6 +52,16 @@ class Panel extends React.Component<PanelStateProps & PanelDispatchProps> {
     }
     clientSocket.emit('draw-from-client', drawingName, textCommand)
     this.props.canvasRef.add(newText)
+  }
+
+  addLine() {
+    const newLine = new fabric.Line([50, 100, 100, 100], {
+      fill: this.props.color, 
+      stroke: this.props.color, 
+      strokeWidth: 3, 
+      selectable: true
+    })
+    this.props.canvasRef.add(newLine)
   }
 
   addCircle() {
@@ -110,6 +121,7 @@ class Panel extends React.Component<PanelStateProps & PanelDispatchProps> {
       <div>
         <button type="button" onClick={() => this.handleClick('draw')}>Pen
         </button>
+
         <button type="button" onClick={() => {
           this.handleClick('delete')
           let activeObject = this.props.canvasRef.getActiveObject()
@@ -128,6 +140,10 @@ class Panel extends React.Component<PanelStateProps & PanelDispatchProps> {
           this.handleClick('text')
           this.addText()
           }}>Text</button>
+
+        <button type="button" onClick={() => {
+          this.handleClick('line')
+          }}>Line</button>
 
         <button type="button" onClick={() => {
           this.handleClick('circle')
