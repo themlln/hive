@@ -28,7 +28,7 @@ module.exports = io => {
       }
     })
 
-    socket.on('delete-object-from-client', (channelId: String, deleteCommand: any) => {
+    socket.on('delete-object-from-client', (channelId: string, deleteCommand: any) => {
       const instructions = getType(channelId, drawings)
       const newInstructions = instructions.filter( instruction => instruction.id !== deleteCommand.id)
       drawings[channelId] = newInstructions
@@ -43,14 +43,14 @@ module.exports = io => {
       socket.broadcast.to(channelId).emit('modified-from-server', modifiedCommand)
     })
 
-    socket.on('clear-canvas', (channelId: any) => {
+    socket.on('clear-canvas', (channelId: string) => {
       drawings[channelId] = []
       socket.broadcast.to(channelId).emit('clear-canvas')
     })
 
-    socket.on('load-messages', (channelId: any, messagesToLoad: Array<object>) => {
+    socket.on('load-messages', (channelId: string) => {
       const channelMessages = getType(channelId, messages)
-      socket.broadcast.to(channelId.emit('replay-messages', channelMessages))
+      socket.broadcast.to(channelId).emit('replay-messages', channelMessages)
     })
 
     socket.on('new-message', (channelId: any, message: object) => {
