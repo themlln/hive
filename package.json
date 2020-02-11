@@ -1,5 +1,5 @@
 {
-  "name": "mlln",
+  "name": "hive",
   "version": "2.0.0",
   "description": "Some boilerplate code to get you started - get shakin'!",
   "engines": {
@@ -39,6 +39,7 @@
   "license": "MIT",
   "dependencies": {
     "@material-ui/core": "^4.9.2",
+    "@material-ui/icons": "^4.9.1",
     "@types/axios": "^0.14.0",
     "@types/fabric": "^3.6.1",
     "@types/redux": "^3.6.0",
@@ -52,6 +53,7 @@
     "express-session": "^1.15.1",
     "fabric": "^4.0.0-beta.6",
     "history": "^4.9.0",
+    "material-ui": "^0.20.2",
     "morgan": "^1.9.1",
     "passport": "^0.4.0",
     "passport-google-oauth": "^2.0.0",

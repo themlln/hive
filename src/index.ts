@@ -1,6 +1,7 @@
 import * as morgan from 'morgan'
 import * as path from 'path'
 import * as express from 'express'
+import {Request, Response, NextFunction} from 'express'
 import * as compression from 'compression'
 
 import { createConnection, Connection, Repository } from 'typeorm'
@@ -63,9 +64,9 @@ const createApp = (sessionRepository: Repository<Session>) => {
   app.use(express.static(path.join(__dirname, '..', 'public')))
 
   // any remaining requests with an extension (.js, .css, etc.) send 404
-  app.use((req, res, next) => {
+  app.use((req: Request, res: Response, next: NextFunction) => {
     if (path.extname(req.path).length) {
-      const err = new Error('Not found')
+      const err: Error = new Error('Not found')
       err.status = 404
       next(err)
     } else {
@@ -74,12 +75,12 @@ const createApp = (sessionRepository: Repository<Session>) => {
   })
 
   // sends index.html
-  app.use('*', (req, res) => {
+  app.use('*', (req: Request, res: Response) => {
     res.sendFile(path.join(__dirname, '..', 'public/index.html'))
   })
 
   // error handling endware
-  app.use((err, req, res, next) => {
+  app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
     console.error(err)
     console.error(err.stack)
     res.status(err.status || 500).send(err.message || 'Internal server error.')
@@ -106,12 +107,12 @@ async function bootApp() {
     const sessionRepository = connection.getRepository(Session);
 
     //passport registration
-    passport.serializeUser((user, done) => done(null, user.id))
+    passport.serializeUser((user: User, done) => done(null, user.id))
 
-    passport.deserializeUser(async (id, done) => {
+    passport.deserializeUser(async (id: number, done) => {
       try {
         const user = await userRepository.findOne({
-          select:['id', 'email', 'name', 'profileImage'],
+          select:['id', 'email', 'username', 'profileImage'],
           where: { id: id },
         });
         done(null, user)
@@ -119,6 +120,21 @@ async function bootApp() {
         done(err)
       }
     })
+
+    // app.use('*', (req: Request, res: Response, next: NextFunction) => {
+    //   try {
+    //     if (req.session) {
+    //       if (!req.user) {
+    //         const newUser = userRepository.create({sessionId: req.sessionID})
+    //         req.user = newUser
+    //       }
+    //     }
+    //     next()
+    //   } catch (error) {
+    //     next(error)
+    //   }
+    // })
+
     await createApp(sessionRepository)
     await startListening()
   } catch (err) {

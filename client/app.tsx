@@ -5,6 +5,7 @@ import {loggingIn} from './store/user.js'
 import UserHome from './components/user-home'
 import { Home } from './components/home'
 import Welcome from './components/welcome'
+import {Login, Signup} from './components/index'
 
 /**
  * COMPONENT
@@ -22,6 +23,8 @@ import Welcome from './components/welcome'
       <Switch>
         {/* Routes placed here are available to all visitors */}
         <Route path="/whiteboard" component={Home}/>
+        <Route path="/login" component={Login} />
+        <Route path="/signup" component={Signup} />
         {isLoggedIn && (
           <Switch>
             {/* Routes placed here are only available after logging in */}

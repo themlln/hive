@@ -2,9 +2,11 @@ import { fabric } from 'fabric'
 import {PathCommand} from '../fabricCanvas'
 import { clientSocket, channelId } from '../home'
 import {generateId} from './id'
+import { updateStrokeWidth } from '../../store/Panel'
 
 
 export function   addTriangle(
+    stroke: string,
     fill: string,
     canvas: any
 ) {
@@ -13,7 +15,8 @@ export function   addTriangle(
       top: 50,
       width: 30,
       height: 30,
-      fill: fill
+      fill: fill,
+      stroke: stroke
     })
 
     newTriangle["uid"] = generateId(newTriangle)
@@ -36,9 +39,11 @@ export function drawTriangle(
       top: triangle.top,
       width: triangle.width,
       height: triangle.height,
+      stroke: triangle.stroke,
       fill: triangle.fill,
       scaleX: triangle.scaleX,
-      scaleY: triangle.scaleY
+      scaleY: triangle.scaleY, 
+      
     })
 
     newTriangle["uid"] = triangleCommand.id

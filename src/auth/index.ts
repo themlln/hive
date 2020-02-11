@@ -1,8 +1,9 @@
 import { Request, NextFunction } from "express"
 import { getRepository } from "typeorm"
+import { User } from '../entity/User'
+
 
 const router = require('express').Router()
-const {User} = require('../entity/User')
 module.exports = router
 
 
@@ -10,15 +11,19 @@ const userRepository = getRepository(User)
 
 router.post('/login', async (req: Request, res:Response, next: NextFunction) => {
   try {
-    const user: any = await userRepository.findOneOrFail({
+    const user: User = await userRepository.findOne({
       email: req.body.email
     })
+    user.sessionId = req.sessionID
+    await userRepository.save(user)
+
     if (!user) {
       res.json('Wrong username and/or password').status(401)
     } else if (!user.correctPassword(req.body.password)) {
       res.json('Wrong username and/or password').status(401)
     } else {
-      const modifiedUser = {id: user.id, email: user.email, name: user.name, profileImage: user.profileImage}
+      const modifiedUser = {id: user.id, email: user.email, username: user.username, profileImage: user.profileImage}
+
       req.login(modifiedUser, err => (err ? next(err) : res.json(modifiedUser)))
     }
   } catch (err) {
@@ -28,9 +33,15 @@ router.post('/login', async (req: Request, res:Response, next: NextFunction) => 
 
 router.post('/signup', async (req: Request, res:Response, next: NextFunction) => {
   try {
-    const user: any = await userRepository.create(req.body);
+    const user: User = await userRepository.create({
+      email: req.body.email,
+      password: req.body.password,
+      username: req.body.username,
+      sessionId: req.sessionID
+    })
     await userRepository.save(user);
-    const modifiedUser: object = {id: user.id, email: user.email, name: user.name, profileImage: user.profileImage}
+
+    const modifiedUser: object = {id: user.id, email: user.email, name: user.username, profileImage: user.profileImage}
     req.login(modifiedUser, err => (err ? next(err) : res.json(modifiedUser)))
   } catch (err) {
     if (err.name === 'TypeORMUniqueConstraintError') {
