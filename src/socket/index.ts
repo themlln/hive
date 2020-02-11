@@ -50,14 +50,12 @@ module.exports = io => {
 
     socket.on('load-messages', (channelId: string, messagesToLoad: Array<object>) => {
       const channelMessages = getType(channelId, messages)
-      console.log("REPLAY MESSAGE!!!")
       socket.broadcast.to(channelId).emit('replay-messages', channelMessages)
     })
 
     socket.on('new-message', (channelId: string, message: object) => {
       const channelMessages = getType(channelId, messages)
       channelMessages.push(message)
-      console.log("NEW MESSAGE BEING SENT!!!")
       socket.broadcast.to(channelId).emit('receive-message', message)
     })
 
