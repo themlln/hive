@@ -14,6 +14,10 @@ export interface ChatDispatchProps {
   deleteMessage: (message: Message, channelId: string) => {message: Message}
 }
 
+export interface NewMessageState {
+  value: string
+}
+
 export interface NewMessageMapStateToProps {
   user: ComponentState,
   channelId: ComponentState

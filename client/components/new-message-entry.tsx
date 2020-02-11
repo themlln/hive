@@ -1,13 +1,23 @@
 import * as React from 'react'
 import { sendMessage } from '../store/Chat'
 import {Message} from '../types/storeTypes'
-import {NewMessageDispatchToProps, NewMessageMapStateToProps} from '../types/componentTypes'
+import {NewMessageDispatchToProps, NewMessageMapStateToProps, NewMessageState} from '../types/componentTypes'
 import { connect } from 'react-redux'
 
-class NewMessageEntry extends React.Component<NewMessageMapStateToProps & NewMessageDispatchToProps> {
+class NewMessageEntry extends React.Component<NewMessageMapStateToProps & NewMessageDispatchToProps, NewMessageState> {
   constructor(props) {
     super(props)
+    this.state = {
+      value: ''
+    }
+    this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
+  }
+
+  handleChange (event: any) {
+    this.setState({
+      value: event.target.value
+    })
   }
 
   handleSubmit = (event: any) => {
@@ -18,6 +28,7 @@ class NewMessageEntry extends React.Component<NewMessageMapStateToProps & NewMes
     const username: string = this.props.user.name
     const profileImage: string = this.props.user.profileImage
     const channelId: string = this.props.channelId
+
     const newMessage: Message = {
       content: content,
       timestamp: timestamp,
@@ -27,6 +38,9 @@ class NewMessageEntry extends React.Component<NewMessageMapStateToProps & NewMes
       channelId: channelId
     }
     this.props.sendMessage(newMessage, this.props.channelId)
+    this.setState({
+      value: ''
+    })
   }
 
   render () {
@@ -37,7 +51,9 @@ class NewMessageEntry extends React.Component<NewMessageMapStateToProps & NewMes
             className="form-control"
             type="text"
             name="content"
+            value= {this.state.value}
             placeholder="Type here..."
+            onChange={this.handleChange}
           />
           <span className="input-group-btn">
             <button className="btn btn-default" type="submit">Send</button>
@@ -48,7 +64,7 @@ class NewMessageEntry extends React.Component<NewMessageMapStateToProps & NewMes
   }
 }
 
-const mapStateToProps = (state: React.ComponentState, ownProps:{channelId:string}): NewMessageMapStateToProps => {
+const mapStateToProps = (state: React.ComponentState, ownProps:{channelId: string}): NewMessageMapStateToProps => {
   return {
     user: state.user,
     channelId: ownProps.channelId
