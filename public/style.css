@@ -111,4 +111,10 @@ main > div {
   flex-direction: column;
   z-index: 100;
   position: fixed;
+  margin-top: 30px;
+  margin-left: 20px;
+}
+
+#colortitle {
+  margin: 0;
 }
