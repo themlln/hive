@@ -51,6 +51,7 @@ module.exports = io => {
       if (modifiedObject[0].triangleObject) {modifiedObject[0].triangleObject = modifiedCommand.modifiedObject}
       if (modifiedObject[0].path) { modifiedObject[0].path = modifiedCommand.modifiedObject }
       if (modifiedObject[0].textObject) {modifiedObject[0].textObject = modifiedCommand.modifiedObject}
+      if (modifiedObject[0].lineObject) {modifiedObject[0].lineObject = modifiedCommand.modifiedObject}
       socket.broadcast.to(channelId).emit('modified-from-server', modifiedCommand)
     })
 

@@ -111,7 +111,6 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
     this.setState({
       isSelected: true
     })
-    console.log(event)
   }
 
   handleObjectModified(event) {
@@ -154,7 +153,6 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
           drawTriangle(instruction, this.props.canvasRef)
         } else if (instruction.lineObject) {
           drawLine(instruction, this.props.canvasRef)
-          console.log("draw line from replay drawing", instruction)
         } else if (instruction.path) {
           drawPath(instruction, this.props.canvasRef)
         } 
@@ -201,7 +199,6 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
     })
 
     //bindings
-
     fabricCanvas.on('mouse:down', this.handleMouseDown)
     fabricCanvas.on('mouse:move', this.handleMouseMove)
     fabricCanvas.on('mouse:up', this.handleMouseUp)

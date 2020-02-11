@@ -42,11 +42,7 @@ export function line (
       height: line.height,
       stroke: line.stroke, 
       strokeWidth: line.strokeWidth, 
-      selectable: true, 
-      x1: line.x1,
-      x2: line.x2, 
-      y1: line.y1, 
-      y2:line.y2
+      selectable: true
     })
 
     newLine["uid"] = lineCommand.id
