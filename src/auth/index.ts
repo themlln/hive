@@ -14,11 +14,9 @@ router.post('/login', async (req: Request, res:Response, next: NextFunction) => 
     const user: User = await userRepository.findOne({
       email: req.body.email
     })
-    console.log("USER IN ROUTE", user)
     user.sessionId = req.sessionID
     await userRepository.save(user)
 
-    console.log("USER IN LOGIN POST REQUEST", user)
     if (!user) {
       res.json('Wrong username and/or password').status(401)
     } else if (!user.correctPassword(req.body.password)) {
