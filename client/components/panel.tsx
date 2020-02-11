@@ -11,13 +11,15 @@ import { addTriangle } from './canvasTools/triangle'
 import { removeObject } from './canvasTools/delete'
 export const channelId: String = '/canvas'
 
-class Panel extends React.Component<PanelStateProps & PanelDispatchProps> {
+
+class Panel extends React.Component<PanelStateProps & PanelDispatchProps, State> {
 
   constructor(props) {
     super(props)
     this.clearCanvas = this.clearCanvas.bind(this)
     this.handleClick = this.handleClick.bind(this)
   }
+
   componentDidMount() {
   }
 
@@ -26,6 +28,7 @@ class Panel extends React.Component<PanelStateProps & PanelDispatchProps> {
     this.props.canvasRef.backgroundColor = 'white'
     clientSocket.emit('clear-canvas', channelId)
  }
+
  async handleClick(action: string) {
    await this.props.updateTool(action)
   }

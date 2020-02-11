@@ -2,6 +2,7 @@ import * as React from 'react'
 import { Link } from 'react-router-dom'
 import { creatingNewCanvas } from '../store/Canvas'
 import { connect } from 'react-redux'
+import FormDialog from './setRoom'
 
 class Welcome extends React.Component<WelcomeDispatchProps> {
   constructor(props) {
@@ -9,14 +10,18 @@ class Welcome extends React.Component<WelcomeDispatchProps> {
   }
 
   handleClick() {
-    this.props.onClickCreateCanvas()
+    // this.props.onClickCreateCanvas()
   }
 
   render(){
     return(
       <div>
-        <h3><button type="button" onClick={()=>this.handleClick()}>Collabo by MLLN.</button></h3>
+      <FormDialog createCanvas={this.props.onClickCreateCanvas} />
       </div>
+
+          // <div>
+      //   <h3><button type="button" onClick={()=>this.handleClick()}>Collabo by MLLN.</button></h3>
+      // </div>
     )
   }
 }
