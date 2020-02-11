@@ -10,7 +10,7 @@ class Welcome extends React.Component<WelcomeDispatchProps> {
   }
 
   handleClick() {
-    this.props.onClickCreateCanvas()
+    // this.props.onClickCreateCanvas()
   }
 
   render(){
