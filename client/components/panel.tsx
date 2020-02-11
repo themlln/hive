@@ -5,13 +5,15 @@ import { fabric } from 'fabric'
 import { clientSocket } from './home'
 import { Socket } from 'net'
 
-class Panel extends React.Component<PanelStateProps & PanelDispatchProps> {
+
+class Panel extends React.Component<PanelStateProps & PanelDispatchProps, State> {
 
   constructor(props) {
     super(props)
     this.clearCanvas = this.clearCanvas.bind(this)
     this.handleClick = this.handleClick.bind(this)
   }
+
   componentDidMount() {
   }
 
@@ -20,6 +22,7 @@ class Panel extends React.Component<PanelStateProps & PanelDispatchProps> {
     this.props.canvasRef.backgroundColor = 'white'
     clientSocket.emit('clear-canvas', this.props.channelId)
  }
+
  async handleClick(action: string) {
    await this.props.updateTool(action)
 
