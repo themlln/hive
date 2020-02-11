@@ -4,7 +4,12 @@ import { connect } from 'react-redux'
 import { fabric } from 'fabric'
 import { clientSocket } from './fabricCanvas'
 import { Socket } from 'net'
-export const drawingName: String = '/canvas'
+import { addText } from './canvasTools/text'
+import { addCircle } from './canvasTools/circle'
+import { addRectangle } from './canvasTools/rectangle'
+import { addTriangle } from './canvasTools/triangle'
+import { removeObject } from './canvasTools/delete'
+export const channelId: String = '/canvas'
 
 
 class Panel extends React.Component<PanelStateProps & PanelDispatchProps, State> {
@@ -13,8 +18,6 @@ class Panel extends React.Component<PanelStateProps & PanelDispatchProps, State>
     super(props)
     this.clearCanvas = this.clearCanvas.bind(this)
     this.handleClick = this.handleClick.bind(this)
-    this.generateId = this.generateId.bind(this)
-    this.addText = this.addText.bind(this)
   }
 
   componentDidMount() {
@@ -23,58 +26,51 @@ class Panel extends React.Component<PanelStateProps & PanelDispatchProps, State>
  async clearCanvas(action: string) {
     await this.props.canvasRef.clear()
     this.props.canvasRef.backgroundColor = 'white'
-    clientSocket.emit('clear-canvas', drawingName)
+    clientSocket.emit('clear-canvas', channelId)
  }
 
  async handleClick(action: string) {
    await this.props.updateTool(action)
-
   }
 
-  generateId (object: any) {
-    let randomNumber = Math.floor(Math.random()* 1000)
-    let idArray = [randomNumber, object.left, object.top, object.width, object.height]
-    let idString = idArray.join("").split(".").join("")
-    return idString
-  }
-
-  addText() {
-    const newText = new fabric.IText('Insert Text Here', {
-      fontFamily: 'arial',
-      left: 100,
-      top: 100 ,
-    })
-    newText["uid"] = this.generateId(newText)
-    let textCommand = {
-      id: newText["uid"],
-      textObject: newText
-    }
-    clientSocket.emit('draw-from-client', drawingName, textCommand)
-    this.props.canvasRef.add(newText)
-  }
 
   render() {
     return(
       <div>
         <button type="button" onClick={() => this.handleClick('draw')}>Pen
         </button>
+
         <button type="button" onClick={() => {
           this.handleClick('delete')
-          let activeObject = this.props.canvasRef.getActiveObject()
-          let deleteCommand = {
-            id: activeObject.uid,
-            path: activeObject
-          }
-          this.props.canvasRef.remove(activeObject)
-          clientSocket.emit('delete-object-from-client', drawingName, deleteCommand)
-          }
-          } >Delete
+          removeObject(this.props.canvasRef)
+          }}>Delete
         </button>
         <button type="button" onClick={() => this.handleClick('select')}>Select/Move</button>
+
         <button type="button" onClick={() => {
           this.handleClick('text')
-          this.addText()
+          addText(this.props.color, this.props.canvasRef)
           }}>Text</button>
+
+        <button type="button" onClick={() => {
+          this.handleClick('line')
+          }}>Line</button>
+
+        <button type="button" onClick={() => {
+          this.handleClick('circle')
+          addCircle(this.props.color, this.props.canvasRef)
+          }}>Circle</button>
+
+        <button type="button" onClick={() => {
+          this.handleClick('rectangle')
+          addRectangle(this.props.color, this.props.canvasRef)
+          }}>Rectangle</button>
+
+        <button type="button" onClick={() => {
+          this.handleClick('triangle')
+          addTriangle(this.props.color, this.props.canvasRef)
+          }}>Triangle</button>
+
 
         <button type="button" onClick={() => this.clearCanvas('clearCanvas')}>Clear Canvas</button>
 
@@ -99,6 +95,7 @@ class Panel extends React.Component<PanelStateProps & PanelDispatchProps, State>
 interface PanelStateProps {
   tool: string
   canvasRef: any
+  color: string
 }
 
 interface PanelDispatchProps {
@@ -107,7 +104,8 @@ interface PanelDispatchProps {
 const mapStateToProps = (state: any): PanelStateProps => {
   return {
     tool: state.panel.tool,
-    canvasRef: state.panel.canvasRef
+    canvasRef: state.panel.canvasRef,
+    color: state.panel.color
   }
 }
 

@@ -27,7 +27,7 @@ class Welcome extends React.Component<WelcomeDispatchProps> {
 }
 
 interface WelcomeDispatchProps {
-  onClickCreateCanvas: () => {}
+  onClickCreateCanvas: () => {};
 }
 const mapDispatch = (dispatch) => {
   return { onClickCreateCanvas: () =>

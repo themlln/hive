@@ -23,6 +23,14 @@ module.exports = io => {
       drawing.push(command)
       if(command.textObject) {
         socket.broadcast.to(channelId).emit('text-from-server', command)
+      } else if (command.circleObject) {
+        socket.broadcast.to(channelId).emit('circle-from-server', command)
+      } else if (command.rectangleObject) {
+        socket.broadcast.to(channelId).emit('rectangle-from-server', command)
+      } else if (command.triangleObject) {
+        socket.broadcast.to(channelId).emit('triangle-from-server', command)
+      } else if (command.lineObject) {
+        socket.broadcast.to(channelId).emit('line-from-server', command)
       } else {
         socket.broadcast.to(channelId).emit('draw-from-server', command)
       }
@@ -38,8 +46,12 @@ module.exports = io => {
     socket.on('modified-from-client', (channelId: any, modifiedCommand: any) => {
       const instructions = getType(channelId, drawings)
       const modifiedObject = instructions.filter(instruction => instruction.id === modifiedCommand.id)
-      modifiedObject[0].path = modifiedCommand.modifiedObject
-      modifiedObject[0].textObject = modifiedCommand.modifiedObject
+      if (modifiedObject[0].rectangleObject) {modifiedObject[0].rectangleObject = modifiedCommand.modifiedObject}
+      if (modifiedObject[0].circleObject) {modifiedObject[0].circleObject = modifiedCommand.modifiedObject}
+      if (modifiedObject[0].triangleObject) {modifiedObject[0].triangleObject = modifiedCommand.modifiedObject}
+      if (modifiedObject[0].path) { modifiedObject[0].path = modifiedCommand.modifiedObject }
+      if (modifiedObject[0].textObject) {modifiedObject[0].textObject = modifiedCommand.modifiedObject}
+      if (modifiedObject[0].lineObject) {modifiedObject[0].lineObject = modifiedCommand.modifiedObject}
       socket.broadcast.to(channelId).emit('modified-from-server', modifiedCommand)
     })
 
