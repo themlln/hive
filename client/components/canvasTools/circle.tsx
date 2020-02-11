@@ -4,6 +4,7 @@ import {generateId} from './id'
 import { clientSocket, channelId } from '../home'
 
 export function addCircle(
+    stroke: string,
     fill: string,
     canvas: any
 ) {
@@ -11,7 +12,8 @@ export function addCircle(
       radius: 15,
       left: 100,
       top: 100,
-      fill: fill
+      fill: fill,
+      stroke: stroke
     });
     newCircle["uid"] = generateId(newCircle)
     let circleCommand = {
@@ -32,6 +34,7 @@ export function drawCircle(
         left: circle.left,
         top: circle.top,
         fill: circle.fill,
+        stroke: circle.stroke,
         scaleX: circle.scaleX,
         scaleY: circle.scaleY
       });

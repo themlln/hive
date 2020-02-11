@@ -45,7 +45,7 @@ class Panel extends React.Component<PanelStateProps & PanelDispatchProps> {
 
         <button type="button" onClick={() => {
           this.handleClick('text')
-          addText(this.props.color, this.props.canvasRef)
+          addText(this.props.color, this.props.fill, this.props.canvasRef)
           }}>Text</button>
 
         <button type="button" onClick={() => {
@@ -54,17 +54,17 @@ class Panel extends React.Component<PanelStateProps & PanelDispatchProps> {
 
         <button type="button" onClick={() => {
           this.handleClick('circle')
-          addCircle(this.props.color, this.props.canvasRef)
+          addCircle(this.props.color, this.props.fill, this.props.canvasRef)
           }}>Circle</button>
 
         <button type="button" onClick={() => {
           this.handleClick('rectangle')
-          addRectangle(this.props.color, this.props.canvasRef)
+          addRectangle(this.props.color, this.props.fill, this.props.canvasRef)
           }}>Rectangle</button>
 
         <button type="button" onClick={() => {
           this.handleClick('triangle')
-          addTriangle(this.props.color, this.props.canvasRef)
+          addTriangle(this.props.color, this.props.fill, this.props.canvasRef)
           }}>Triangle</button>
 
 
@@ -92,7 +92,8 @@ interface PanelStateProps {
   tool: string
   canvasRef: any
   channelId: string
-  color: string
+  color: string, 
+  fill: string
 }
 
 interface PanelDispatchProps {
@@ -103,7 +104,8 @@ const mapStateToProps = (state: any, ownProps: {channelId: string}): PanelStateP
     tool: state.panel.tool,
     canvasRef: state.panel.canvasRef,
     channelId: ownProps.channelId,
-    color: state.panel.color
+    color: state.panel.color,
+    fill: state.panel.fill
   }
 }
 
