@@ -11,9 +11,10 @@ const userRepository = getRepository(User)
 
 router.post('/login', async (req: Request, res:Response, next: NextFunction) => {
   try {
-    const user: any = await userRepository.findOne({
+    const user: User = await userRepository.findOne({
       email: req.body.email
     })
+    console.log("USER IN ROUTE", user)
     user.sessionId = req.sessionID
     await userRepository.save(user)
 

@@ -121,30 +121,19 @@ async function bootApp() {
       }
     })
 
-    app.use('*', async (req: Request, res: Response, next: NextFunction) => {
-      try {
-        // if a session exists
-        if (req.sessionID) {
-          //if you are logged in
-          if (req.user) {
-            const user: User = userRepository.findOne({
-              where: {
-                email: req.body.email
-              }
-            })
-            user.sessionId = req.sessionID
-            await userRepository.save(user)
-          } else {
-            //if you are a guest
-            const newUser = await userRepository.create({sessionId: req.sessionID})
-            req.user = newUser
-          }
-        }
-        next()
-      } catch (error) {
-        next(error)
-      }
-    })
+    // app.use('*', (req: Request, res: Response, next: NextFunction) => {
+    //   try {
+    //     if (req.session) {
+    //       if (!req.user) {
+    //         const newUser = userRepository.create({sessionId: req.sessionID})
+    //         req.user = newUser
+    //       }
+    //     }
+    //     next()
+    //   } catch (error) {
+    //     next(error)
+    //   }
+    // })
 
     await createApp(sessionRepository)
     await startListening()
