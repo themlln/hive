@@ -118,3 +118,12 @@ main > div {
 #colortitle {
   margin: 0;
 }
+
+#welcome {
+  display: flex;
+  flex-direction: row;
+}
+
+#createform {
+  margin-right: 20px;
+}

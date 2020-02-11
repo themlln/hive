@@ -22,8 +22,9 @@ export class Home extends React.Component < {}, {} > {
         }
     }
 
-    componentDidMount() {
-      // channelId = this.props.location.search.slice(4)
+    async componentDidMount() {
+      await
+           // channelId = this.props.location.search.slice(4)
       // clientSocket.on('connect', () => {
       //   console.log('Client-Socket: I have a made a persistent two-way connection!', channelId)
       //   clientSocket.emit('join-drawing', channelId)
@@ -40,11 +41,11 @@ export class Home extends React.Component < {}, {} > {
       //     store.dispatch(deletedMessage(message))
       //   })
       // })
+      // }
 
     }
 
-    public render() {
-        console.log("PROPS IN HOME", this.props)
+   render() {
         return (
         <div>
           <Navbar />

@@ -5,11 +5,12 @@ import history from '../history'
  * ACTION TYPES
  */
  const CREATE_NEW = 'CREATE_NEW'
+ const GET_CHANNEL_ID = 'GET_CHANNEL_ID'
 
  //TYPES OF ACTION TYPES
  interface CreateNewCanvas {
    type: typeof CREATE_NEW
-   canvasId: string
+   channelId: string
  }
 
  type CanvasActionTypes = CreateNewCanvas
@@ -19,21 +20,21 @@ import history from '../history'
  */
 
 interface Canvas {
-  canvasId: string
+  channelId: string
 }
 
 const initialState: Canvas = {
-  canvasId: ""
+  channelId: ""
 }
 
  /**
  * ACTION CREATORS
  */
 
-function createNewCanvas(canvasId:string): CanvasActionTypes {
+function createNewCanvas(channelId: string): CanvasActionTypes {
    return {
      type: CREATE_NEW,
-     canvasId
+     channelId
    }
  }
 
@@ -43,8 +44,8 @@ function createNewCanvas(canvasId:string): CanvasActionTypes {
 export const creatingNewCanvas = () => async dispatch => {
   try {
     const res = await axios.post('/api/canvases')
+    console.log(res.data, "DATAAA")
     dispatch(createNewCanvas(res.data))
-    history.push('/whiteboard?id='+res.data);
   } catch (err) {
     console.error(err)
   }
@@ -62,7 +63,7 @@ export const creatingNewCanvas = () => async dispatch => {
      switch(action.type) {
        case CREATE_NEW:
         return {
-          canvasId: action.canvasId
+          channelId: action.channelId
         }
        default:
         return state

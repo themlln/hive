@@ -16,7 +16,6 @@ import Welcome from './components/welcome'
   }
 
   render() {
-    console.log("PROPS IN APP***", this.props);
     const {isLoggedIn} = this.props
 
     return (
