@@ -8,6 +8,7 @@ import { addText } from './canvasTools/text'
 import { addCircle } from './canvasTools/circle'
 import { addRectangle } from './canvasTools/rectangle'
 import { addTriangle } from './canvasTools/triangle'
+import { removeObject } from './canvasTools/delete'
 export const channelId: String = '/canvas'
 
 class Panel extends React.Component<PanelStateProps & PanelDispatchProps> {
@@ -27,8 +28,8 @@ class Panel extends React.Component<PanelStateProps & PanelDispatchProps> {
  }
  async handleClick(action: string) {
    await this.props.updateTool(action)
-
   }
+  
 
   render() {
     return(
@@ -38,15 +39,8 @@ class Panel extends React.Component<PanelStateProps & PanelDispatchProps> {
 
         <button type="button" onClick={() => {
           this.handleClick('delete')
-          let activeObject = this.props.canvasRef.getActiveObject()
-          let deleteCommand = {
-            id: activeObject.uid,
-            path: activeObject
-          }
-          this.props.canvasRef.remove(activeObject)
-          clientSocket.emit('delete-object-from-client', channelId, deleteCommand)
-          }
-          } >Delete
+          removeObject(this.props.canvasRef)
+          }>Delete
         </button>
         <button type="button" onClick={() => this.handleClick('select')}>Select/Move</button>
         
