@@ -4,9 +4,6 @@ import * as createClientSocket from 'socket.io-client'
 import { connect } from 'react-redux'
 import {updateCanvas} from '../store/Panel'
 import { fabric } from 'fabric'
-import { Path, Object } from 'fabric/fabric-impl'
-import { object } from 'prop-types'
-import { Socket } from 'net'
 import { draw, sendDrawing, drawPath} from './canvasTools/draw'
 import {line, drawLine} from './canvasTools/line'
 import {generateId} from './canvasTools/id'
@@ -83,12 +80,12 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
   handleMouseUp(event) {
     if (this.props.tool === 'draw'){
       sendDrawing(this.props.canvasRef, this.state.shouldBroadcast, this.state.isSelected)
-      
+
       this.setState({
         shouldBroadcast: false,
         currentObject:{}
       })
-        
+
     } else if (this.props.tool === "line") {
       let currentMousePosition = this.position(event.e)
       line (firstMousePosition, currentMousePosition,this.props.color, this.props.color, this.props.strokeWidth, this.props.canvasRef)
@@ -155,7 +152,7 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
           drawLine(instruction, this.props.canvasRef)
         } else if (instruction.path) {
           drawPath(instruction, this.props.canvasRef)
-        } 
+        }
       })
     })
 
@@ -185,7 +182,7 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
 
     clientSocket.on('line-from-server', (lineCommand)=> {
       drawLine(lineCommand, this.props.canvasRef)
-    }) 
+    })
 
     clientSocket.on('delete-object-from-server', (deleteCommand) => {
       const allObjects = this.props.canvasRef.getObjects()

@@ -1,5 +1,5 @@
 import * as React from 'react'
-import {Whiteboard} from './whiteboard'
+import Whiteboard from './whiteboard'
 import Navbar from './navbar'
 import Chat from './chat'
 
