@@ -14,7 +14,7 @@ export const channelId: String = '/canvas'
 class Panel extends React.Component<PanelStateProps & PanelDispatchProps> {
 
   constructor(props) {
-    super(props) 
+    super(props)
     this.clearCanvas = this.clearCanvas.bind(this)
     this.handleClick = this.handleClick.bind(this)
   }
@@ -29,7 +29,7 @@ class Panel extends React.Component<PanelStateProps & PanelDispatchProps> {
  async handleClick(action: string) {
    await this.props.updateTool(action)
   }
-  
+
 
   render() {
     return(
@@ -40,10 +40,10 @@ class Panel extends React.Component<PanelStateProps & PanelDispatchProps> {
         <button type="button" onClick={() => {
           this.handleClick('delete')
           removeObject(this.props.canvasRef)
-          }>Delete
+          }}>Delete
         </button>
         <button type="button" onClick={() => this.handleClick('select')}>Select/Move</button>
-        
+
         <button type="button" onClick={() => {
           this.handleClick('text')
           addText(this.props.color, this.props.canvasRef)
@@ -101,7 +101,7 @@ interface PanelDispatchProps {
 const mapStateToProps = (state: any): PanelStateProps => {
   return {
     tool: state.panel.tool,
-    canvasRef: state.panel.canvasRef, 
+    canvasRef: state.panel.canvasRef,
     color: state.panel.color
   }
 }
