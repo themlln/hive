@@ -44,7 +44,7 @@ export const creatingNewCanvas = () => async dispatch => {
   try {
     const res = await axios.post('/api/canvases')
     dispatch(createNewCanvas(res.data))
-    history.push('/whiteboard/id?='+res.data);
+    history.push('/whiteboard?id='+res.data);
   } catch (err) {
     console.error(err)
   }

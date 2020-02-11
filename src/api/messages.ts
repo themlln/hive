@@ -6,28 +6,13 @@ module.exports = router
 
 const messageRepository = getRepository(Message)
 
-
-router.get('/?channelId', async (req: Request, res: Response, next: NextFunction) => {
+router.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const channelId: string = req.query.channelId
-
-
-    console.log("MESSAGES IN LINE 17", messages);
-    res.json(messages)
-  } catch (error) {
-    next(error)
-  }
-})
-
-
-router.get('/', async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const channelId: string = req.query.id;
+    const channelId: string = req.params.id;
     const messages = await messageRepository.find({
       where: {channelId: channelId}
     })
     // const messages = await messageRepository.find()
-    console.log("LINE 27***", messages)
     res.json(messages)
   } catch (error) {
     next(error)

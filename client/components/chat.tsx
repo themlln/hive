@@ -13,7 +13,7 @@ class Chat extends React.Component<ChatStateProps & ChatDispatchProps> {
   }
 
   render() {
-    console.log("PROPS IN CHAT COMPONENT", this.props)
+    console.log("CHAT PROPS****", this.props);
     return (
       <div>
         <ul className="message-list">

@@ -21,7 +21,7 @@ export class Home extends React.Component < {}, {} > {
           showLogin: false
         }
         this.toggleLogin = this.toggleLogin.bind(this)
-        channelId = this.props.location.search
+        channelId = this.props.location.search.slice(4)
     }
 
     toggleLogin() {
@@ -32,11 +32,12 @@ export class Home extends React.Component < {}, {} > {
     }
 
     public render() {
+        console.log("PROPSSSSS", this.props)
         return (
         <div>
           <Navbar />
-          <Whiteboard channelId={this.props.location.search}/>
-          <Chat channelId={this.props.location.search}/>
+          <Whiteboard channelId={channelId}/>
+          <Chat channelId={channelId}/>
         </div>
         )
     }
