@@ -7,13 +7,16 @@ export class Message {
     @PrimaryGeneratedColumn()
     id: number;
 
+    @Column({nullable: true})
+    channelId: string;
+
     @Column()
     content: string;
 
     @Column()
     timestamp: string;
 
-    @Column()
+    @Column({nullable: true})
     userId?: number;
 
     @Column({nullable: true})

@@ -2,27 +2,27 @@ import * as React from 'react'
 import {updateTool} from '../store/Panel'
 import { connect } from 'react-redux'
 import { fabric } from 'fabric'
-import { clientSocket } from './fabricCanvas'
+import { clientSocket } from './home'
 import { Socket } from 'net'
-export const drawingName: String = '/canvas'
 
-class Panel extends React.Component<PanelStateProps & PanelDispatchProps> {
+
+class Panel extends React.Component<PanelStateProps & PanelDispatchProps, State> {
 
   constructor(props) {
     super(props)
     this.clearCanvas = this.clearCanvas.bind(this)
     this.handleClick = this.handleClick.bind(this)
-    this.generateId = this.generateId.bind(this)
-    this.addText = this.addText.bind(this)
   }
+
   componentDidMount() {
   }
 
  async clearCanvas(action: string) {
     await this.props.canvasRef.clear()
     this.props.canvasRef.backgroundColor = 'white'
-    clientSocket.emit('clear-canvas', drawingName)
+    clientSocket.emit('clear-canvas', this.props.channelId)
  }
+
  async handleClick(action: string) {
    await this.props.updateTool(action)
 
@@ -35,43 +35,43 @@ class Panel extends React.Component<PanelStateProps & PanelDispatchProps> {
     return idString
   }
 
-  addText() {
-    const newText = new fabric.IText('Insert Text Here', {
-      fontFamily: 'arial',
-      left: 100,
-      top: 100 ,
-    })
-    newText["uid"] = this.generateId(newText)
-    let textCommand = {
-      id: newText["uid"],
-      textObject: newText
-    }
-    clientSocket.emit('draw-from-client', drawingName, textCommand)
-    this.props.canvasRef.add(newText)
-  }
-
   render() {
     return(
       <div>
         <button type="button" onClick={() => this.handleClick('draw')}>Pen
         </button>
+
         <button type="button" onClick={() => {
           this.handleClick('delete')
-          let activeObject = this.props.canvasRef.getActiveObject()
-          let deleteCommand = {
-            id: activeObject.uid,
-            path: activeObject
-          }
-          this.props.canvasRef.remove(activeObject)
-          clientSocket.emit('delete-object-from-client', drawingName, deleteCommand)
-          }
-          } >Delete
+          removeObject(this.props.canvasRef)
+          }}>Delete
         </button>
         <button type="button" onClick={() => this.handleClick('select')}>Select/Move</button>
+
         <button type="button" onClick={() => {
           this.handleClick('text')
-          this.addText()
+          addText(this.props.color, this.props.canvasRef)
           }}>Text</button>
+
+        <button type="button" onClick={() => {
+          this.handleClick('line')
+          }}>Line</button>
+
+        <button type="button" onClick={() => {
+          this.handleClick('circle')
+          addCircle(this.props.color, this.props.canvasRef)
+          }}>Circle</button>
+
+        <button type="button" onClick={() => {
+          this.handleClick('rectangle')
+          addRectangle(this.props.color, this.props.canvasRef)
+          }}>Rectangle</button>
+
+        <button type="button" onClick={() => {
+          this.handleClick('triangle')
+          addTriangle(this.props.color, this.props.canvasRef)
+          }}>Triangle</button>
+
 
         <button type="button" onClick={() => this.clearCanvas('clearCanvas')}>Clear Canvas</button>
 
@@ -95,16 +95,18 @@ class Panel extends React.Component<PanelStateProps & PanelDispatchProps> {
 //INTERFACE
 interface PanelStateProps {
   tool: string
-  canvasRef: any
+  canvasRef: any,
+  channelId: String
 }
 
 interface PanelDispatchProps {
   updateTool: (tool: string) => {tool: string}
 }
-const mapStateToProps = (state: any): PanelStateProps => {
+const mapStateToProps = (state: any, ownProps: {channelId: String}): PanelStateProps => {
   return {
     tool: state.panel.tool,
-    canvasRef: state.panel.canvasRef
+    canvasRef: state.panel.canvasRef,
+    color: state.panel.color
   }
 }
 

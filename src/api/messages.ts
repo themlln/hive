@@ -6,20 +6,14 @@ module.exports = router
 
 const messageRepository = getRepository(Message)
 
-router.get('/', async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const messages = await messageRepository.find()
-    res.json(messages)
-  } catch (error) {
-    next(error)
-  }
-})
-
 router.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const messageId: string = req.params.id
-    const message = await messageRepository.findOneOrFail(messageId)
-    res.json(message)
+    const channelId: string = req.params.id;
+    const messages = await messageRepository.find({
+      where: {channelId: channelId}
+    })
+    // const messages = await messageRepository.find()
+    res.json(messages)
   } catch (error) {
     next(error)
   }
@@ -30,6 +24,7 @@ router.post('/', async (req: Request, res: Response, next: NextFunction) => {
     const newMessage = await messageRepository.create(req.body)
     const newMessageSaved = await messageRepository.save(newMessage)
     res.json(newMessageSaved).status(201)
+
   } catch (error) {
     next(error)
   }
