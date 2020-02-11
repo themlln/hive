@@ -11,6 +11,7 @@ import { drawRectangle } from './canvasTools/rectangle'
 import { drawTriangle } from './canvasTools/triangle'
 import { modifyObject } from './canvasTools/modifyObject'
 import {clientSocket, channelId} from './home'
+import { removeObject } from './canvasTools/delete'
 
 let currentMousePosition: any = {x: 0, y: 0}
 let lastMousePosition: any = {x: 0, y: 0}
@@ -127,6 +128,13 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
 
     await this.props.setCanvas(this.state.canvas)
 
+    let canvas = this.props.canvasRef
+
+    document.addEventListener('keydown', function(event){
+      if (event.keyCode === 8 || event.keyCode === 46){
+        removeObject(canvas)
+      }
+    })
 
     clientSocket.on('replay-drawing', (instructions) => {
 
