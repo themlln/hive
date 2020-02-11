@@ -23,6 +23,14 @@ module.exports = io => {
       drawing.push(command)
       if(command.textObject) {
         socket.broadcast.to(channelId).emit('text-from-server', command)
+      } else if (command.circleObject) {
+        socket.broadcast.to(channelId).emit('circle-from-server', command)
+      } else if (command.rectangleObject) {
+        socket.broadcast.to(channelId).emit('rectangle-from-server', command)
+      } else if (command.triangleObject) {
+        socket.broadcast.to(channelId).emit('triangle-from-server', command)
+      } else if (command.lineObject) {
+        socket.broadcast.to(channelId).emit('line-from-server', command)
       } else {
         socket.broadcast.to(channelId).emit('draw-from-server', command)
       }

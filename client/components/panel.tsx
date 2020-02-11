@@ -11,8 +11,6 @@ class Panel extends React.Component<PanelStateProps & PanelDispatchProps> {
     super(props)
     this.clearCanvas = this.clearCanvas.bind(this)
     this.handleClick = this.handleClick.bind(this)
-    this.generateId = this.generateId.bind(this)
-    this.addText = this.addText.bind(this)
   }
   componentDidMount() {
   }
@@ -49,11 +47,13 @@ class Panel extends React.Component<PanelStateProps & PanelDispatchProps> {
     this.props.canvasRef.add(newText)
   }
 
+
   render() {
     return(
       <div>
         <button type="button" onClick={() => this.handleClick('draw')}>Pen
         </button>
+
         <button type="button" onClick={() => {
           this.handleClick('delete')
           let activeObject = this.props.canvasRef.getActiveObject()
@@ -67,10 +67,31 @@ class Panel extends React.Component<PanelStateProps & PanelDispatchProps> {
           } >Delete
         </button>
         <button type="button" onClick={() => this.handleClick('select')}>Select/Move</button>
+
         <button type="button" onClick={() => {
           this.handleClick('text')
-          this.addText()
+          addText(this.props.color, this.props.canvasRef)
           }}>Text</button>
+
+        <button type="button" onClick={() => {
+          this.handleClick('line')
+          }}>Line</button>
+
+        <button type="button" onClick={() => {
+          this.handleClick('circle')
+          addCircle(this.props.color, this.props.canvasRef)
+          }}>Circle</button>
+
+        <button type="button" onClick={() => {
+          this.handleClick('rectangle')
+          addRectangle(this.props.color, this.props.canvasRef)
+          }}>Rectangle</button>
+
+        <button type="button" onClick={() => {
+          this.handleClick('triangle')
+          addTriangle(this.props.color, this.props.canvasRef)
+          }}>Triangle</button>
+
 
         <button type="button" onClick={() => this.clearCanvas('clearCanvas')}>Clear Canvas</button>
 
