@@ -111,9 +111,10 @@ async function bootApp() {
     passport.deserializeUser(async (id: number, done) => {
       try {
         const user = await userRepository.findOne({
-          select:['id', 'email', 'name', 'profileImage'],
+          select:['id', 'email', 'username', 'profileImage'],
           where: { id: id },
         });
+        console.log("ID IN INDEX", id)
         console.log("WHAT IS THE USER IN THE INDEX??", user)
         done(null, user)
       } catch (err) {

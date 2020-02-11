@@ -13,12 +13,14 @@ router.post('/login', async (req: Request, res:Response, next: NextFunction) => 
     const user: any = await userRepository.findOneOrFail({
       email: req.body.email
     })
+    console.log("USER IN LOGIN POST REQUEST", user)
     if (!user) {
       res.json('Wrong username and/or password').status(401)
     } else if (!user.correctPassword(req.body.password)) {
       res.json('Wrong username and/or password').status(401)
     } else {
       const modifiedUser = {id: user.id, email: user.email, name: user.name, profileImage: user.profileImage}
+      console.log("MODIFIED USER IN POST REQUEST", modifiedUser)
       req.login(modifiedUser, err => (err ? next(err) : res.json(modifiedUser)))
     }
   } catch (err) {
@@ -28,18 +30,14 @@ router.post('/login', async (req: Request, res:Response, next: NextFunction) => 
 
 router.post('/signup', async (req: Request, res:Response, next: NextFunction) => {
   try {
-    const user: User = await userRepository.findOne({
-      where: {
-        id: req.session.user.id
-      }
-    })
-    user.password = req.body.password
-    user.email = req.body.email
-    user.name = req.body.screenname
-    user.sessionId = req.body.sessionId
+    const user: User = await userRepository.create()
+    // user.password = req.body.password
+    // user.email = req.body.email
+    // user.name = req.body.username
+    // user.sessionId = req.body.sessionId
     await userRepository.save(user);
 
-    const modifiedUser: object = {id: user.id, email: user.email, name: user.name, profileImage: user.profileImage}
+    const modifiedUser: object = {id: user.id, email: user.email, name: user.username, profileImage: user.profileImage}
     req.login(modifiedUser, err => (err ? next(err) : res.json(modifiedUser)))
   } catch (err) {
     if (err.name === 'TypeORMUniqueConstraintError') {
