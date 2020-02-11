@@ -1,8 +1,8 @@
 import { Request, NextFunction } from "express"
 import { getRepository } from "typeorm"
+import { User } from '../entity/User'
 
 const router = require('express').Router()
-const {User} = require('../entity/User')
 module.exports = router
 
 
@@ -28,8 +28,17 @@ router.post('/login', async (req: Request, res:Response, next: NextFunction) => 
 
 router.post('/signup', async (req: Request, res:Response, next: NextFunction) => {
   try {
-    const user: any = await userRepository.create(req.body);
+    const user: User = await userRepository.findOne({
+      where: {
+        id: req.session.user.id
+      }
+    })
+    user.password = req.body.password
+    user.email = req.body.email
+    user.name = req.body.screenname
+    user.sessionId = req.body.sessionId
     await userRepository.save(user);
+
     const modifiedUser: object = {id: user.id, email: user.email, name: user.name, profileImage: user.profileImage}
     req.login(modifiedUser, err => (err ? next(err) : res.json(modifiedUser)))
   } catch (err) {

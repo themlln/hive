@@ -114,28 +114,10 @@ async function bootApp() {
           select:['id', 'email', 'name', 'profileImage'],
           where: { id: id },
         });
+        console.log("WHAT IS THE USER IN THE INDEX??", user)
         done(null, user)
       } catch (err) {
         done(err)
-      }
-    })
-
-    app.use('*', async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-      try {
-        if (!req.session.user) {
-          //if you are logged in
-          if (req.user) {
-            req.session.user = req.user
-          } else {
-            //if you are a guest
-            const newUser = await userRepository.create({sessionId: req.session.id})
-            req.session.user = newUser
-            req.user = newUser
-          }
-        }
-        next()
-      } catch (error) {
-        next(error)
       }
     })
 
