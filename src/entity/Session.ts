@@ -1,4 +1,4 @@
-import { BaseEntity, Column, Entity, PrimaryColumn } from 'typeorm';
+import { BaseEntity, Column, Entity, PrimaryColumn, CreateDateColumn, UpdateDateColumn} from 'typeorm';
 import { SessionEntity } from 'typeorm-store';
 
 @Entity()
@@ -11,4 +11,10 @@ export class Session extends BaseEntity implements SessionEntity {
 
     @Column()
     data: string;
+
+    @CreateDateColumn()
+    createDate: Date
+
+    @UpdateDateColumn()
+    updateDate: Date
 }

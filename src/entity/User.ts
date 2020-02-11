@@ -11,15 +11,15 @@ export class User {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ unique: true })
+  @Column({ unique: true, nullable: true })
   @IsEmail()
   email: string;
 
-  @Column()
+  @Column({nullable: true})
   password: string;
 
-  @Column({default: 'Anonymous mlln'})
-  name: string;
+  @Column({default: 'Anonymous bee'})
+  username: string;
 
   @Column({default: "https://visualpharm.com/assets/751/Melon-595b40b75ba036ed117d8629.svg"})
   profileImage: string;
@@ -30,7 +30,7 @@ export class User {
   @Column({ nullable: true })
   salt: string;
 
-  @Column({ nullable: true })
+  @Column()
   sessionId: string;
 
   @Column({ nullable: true })
