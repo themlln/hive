@@ -6,26 +6,23 @@ module.exports = router
 
 const userRepository = getRepository(User)
 
-router.use('*', (req: Request, res: Response, next: NextFunction) => {
-  try {
-    let userId = Number(req.params['0'].slice(1))
-
-    if (req.session.user.id === userId) {
-      next()
-    } else {
-      res.json().status(403)
-    }
-  } catch (error) {
-    next(error)
-  }
-})
+// router.use('*', (req: Request, res: Response, next: NextFunction) => {
+//   try {
+//     let userId = Number(req.params['0'].slice(1))
+//     console.log('REQUEST IN USER ROUTE', req.sessionStore)
+//     if (req.sessionStore.sessionID === userId) {
+//       next()
+//     } else {
+//       res.json().status(403)
+//     }
+//   } catch (error) {
+//     next(error)
+//   }
+// })
 
 router.get('/', async (req: Request, res: Response, next: NextFunction) => {
   try {
     const users = await userRepository.find({
-      // explicitly select only the id and email fields - even though
-      // users' passwords are encrypted, it won't help if we just
-      // send everything to anyone who asks!
       select: ['id', 'email']
     })
     res.json(users)

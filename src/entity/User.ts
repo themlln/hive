@@ -11,11 +11,11 @@ export class User {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ unique: true })
+  @Column({ unique: true, nullable: true })
   @IsEmail()
   email: string;
 
-  @Column()
+  @Column({nullable: true})
   password: string;
 
   @Column({default: 'Anonymous bee'})
