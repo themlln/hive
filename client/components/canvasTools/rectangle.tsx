@@ -1,9 +1,10 @@
 import { fabric } from 'fabric'
-import { clientSocket, channelId, PathCommand} from '../fabricCanvas'
+import {PathCommand} from '../fabricCanvas'
 import {generateId} from './id'
+import { clientSocket, channelId } from '../home'
 
 export function addRectangle(
-    fill: string, 
+    fill: string,
     canvas: any
 ) {
     const newRectangle = new fabric.Rect({
@@ -23,7 +24,7 @@ export function addRectangle(
   }
 
 export function drawRectangle (
-    rectangleCommand: any, 
+    rectangleCommand: any,
     canvas: any
 ) {
     let rect = rectangleCommand.rectangleObject
@@ -32,7 +33,7 @@ export function drawRectangle (
       top: rect.top,
       fill: rect.fill,
       width: rect.width,
-      height: rect.height, 
+      height: rect.height,
       scaleX: rect.scaleX,
       scaleY: rect.scaleY
     })

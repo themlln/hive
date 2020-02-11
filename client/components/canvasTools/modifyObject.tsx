@@ -1,5 +1,5 @@
 import { fabric } from 'fabric'
-import { clientSocket, channelId, PathCommand} from '../fabricCanvas'
+import {PathCommand} from '../fabricCanvas'
 import {generateId} from './id'
 
 export function modifyObject(
@@ -9,7 +9,7 @@ export function modifyObject(
       const allObjects = canvas.getObjects()
       const objectToModify = allObjects.filter(object => object.uid === modifiedCommand.id)
       const modifiedObject = modifiedCommand.modifiedObject
-  
+
       if(objectToModify[0].text) {
         objectToModify[0].text = modifiedObject.text
       }

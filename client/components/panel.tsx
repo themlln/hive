@@ -3,10 +3,12 @@ import {updateTool} from '../store/Panel'
 import { connect } from 'react-redux'
 import { fabric } from 'fabric'
 import { clientSocket } from './home'
-import { Socket } from 'net'
-
-
-class Panel extends React.Component<PanelStateProps & PanelDispatchProps, State> {
+import {removeObject} from '../components/canvasTools/delete'
+import {addText} from '../components/canvasTools/text'
+import {addCircle} from '../components/canvasTools/circle'
+import {addRectangle} from '../components/canvasTools/rectangle'
+import {addTriangle} from '../components/canvasTools/triangle'
+class Panel extends React.Component<PanelStateProps & PanelDispatchProps> {
 
   constructor(props) {
     super(props)
@@ -26,13 +28,6 @@ class Panel extends React.Component<PanelStateProps & PanelDispatchProps, State>
  async handleClick(action: string) {
    await this.props.updateTool(action)
 
-  }
-
-  generateId (object: any) {
-    let randomNumber = Math.floor(Math.random()* 1000)
-    let idArray = [randomNumber, object.left, object.top, object.width, object.height]
-    let idString = idArray.join("").split(".").join("")
-    return idString
   }
 
   render() {
@@ -95,17 +90,19 @@ class Panel extends React.Component<PanelStateProps & PanelDispatchProps, State>
 //INTERFACE
 interface PanelStateProps {
   tool: string
-  canvasRef: any,
-  channelId: String
+  canvasRef: any
+  channelId: string
+  color: string
 }
 
 interface PanelDispatchProps {
   updateTool: (tool: string) => {tool: string}
 }
-const mapStateToProps = (state: any, ownProps: {channelId: String}): PanelStateProps => {
+const mapStateToProps = (state: any, ownProps: {channelId: string}): PanelStateProps => {
   return {
     tool: state.panel.tool,
     canvasRef: state.panel.canvasRef,
+    channelId: ownProps.channelId,
     color: state.panel.color
   }
 }

@@ -10,18 +10,18 @@ class Welcome extends React.Component<WelcomeDispatchProps> {
   }
 
   handleClick() {
-    // this.props.onClickCreateCanvas()
+    this.props.onClickCreateCanvas()
   }
 
   render(){
     return(
-      <div>
-      <FormDialog createCanvas={this.props.onClickCreateCanvas} />
-      </div>
-
-          // <div>
-      //   <h3><button type="button" onClick={()=>this.handleClick()}>Collabo by MLLN.</button></h3>
+      // <div>
+      // <FormDialog createCanvas={this.props.onClickCreateCanvas} />
       // </div>
+
+      <div>
+        <h3><button type="button" onClick={()=>this.handleClick()}>Collabo by MLLN.</button></h3>
+      </div>
     )
   }
 }

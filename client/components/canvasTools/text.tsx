@@ -1,9 +1,10 @@
 import { fabric } from 'fabric'
-import { clientSocket, channelId, PathCommand} from '../fabricCanvas'
+import {PathCommand} from '../fabricCanvas'
 import {generateId} from './id'
+import { clientSocket, channelId } from '../home'
 
 export function addText(
-    color: string, 
+    color: string,
     canvas: any
 ) {
     const newText = new fabric.IText('Insert Text Here', {

@@ -10,7 +10,7 @@ import { drawCircle } from './canvasTools/circle'
 import { drawRectangle } from './canvasTools/rectangle'
 import { drawTriangle } from './canvasTools/triangle'
 import { modifyObject } from './canvasTools/modifyObject'
-import {clientSocket} from './home'
+import {clientSocket, channelId} from './home'
 
 let currentMousePosition: any = {x: 0, y: 0}
 let lastMousePosition: any = {x: 0, y: 0}
@@ -219,6 +219,7 @@ interface CanvasStateProps {
     strokeWidth: number
     canvasRef: any
     instructions: Array<any>
+    channelId: string
 }
 
 interface CanvasDispatchProps {
@@ -226,13 +227,14 @@ interface CanvasDispatchProps {
 }
 
 
-const mapStateToProps = (state: any): CanvasStateProps => {
+const mapStateToProps = (state: any, ownProps: any): CanvasStateProps => {
   return {
     tool: state.panel.tool,
     color: state.panel.color,
     strokeWidth: state.panel.strokeWidth,
     canvasRef: state.panel.canvasRef,
     instructions: state.panel.instruction,
+    channelId: ownProps.channelId
   }
 }
 

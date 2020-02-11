@@ -11,7 +11,7 @@ import { Message } from '../types/storeTypes'
 
 export const clientSocket: any = createClientSocket(window.location.origin)
 
-let channelId: String
+export let channelId: string
 
 
 export class Home extends React.Component < {}, {} > {
