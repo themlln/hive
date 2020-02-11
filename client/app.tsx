@@ -10,7 +10,7 @@ import Welcome from './components/welcome'
  * COMPONENT
  */
 
- class App extends React.Component {
+ class App extends React.Component <AppStateProps & AppDispatchProps>{
   componentDidMount() {
     this.props.loadInitialData()
   }
@@ -34,7 +34,14 @@ import Welcome from './components/welcome'
     )
   }
 }
+/**INTERFACE **/
+interface AppStateProps {
+  isLoggedIn: boolean;
+}
 
+interface AppDispatchProps {
+  loadInitialData: () => {};
+}
 /**
  * CONTAINER
  */

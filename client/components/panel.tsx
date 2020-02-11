@@ -32,22 +32,6 @@ class Panel extends React.Component<PanelStateProps & PanelDispatchProps> {
     return idString
   }
 
-  addText() {
-    const newText = new fabric.IText('Insert Text Here', {
-      fontFamily: 'arial',
-      left: 100,
-      top: 100 ,
-    })
-    newText["uid"] = this.generateId(newText)
-    let textCommand = {
-      id: newText["uid"],
-      textObject: newText
-    }
-    clientSocket.emit('draw-from-client', this.props.channelId, textCommand)
-    this.props.canvasRef.add(newText)
-  }
-
-
   render() {
     return(
       <div>
@@ -56,15 +40,8 @@ class Panel extends React.Component<PanelStateProps & PanelDispatchProps> {
 
         <button type="button" onClick={() => {
           this.handleClick('delete')
-          let activeObject = this.props.canvasRef.getActiveObject()
-          let deleteCommand = {
-            id: activeObject.uid,
-            path: activeObject
-          }
-          this.props.canvasRef.remove(activeObject)
-          clientSocket.emit('delete-object-from-client', this.props.channelId, deleteCommand)
-          }
-          } >Delete
+          removeObject(this.props.canvasRef)
+          }}>Delete
         </button>
         <button type="button" onClick={() => this.handleClick('select')}>Select/Move</button>
 
@@ -126,7 +103,7 @@ const mapStateToProps = (state: any, ownProps: {channelId: String}): PanelStateP
   return {
     tool: state.panel.tool,
     canvasRef: state.panel.canvasRef,
-    channelId: ownProps.channelId
+    color: state.panel.color
   }
 }
 

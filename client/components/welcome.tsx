@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { creatingNewCanvas } from '../store/Canvas'
 import { connect } from 'react-redux'
 
-class Welcome extends React.Component {
+class Welcome extends React.Component<WelcomeDispatchProps> {
   constructor(props) {
     super(props)
   }
@@ -21,6 +21,9 @@ class Welcome extends React.Component {
   }
 }
 
+interface WelcomeDispatchProps {
+  onClickCreateCanvas: () => {};
+}
 const mapDispatch = (dispatch) => {
   return { onClickCreateCanvas: () =>
     dispatch(creatingNewCanvas())

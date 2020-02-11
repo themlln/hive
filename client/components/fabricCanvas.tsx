@@ -2,9 +2,14 @@ import * as React from 'react'
 import { connect } from 'react-redux'
 import {updateCanvas} from '../store/Panel'
 import { fabric } from 'fabric'
-import { Path, Object } from 'fabric/fabric-impl'
-import { object } from 'prop-types'
-import { Socket } from 'net'
+import { draw, sendDrawing, drawPath} from './canvasTools/draw'
+import {line, drawLine} from './canvasTools/line'
+import {generateId} from './canvasTools/id'
+import { copyText } from './canvasTools/text'
+import { drawCircle } from './canvasTools/circle'
+import { drawRectangle } from './canvasTools/rectangle'
+import { drawTriangle } from './canvasTools/triangle'
+import { modifyObject } from './canvasTools/modifyObject'
 import {clientSocket} from './home'
 
 let currentMousePosition: any = {x: 0, y: 0}
@@ -65,23 +70,8 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
 
   handleMouseUp(event) {
     if (this.props.tool === 'draw'){
-      const index = this.props.canvasRef._objects.length - 1
-      const path = this.props.canvasRef._objects[index]
-      const newId = this.generateId(path)
-      path.set({
-        uid: newId
-      })
+      sendDrawing(this.props.canvasRef, this.state.shouldBroadcast, this.state.isSelected)
 
-      let pathCommand: PathCommand = {
-        id: newId,
-        path: path
-      }
-
-      this.setState(
-        this.state.objectHashMap[newId] = path
-      )
-
-      this.state.shouldBroadcast && !this.state.isSelected && clientSocket.emit('draw-from-client', this.props.channelId, pathCommand)
       this.setState({
         shouldBroadcast: false,
         currentObject:{}
