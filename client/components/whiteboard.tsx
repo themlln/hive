@@ -1,6 +1,5 @@
 import * as React from 'react'
 import Panel from './panel'
-import Canvas from './canvas'
 import FabricCanvas from './fabricCanvas'
 import ColorPicker from './color'
 
@@ -30,17 +29,18 @@ export class Whiteboard extends React.Component < {}, State > {
     }
 
     public render() {
+        console.log("WHITE BOARD PROPS***", this.props);
         return (
-        <>
+
         <div>
-          <Panel />
+          <Panel channelId={this.props.channelId} />
           {this.state.active && <ColorPicker />}
           <button type="button" onClick={this.handleToggle}>
             Color Picker
           </button>
-          <FabricCanvas />
+          <FabricCanvas channelId={this.props.channelId}/>
         </div>
-        </>
+
         )
     }
 }

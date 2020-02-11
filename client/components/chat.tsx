@@ -1,22 +1,19 @@
 import * as React from 'react'
-import { fetchMessages, deleteMessage } from '../store/Chat'
+import { fetchingMessages, deleteMessage } from '../store/Chat'
 import { Message, ChatState } from '../types/storeTypes'
 import { ChatStateProps, ChatDispatchProps } from '../types/componentTypes'
 import { SingleMessage } from './single-message'
 import { ConnectNewMessageEntry } from './new-message-entry'
-import { clientSocket } from './fabricCanvas'
 import { connect } from 'react-redux'
 
 class Chat extends React.Component<ChatStateProps & ChatDispatchProps> {
 
   componentDidMount() {
-    this.props.fetchMessages()
-    clientSocket.on('replay-messages', (instructions) => {
-      
-    })
+    this.props.fetchingMessages(this.props.channelId)
   }
 
   render() {
+    console.log("CHAT PROPS****", this.props);
     return (
       <div>
         <ul className="message-list">
@@ -24,30 +21,32 @@ class Chat extends React.Component<ChatStateProps & ChatDispatchProps> {
           message={message}
           key={message.id}
           deleteMessage={this.props.deleteMessage}
-          user={this.props.user} />)}
+          user={this.props.user}
+          channelId={this.props.channelId}
+          />)}
         </ul>
-        <ConnectNewMessageEntry />
+        <ConnectNewMessageEntry channelId={this.props.channelId}/>
       </div>
     );
   }
 }
 
-const mapStateToProps = (state: ChatState): ChatStateProps => {
+const mapStateToProps = (state: ChatState, ownProps:{channelId:string}): ChatStateProps => {
   return {
     chat: {
       messages: state.chat.messages
     },
-    user: state.user
+    user: state.user,
+    channelId: ownProps.channelId
   }
 }
 
 const mapDispatchToProps = (dispatch: any): ChatDispatchProps => {
   return {
-    fetchMessages: () => dispatch(fetchMessages()),
-    deleteMessage: (message: Message) => dispatch(deleteMessage(message))
+    fetchingMessages:(channelId: string) => dispatch((fetchingMessages(channelId))),
+    deleteMessage: (message: Message, channelId: string) => dispatch(deleteMessage(message, channelId))
+
   }
 }
 
-const ConnectChat = connect(mapStateToProps, mapDispatchToProps)(Chat)
-
-export default ConnectChat
+export default connect(mapStateToProps, mapDispatchToProps)(Chat)

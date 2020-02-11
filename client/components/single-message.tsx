@@ -3,10 +3,11 @@ import * as React from 'react'
 interface MessageProps {
   message: object,
   deleteMessage: any,
-  user: object
+  user: object,
+  channelId: string
 }
 
-export const SingleMessage: React.FunctionComponent<MessageProps> = ({message,deleteMessage, user}) => {
+export const SingleMessage: React.FunctionComponent<MessageProps> = ({message, deleteMessage, user, channelId}) => {
   return (
     <>
       <div className="message">
@@ -25,7 +26,7 @@ export const SingleMessage: React.FunctionComponent<MessageProps> = ({message,de
         <div className="delete-message">
           <button className="message-remove-btn"
           type="button"
-          onClick={() => deleteMessage(message)} >
+          onClick={() => deleteMessage(message, channelId)} >
           X
           </button>
         </div>

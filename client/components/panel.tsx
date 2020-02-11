@@ -2,14 +2,8 @@ import * as React from 'react'
 import {updateTool} from '../store/Panel'
 import { connect } from 'react-redux'
 import { fabric } from 'fabric'
-import { clientSocket } from './fabricCanvas'
+import { clientSocket } from './home'
 import { Socket } from 'net'
-import { addText } from './canvasTools/text'
-import { addCircle } from './canvasTools/circle'
-import { addRectangle } from './canvasTools/rectangle'
-import { addTriangle } from './canvasTools/triangle'
-import { removeObject } from './canvasTools/delete'
-export const channelId: String = '/canvas'
 
 
 class Panel extends React.Component<PanelStateProps & PanelDispatchProps, State> {
@@ -26,13 +20,20 @@ class Panel extends React.Component<PanelStateProps & PanelDispatchProps, State>
  async clearCanvas(action: string) {
     await this.props.canvasRef.clear()
     this.props.canvasRef.backgroundColor = 'white'
-    clientSocket.emit('clear-canvas', channelId)
+    clientSocket.emit('clear-canvas', this.props.channelId)
  }
 
  async handleClick(action: string) {
    await this.props.updateTool(action)
+
   }
 
+  generateId (object: any) {
+    let randomNumber = Math.floor(Math.random()* 1000)
+    let idArray = [randomNumber, object.left, object.top, object.width, object.height]
+    let idString = idArray.join("").split(".").join("")
+    return idString
+  }
 
   render() {
     return(
@@ -94,14 +95,14 @@ class Panel extends React.Component<PanelStateProps & PanelDispatchProps, State>
 //INTERFACE
 interface PanelStateProps {
   tool: string
-  canvasRef: any
-  color: string
+  canvasRef: any,
+  channelId: String
 }
 
 interface PanelDispatchProps {
   updateTool: (tool: string) => {tool: string}
 }
-const mapStateToProps = (state: any): PanelStateProps => {
+const mapStateToProps = (state: any, ownProps: {channelId: String}): PanelStateProps => {
   return {
     tool: state.panel.tool,
     canvasRef: state.panel.canvasRef,

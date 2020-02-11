@@ -1,6 +1,4 @@
 import * as React from 'react'
-
-import * as createClientSocket from 'socket.io-client'
 import { connect } from 'react-redux'
 import {updateCanvas} from '../store/Panel'
 import { fabric } from 'fabric'
@@ -12,18 +10,11 @@ import { drawCircle } from './canvasTools/circle'
 import { drawRectangle } from './canvasTools/rectangle'
 import { drawTriangle } from './canvasTools/triangle'
 import { modifyObject } from './canvasTools/modifyObject'
-
-export const clientSocket: any = createClientSocket(window.location.origin)
-export const channelId: String = '/canvas'
+import {clientSocket} from './home'
 
 let currentMousePosition: any = {x: 0, y: 0}
 let lastMousePosition: any = {x: 0, y: 0}
 let firstMousePosition: any = {x: 0, y: 0}
-
-clientSocket.on('connect', () => {
-  console.log('Client-Socket: I have a made a persistent two-way connection!')
-  clientSocket.emit('join-drawing', channelId)
-})
 
 interface State {
   canvas: any,
@@ -117,8 +108,7 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
       id: modifiedObject.uid,
       modifiedObject: modifiedObject
     }
-
-    clientSocket.emit('modified-from-client', channelId, modifiedCommand)
+    clientSocket.emit('modified-from-client', this.props.channelId, modifiedCommand)
   }
 
   async componentDidMount() {
@@ -139,6 +129,7 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
 
 
     clientSocket.on('replay-drawing', (instructions) => {
+
       instructions.forEach(instruction => {
         if(instruction.textObject) {
           copyText(instruction, this.props.canvasRef)
