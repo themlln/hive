@@ -93,7 +93,7 @@ export const chatReducer = (state = initialState, action: ChatActionTypes): Chat
   switch(action.type) {
     case LOAD_MESSAGES:
       return {
-        messages: [...state.messages, ...action.payload]
+        messages: [...action.payload]
       }
     case GOT_NEW_MESSAGE:
       return {

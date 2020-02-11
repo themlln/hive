@@ -46,6 +46,7 @@ export class Home extends React.Component < {}, {} > {
 clientSocket.on('connect', () => {
   console.log('Client-Socket: I have a made a persistent two-way connection!', channelId)
   clientSocket.emit('join-drawing', channelId)
+
   clientSocket.on('replay-messages', (messages: Array<Message>) => {
     store.dispatch(loadMessages(messages))
   })

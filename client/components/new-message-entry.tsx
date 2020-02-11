@@ -26,7 +26,6 @@ class NewMessageEntry extends React.Component<NewMessageMapStateToProps & NewMes
       profileImage: profileImage,
       channelId: channelId
     }
-    console.log("SENDING MESSAGE WITH***", newMessage, this.props.channelId)
     this.props.sendMessage(newMessage, this.props.channelId)
   }
 
