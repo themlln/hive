@@ -8,15 +8,48 @@ import {addText} from '../components/canvasTools/text'
 import {addCircle} from '../components/canvasTools/circle'
 import {addRectangle} from '../components/canvasTools/rectangle'
 import {addTriangle} from '../components/canvasTools/triangle'
-class Panel extends React.Component<PanelStateProps & PanelDispatchProps> {
+//buttons - change to one line** 
+import DeleteButton from './buttons/deleteButton'
+import DrawButton from './buttons/drawButton'
+import SelectButton from './buttons/selectButton'
+import TextButton from './buttons/textButton'
+import LineButton from './buttons/lineButton'
+import CircleButton from './buttons/circleButton'
+import RectangleButton from './buttons/rectangleButton'
+import TriangleButton from './buttons/triangleButton'
+import DownloadButton from './buttons/downloadButton'
+import ClearCanvasButton from './buttons/clearCanvasButton'
+import ColorButton from './buttons/colorButton'
+import ColorPicker from './color'
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+
+
+
+interface State {
+  active: boolean;
+}
+
+class Panel extends React.Component<PanelStateProps & PanelDispatchProps, State> {
 
   constructor(props) {
     super(props)
+    this.state = {
+      active: false,
+    }
+
     this.clearCanvas = this.clearCanvas.bind(this)
     this.handleClick = this.handleClick.bind(this)
+    this.handleToggle = this.handleToggle.bind(this)
+
   }
 
   componentDidMount() {
+  }
+
+  async handleToggle() {
+    this.setState({
+      active: !this.state.active
+    })
   }
 
  async clearCanvas(action: string) {
@@ -33,44 +66,48 @@ class Panel extends React.Component<PanelStateProps & PanelDispatchProps> {
   render() {
     return(
       <div>
-        <button type="button" onClick={() => this.handleClick('draw')}>Pen
-        </button>
-
-        <button type="button" onClick={() => {
+        <span className = "button-wrapper" onClick={() => this.handleClick('draw')}><DrawButton /></span>
+        
+        <span className = "button-wrapper" onClick={() => {
           this.handleClick('delete')
           removeObject(this.props.canvasRef)
-          }}>Delete
-        </button>
-        <button type="button" onClick={() => this.handleClick('select')}>Select/Move</button>
+          }}> <DeleteButton />
+        </span>
 
-        <button type="button" onClick={() => {
+        <span className = "button-wrapper" onClick={() => this.handleClick('select')}><SelectButton /> </span>
+
+        <span className = "button-wrapper" onClick={() => {
           this.handleClick('text')
           addText(this.props.color, this.props.fill, this.props.canvasRef)
-          }}>Text</button>
+          }}><TextButton /></span>
 
-        <button type="button" onClick={() => {
+          {this.state.active && <ColorPicker />}
+          <span type="button" onClick={this.handleToggle}>
+            <ColorButton/>
+          </span>
+
+        <span className = "button-wrapper" onClick={() => {
           this.handleClick('line')
-          }}>Line</button>
+          }}><LineButton /></span>
 
-        <button type="button" onClick={() => {
+        <span className = "button-wrapper" onClick={() => {
           this.handleClick('circle')
           addCircle(this.props.color, this.props.fill, this.props.canvasRef)
-          }}>Circle</button>
+          }}><CircleButton /></span>
 
-        <button type="button" onClick={() => {
+        <span className = "button-wrapper" onClick={() => {
           this.handleClick('rectangle')
           addRectangle(this.props.color, this.props.fill, this.props.canvasRef)
-          }}>Rectangle</button>
+          }}><RectangleButton /></span>
 
-        <button type="button" onClick={() => {
+        <span className = "button-wrapper" onClick={() => {
           this.handleClick('triangle')
           addTriangle(this.props.color, this.props.fill, this.props.canvasRef)
-          }}>Triangle</button>
+          }}><TriangleButton /></span>
 
+        <span className = "button-wrapper" onClick={() => this.clearCanvas('clearCanvas')}><ClearCanvasButton /></span>
 
-        <button type="button" onClick={() => this.clearCanvas('clearCanvas')}>Clear Canvas</button>
-
-        <button type="button" onClick={ () => {
+        <span className = "button-wrapper" onClick={ () => {
           const dataURL = this.props.canvasRef.toDataURL({
             format: 'jpeg'
           })
@@ -80,7 +117,7 @@ class Panel extends React.Component<PanelStateProps & PanelDispatchProps> {
           document.body.appendChild(a);
           a.click();
           document.body.removeChild(a);
-        }}>Download Canvas</button>
+        }}><DownloadButton /></span>
 
       </div>
     )

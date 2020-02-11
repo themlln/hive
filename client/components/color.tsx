@@ -12,7 +12,6 @@ class ColorPicker extends React.Component<ColorStateProps & ColorDispatchProps> 
 
   handleFillChange = (color: any) => {
     this.props.updateFill(color.hex)
-
   }
 
   render() {

@@ -39,6 +39,7 @@
   "license": "MIT",
   "dependencies": {
     "@material-ui/core": "^4.9.2",
+    "@material-ui/icons": "^4.9.1",
     "@types/axios": "^0.14.0",
     "@types/fabric": "^3.6.1",
     "@types/redux": "^3.6.0",
