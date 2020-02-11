@@ -2,6 +2,7 @@ import { Request, NextFunction } from "express"
 import { getRepository } from "typeorm"
 import { User } from '../entity/User'
 
+
 const router = require('express').Router()
 module.exports = router
 
@@ -10,9 +11,12 @@ const userRepository = getRepository(User)
 
 router.post('/login', async (req: Request, res:Response, next: NextFunction) => {
   try {
-    const user: any = await userRepository.findOneOrFail({
+    const user: any = await userRepository.findOne({
       email: req.body.email
     })
+    user.sessionId = req.sessionID
+    await userRepository.save(user)
+
     console.log("USER IN LOGIN POST REQUEST", user)
     if (!user) {
       res.json('Wrong username and/or password').status(401)

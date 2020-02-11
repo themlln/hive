@@ -1,6 +1,7 @@
 import * as morgan from 'morgan'
 import * as path from 'path'
 import * as express from 'express'
+import {Request, Response, NextFunction} from 'express'
 import * as compression from 'compression'
 
 import { createConnection, Connection, Repository } from 'typeorm'
@@ -63,7 +64,7 @@ const createApp = (sessionRepository: Repository<Session>) => {
   app.use(express.static(path.join(__dirname, '..', 'public')))
 
   // any remaining requests with an extension (.js, .css, etc.) send 404
-  app.use((req: express.Request, res: express.Response, next: express.NextFunction) => {
+  app.use((req: Request, res: Response, next: NextFunction) => {
     if (path.extname(req.path).length) {
       const err: Error = new Error('Not found')
       err.status = 404
@@ -74,12 +75,12 @@ const createApp = (sessionRepository: Repository<Session>) => {
   })
 
   // sends index.html
-  app.use('*', (req: express.Request, res: express.Response) => {
+  app.use('*', (req: Request, res: Response) => {
     res.sendFile(path.join(__dirname, '..', 'public/index.html'))
   })
 
   // error handling endware
-  app.use((err: Error, req: express.Request, res: express.Response, next: express.NextFunction) => {
+  app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
     console.error(err)
     console.error(err.stack)
     res.status(err.status || 500).send(err.message || 'Internal server error.')
@@ -120,16 +121,22 @@ async function bootApp() {
       }
     })
 
-    app.use('*', async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    app.use('*', async (req: Request, res: Response, next: NextFunction) => {
       try {
-        if (!req.session.user) {
+        // if a session exists
+        if (req.sessionID) {
           //if you are logged in
           if (req.user) {
-            req.session.user = req.user
+            const user: User = userRepository.findOne({
+              where: {
+                email: req.body.email
+              }
+            })
+            user.sessionId = req.sessionID
+            await userRepository.save(user)
           } else {
             //if you are a guest
-            const newUser = await User.create({sessionId: req.session.id})
-            req.session.user = newUser
+            const newUser = await userRepository.create({sessionId: req.sessionID})
             req.user = newUser
           }
         }

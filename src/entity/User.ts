@@ -30,7 +30,7 @@ export class User {
   @Column({ nullable: true })
   salt: string;
 
-  @Column({ nullable: true })
+  @Column()
   sessionId: string;
 
   @Column({ nullable: true })

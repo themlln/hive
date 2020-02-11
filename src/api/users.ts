@@ -6,11 +6,14 @@ module.exports = router
 
 const userRepository = getRepository(User)
 
-// router.use('*', (req: Request, res: Response, next: NextFunction) => {
+// router.use('*', async (req: Request, res: Response, next: NextFunction) => {
 //   try {
-//     let userId = Number(req.params['0'].slice(1))
-//     console.log('REQUEST IN USER ROUTE', req.sessionStore)
-//     if (req.sessionStore.sessionID === userId) {
+//     const user = await userRepository.findOne({
+//       where: {
+//         id: req.params.id
+//       }
+//     })
+//     if (req.sessionID === user.sessionId) {
 //       next()
 //     } else {
 //       res.json().status(403)
