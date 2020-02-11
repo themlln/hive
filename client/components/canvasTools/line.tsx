@@ -1,19 +1,20 @@
 import { fabric } from 'fabric'
-import { clientSocket, channelId } from '../fabricCanvas'
+import {PathCommand} from '../fabricCanvas'
 import {generateId} from './id'
+import { clientSocket, channelId } from '../home'
 
 export function line (
     start: Array<number> = [0,0],
     end: Array<number> = [0,0],
-    fill: string, 
-    stroke: string, 
+    fill: string,
+    stroke: string,
     strokeWidth: number,
     canvas: any
   ) {
     const newLine = new fabric.Line([...start, ...end], {
-      fill: fill, 
-      stroke: stroke, 
-      strokeWidth: strokeWidth, 
+      fill: fill,
+      stroke: stroke,
+      strokeWidth: strokeWidth,
       selectable: true
     })
 
@@ -28,20 +29,20 @@ export function line (
   }
 
   export function drawLine (
-    lineCommand: any, 
+    lineCommand: any,
     canvas: any
   ){
     let line = lineCommand.lineObject
     const newLine = new fabric.Line([line.x1, line.y1, line.x2, line.y2], {
-      top: line.top, 
-      left: line.left, 
+      top: line.top,
+      left: line.left,
       scaleX: line.scaleX,
       scaleY: line.scaleY,
-      fill: line.fill, 
+      fill: line.fill,
       width: line.width,
       height: line.height,
-      stroke: line.stroke, 
-      strokeWidth: line.strokeWidth, 
+      stroke: line.stroke,
+      strokeWidth: line.strokeWidth,
       selectable: true
     })
 

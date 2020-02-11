@@ -1,6 +1,6 @@
 import { fabric } from 'fabric'
-import { clientSocket, channelId, PathCommand} from '../fabricCanvas'
-import {generateId} from './id'
+import {PathCommand} from '../fabricCanvas'
+import { clientSocket, channelId } from '../home'
 
 export function removeObject(
     canvas: any

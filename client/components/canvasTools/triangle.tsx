@@ -1,21 +1,22 @@
 import { fabric } from 'fabric'
-import { clientSocket, channelId, PathCommand} from '../fabricCanvas'
+import {PathCommand} from '../fabricCanvas'
+import { clientSocket, channelId } from '../home'
 import {generateId} from './id'
 
 
 export function   addTriangle(
-    fill: string, 
+    fill: string,
     canvas: any
 ) {
     const newTriangle = new fabric.Triangle({
-      left: 50, 
+      left: 50,
       top: 50,
-      width: 30, 
+      width: 30,
       height: 30,
       fill: fill
     })
 
-    newTriangle["uid"] = generateId(newTriangle) 
+    newTriangle["uid"] = generateId(newTriangle)
     let triangleCommand = {
       id: newTriangle["uid"],
       triangleObject: newTriangle
@@ -26,14 +27,14 @@ export function   addTriangle(
   }
 
 export function drawTriangle(
-    triangleCommand: any, 
+    triangleCommand: any,
     canvas: any
 ) {
     const triangle = triangleCommand.triangleObject
     const newTriangle = new fabric.Triangle({
-      left: triangle.left, 
+      left: triangle.left,
       top: triangle.top,
-      width: triangle.width, 
+      width: triangle.width,
       height: triangle.height,
       fill: triangle.fill,
       scaleX: triangle.scaleX,

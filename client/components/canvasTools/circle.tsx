@@ -1,6 +1,7 @@
 import { fabric } from 'fabric'
-import { clientSocket, channelId, PathCommand} from '../fabricCanvas'
+import {PathCommand} from '../fabricCanvas'
 import {generateId} from './id'
+import { clientSocket, channelId } from '../home'
 
 export function addCircle(
     fill: string,
@@ -9,7 +10,7 @@ export function addCircle(
     const newCircle = new fabric.Circle({
       radius: 15,
       left: 100,
-      top: 100, 
+      top: 100,
       fill: fill
     });
     newCircle["uid"] = generateId(newCircle)
@@ -29,8 +30,8 @@ export function drawCircle(
     const newCircle = new fabric.Circle({
         radius: circle.radius,
         left: circle.left,
-        top: circle.top, 
-        fill: circle.fill, 
+        top: circle.top,
+        fill: circle.fill,
         scaleX: circle.scaleX,
         scaleY: circle.scaleY
       });

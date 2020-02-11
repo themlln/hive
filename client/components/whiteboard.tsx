@@ -7,7 +7,7 @@ interface State {
   active: boolean;
 }
 
-export class Whiteboard extends React.Component < {}, State > {
+export default class Whiteboard extends React.Component < {}, State > {
     constructor(props) {
       super(props)
       this.state = {
