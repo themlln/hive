@@ -10,7 +10,7 @@ export default class Whiteboard extends React.Component {
         return (
         <div id = "whiteBoardComponent">
           <div id = "panel"><Panel channelId={this.props.channelId} /></div>
-          <div><FabricCanvas channelId={this.props.channelId}/></div>
+          <div id = "fabricCanvas"><FabricCanvas channelId={this.props.channelId}/></div>
         </div>
 
         )

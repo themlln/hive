@@ -212,6 +212,7 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
     return (
       <>
         <canvas
+          id = "canvasRender"
           ref={this.state.canvasRef}
           onMouseDown={this.handleMouseDown}
           onMouseMove={this.handleMouseMove}
