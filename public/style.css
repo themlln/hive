@@ -295,6 +295,11 @@ main {
   flex-shrink: 1;
 }
 
+.button-wrapper {
+  background: 	#F8F8F8;
+  box-shadow: 0px 1px 2px 0px rgba(0,0,0,0.2);
+  border-radius: 50px;
+}
 /* home component */
 
 #home {
@@ -342,6 +347,7 @@ canvas {
   overflow-y: scroll;
 }
 
+
 /* whiteboard component */
 
 #welcome {
@@ -369,4 +375,31 @@ canvas {
 }
 #createform {
   margin-right: 20px;
+
+/* Welcome Page */
+#welcome {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+#center {
+  margin-top: 100px;
+  display: flex;
+  justify-content: center;
+}
+
+#createform {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  margin-right: 50px;
+  flex-basis: 20%;
+}
+
+#joinform {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  flex-basis: 20%;
 }

@@ -35,7 +35,9 @@ export function copyText(
         left: textCommand.textObject.left,
         top: textCommand.textObject.top,
         fill: textCommand.textObject.fill,
-        stroke: textCommand.textObject.stroke
+        stroke: textCommand.textObject.stroke, 
+        flipX: textCommand.textObject.flipX,
+        flipY: textCommand.textObject.flipY
       })
       newText["uid"] = textCommand.id
       canvas.add(newText)

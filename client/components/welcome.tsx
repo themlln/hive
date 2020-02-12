@@ -26,10 +26,20 @@ class Welcome extends React.Component<WelcomeStateProps & WelcomeDispatchProps, 
     })
   }
 
+
   joinUsernameHandleChange (event: any) {
     this.setState({
       joinUsername: event.target.value
     })
+
+  async handleJoin(event) {
+    event.preventDefault()
+    await this.props.onClickJoinRoom(event.target.roomkey.value)
+    // this.props.history.push('/whiteboard')
+
+    // pass screenname to sessionId
+    //call Thunk to match channelId with Room Key
+
   }
 
   roomKeyHandleChange (event: any) {
@@ -55,9 +65,15 @@ class Welcome extends React.Component<WelcomeStateProps & WelcomeDispatchProps, 
 
   render(){
     return(
+      <div>
+        <header id="center">
+          <img src="/hivelogotransparent.png" width={400}/>
+        </header>
       <div id="welcome">
+
          <form id="createform" onSubmit={this.handleCreate}>
          <h1>Create</h1>
+
           <div>
             <label htmlFor="Username">Set Name</label>
             <input
@@ -68,12 +84,12 @@ class Welcome extends React.Component<WelcomeStateProps & WelcomeDispatchProps, 
             onChange={this.createUsernameHandleChange}
             placeholder="Set your username"/>
           </div>
+
           <button className="btn btn-default" type="submit">Create Room</button>
          </form>
 
         <form id ="joinform" onSubmit={this.handleJoin}>
         <h1>Join</h1>
-
         <label htmlFor="Name">Set Name</label>
           <input
           className="form-control"
@@ -92,6 +108,7 @@ class Welcome extends React.Component<WelcomeStateProps & WelcomeDispatchProps, 
           placeholder="Enter Room Key here"/>
           <button className="btn btn-default" type="submit">Join Room</button>
       </form>
+      </div>
       </div>
     )
   }

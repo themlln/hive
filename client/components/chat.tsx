@@ -13,7 +13,6 @@ class Chat extends React.Component<ChatStateProps & ChatDispatchProps> {
   }
 
   render() {
-    console.log("CHAT PROPS****", this.props)
     return (
       <div id = "chatBox">
         <div id = "allMessages">
