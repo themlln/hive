@@ -8,6 +8,7 @@ clientSocket.on('connect', () => {
 
 
   clientSocket.on('replay-messages', (messages: Array<Message>) => {
+    console.log("REPLAY MESSAGES RECEIVED MESSAGES", messages)
     store.dispatch(loadMessages(messages))
   })
 

@@ -1,12 +1,13 @@
 import { fabric } from 'fabric'
 import {PathCommand} from '../fabricCanvas'
 import {generateId} from './id'
-import { clientSocket, channelId } from '../home'
+import clientSocket from '../../sockets/chat-sockets'
 
 export function addCircle(
     stroke: string,
     fill: string,
-    canvas: any
+    canvas: any,
+    channelId: string
 ) {
     const newCircle = new fabric.Circle({
       radius: 15,

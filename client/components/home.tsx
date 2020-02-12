@@ -5,15 +5,13 @@ import Chat from './chat'
 import store from '../store/index.js'
 import { loadMessages, gotNewMessage, deletedMessage } from '../store/Chat'
 import { Message } from '../types/storeTypes'
-
+import { connect } from 'react-redux'
+import { loadingChannelId } from '../store/Canvas'
 
 // export const clientSocket: any = createClientSocket(window.location.origin)
 
-export let channelId: string = "9d08131e-39a9-44f6-bc98-afeb4f379080"
 
-
-
-export class Home extends React.Component < {}, {} > {
+class Home extends React.Component < {}, {} > {
     constructor(props) {
         super(props)
         this.state = {
@@ -22,35 +20,36 @@ export class Home extends React.Component < {}, {} > {
     }
 
     async componentDidMount() {
-      await
-           // channelId = this.props.location.search.slice(4)
-      // clientSocket.on('connect', () => {
-      //   console.log('Client-Socket: I have a made a persistent two-way connection!', channelId)
-      //   clientSocket.emit('join-drawing', channelId)
-
-      //   clientSocket.on('replay-messages', (messages: Array<Message>) => {
-      //     store.dispatch(loadMessages(messages))
-      //   })
-
-      //   clientSocket.on('receive-message', (message: Message) => {
-      //     store.dispatch(gotNewMessage(message))
-      //   })
-
-      //   clientSocket.on('delete-message-from-server', (message: Message) => {
-      //     store.dispatch(deletedMessage(message))
-      //   })
-      // })
-      // }
-
+      this.props.onLoadChannelId(this.props.location.search.slice(4))
     }
 
    render() {
         return (
         <div id = "home">
-            <div id = "whiteboard"><Whiteboard channelId={channelId}/></div>
-            <div id = "chat"><Chat channelId={channelId}/></div>
+            <div id = "whiteboard"><Whiteboard channelId={this.props.channelId}/></div>
+            <div id = "chat"><Chat channelId={this.props.channelId}/></div>
         </div>
         )
     }
 }
+
+
+const mapState = state => {
+  return {
+    channelId: state.canvas.channelId
+  }
+}
+
+const mapDispatch = dispatch => {
+  return {
+    onLoadChannelId:(channelId) => {
+      dispatch(loadingChannelId(channelId))
+    }
+    }
+}
+
+
+// The `withRouter` wrapper makes sure that updates are not blocked
+// when the url changes
+export default (connect(mapState, mapDispatch)(Home))
 

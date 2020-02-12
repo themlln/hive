@@ -13,6 +13,7 @@ export interface Message {
 export interface ChatState {
   messages: Array<Message>
   user?: Array<object>
+  canvas: {channelId:string}
 }
 
 /**
