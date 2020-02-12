@@ -375,7 +375,7 @@ canvas {
 }
 #createform {
   margin-right: 20px;
-
+}
 /* Welcome Page */
 #welcome {
   display: flex;
@@ -383,6 +383,7 @@ canvas {
   align-items: center;
   justify-content: center;
 }
+
 #center {
   margin-top: 100px;
   display: flex;
