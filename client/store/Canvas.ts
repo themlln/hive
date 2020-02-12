@@ -1,15 +1,18 @@
 const axios = require('axios').default;
 import history from '../history'
+import clientSocket from '../sockets/chat-sockets'
 
 /**
  * ACTION TYPES
  */
  const CREATE_NEW = 'CREATE_NEW'
+ const GET_CHANNEL_ID = 'GET_CHANNEL_ID'
+
 
  //TYPES OF ACTION TYPES
  interface CreateNewCanvas {
    type: typeof CREATE_NEW
-   canvasId: string
+   channelId: string
  }
 
  type CanvasActionTypes = CreateNewCanvas
@@ -19,21 +22,28 @@ import history from '../history'
  */
 
 interface Canvas {
-  canvasId: string
+  channelId: string
 }
 
 const initialState: Canvas = {
-  canvasId: ""
+  channelId: ""
 }
 
  /**
  * ACTION CREATORS
  */
 
-function createNewCanvas(canvasId:string): CanvasActionTypes {
+function createNewCanvas(channelId: string): CanvasActionTypes {
    return {
      type: CREATE_NEW,
-     canvasId
+     channelId
+   }
+ }
+
+ function getChannelId(channelId: string): CanvasActionTypes {
+   return {
+     type: GET_CHANNEL_ID,
+     channelId
    }
  }
 
@@ -43,13 +53,23 @@ function createNewCanvas(canvasId:string): CanvasActionTypes {
 export const creatingNewCanvas = () => async dispatch => {
   try {
     const res = await axios.post('/api/canvases')
+    console.log(res.data, "DATAAA")
     dispatch(createNewCanvas(res.data))
-    history.push('/whiteboard?id='+res.data);
+    clientSocket.emit('join-drawing', res.data)
   } catch (err) {
     console.error(err)
   }
 }
 
+export const fetchingChannel = (channelId: string) => async dispatch => {
+  try {
+    //socket here
+    clientSocket.emit('join-drawing', channelId)
+    dispatch(getChannelId(channelId))
+  } catch (err) {
+    console.error(err)
+  }
+}
 
  /**
  * REDUCER
@@ -62,7 +82,7 @@ export const creatingNewCanvas = () => async dispatch => {
      switch(action.type) {
        case CREATE_NEW:
         return {
-          canvasId: action.canvasId
+          channelId: action.channelId
         }
        default:
         return state

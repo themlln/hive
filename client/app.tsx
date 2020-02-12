@@ -18,7 +18,6 @@ import Navbar from './components/navbar'
   }
 
   render() {
-    console.log("PROPS IN APP***", this.props);
     const {isLoggedIn} = this.props
 
     return (

@@ -1,7 +1,8 @@
 import { fabric } from 'fabric'
 import {PathCommand} from '../fabricCanvas'
 import {generateId} from './id'
-import { clientSocket, channelId } from '../home'
+import clientSocket from '../../sockets/chat-sockets'
+import {channelId} from '../home'
 
 export function draw (
     start: any = [0,0],

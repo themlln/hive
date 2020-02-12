@@ -11,11 +11,11 @@ export class User {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ unique: true, nullable: true })
+  @Column({ unique: true })
   @IsEmail()
   email: string;
 
-  @Column({nullable: true})
+  @Column()
   password: string;
 
   @Column({default: 'Anonymous bee'})
@@ -30,7 +30,7 @@ export class User {
   @Column({ nullable: true })
   salt: string;
 
-  @Column()
+  @Column({nullable: true})
   sessionId: string;
 
   @Column({ nullable: true })
