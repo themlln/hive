@@ -10,7 +10,7 @@ const UserHome = (props: UserHomeProps) => {
 
   if (!email) {
     return <Redirect to="/" />
-  }else {
+  } else {
     return (
       <>
         <Navbar />
