@@ -150,6 +150,7 @@ main {
   width: 250px;
   padding: 5px;
   border-radius: 10px;
+  margin-left: 10px;
 }
 
 .message-img {
