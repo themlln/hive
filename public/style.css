@@ -101,7 +101,7 @@ label {
 /* Show the dropdown menu on hover */
 .dropdown:hover .dropdown-content {display: block;}
 
-/* end of navbar */ 
+/* end of navbar */
 
 form div {
   margin: 1em;
@@ -117,7 +117,7 @@ main {
 }
 
 /* chat component */
-#chatBox { 
+#chatBox {
   display: flex;
   flex-direction: column;
 }
@@ -207,7 +207,7 @@ main {
   font-size: 11px;
   width: 98%;
   padding-left: 2px;
-  
+
 }
 
 /* message form */
@@ -235,7 +235,7 @@ main {
   outline:none;
 }
 
-.sendButton { 
+.sendButton {
   border:solid;
   border-width:1px;
   background-color: 	#E8E8E8;
@@ -275,7 +275,7 @@ main {
   flex-direction: row;
 }
 
-#panel { 
+#panel {
   border-bottom: solid;
   border-width: 3px;
   border-color:white;
@@ -313,11 +313,11 @@ canvas {
 
 #fabricCanvas {
   width: 100%;
-  height: 100%; 
+  height: 100%;
 }
 
 
-#whiteboard { 
+#whiteboard {
   width: 66%;
   min-width: 900px;
   height: 503px;
@@ -342,3 +342,30 @@ canvas {
   overflow-y: scroll;
 }
 
+/* Welcome Page */
+#welcome {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+#center {
+  margin-top: 100px;
+  display: flex;
+  justify-content: center;
+}
+
+#createform {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  margin-right: 50px;
+  flex-basis: 20%;
+}
+
+#joinform {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  flex-basis: 20%;
+}
