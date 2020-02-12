@@ -101,6 +101,7 @@ const startListening = () => {
 async function bootApp() {
   try {
     const connection: Connection = await createConnection()
+    await connection.runMigrations()
     console.log("connection created to database")
     const userRepository = connection.getRepository(User);
     const sessionRepository = connection.getRepository(Session);
