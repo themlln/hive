@@ -49,6 +49,8 @@ export function drawPath (
             scaleX: pathCommand.path.scaleX,
             scaleY: pathCommand.path.scaleY,
             strokeWidth: pathCommand.path.strokeWidth,
+            flipX: pathCommand.path.flipX,
+            flipY: pathCommand.path.flipY
           })
           newPath["uid"] = pathCommand.id
           canvas.add(newPath)

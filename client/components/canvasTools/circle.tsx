@@ -37,7 +37,10 @@ export function drawCircle(
         fill: circle.fill,
         stroke: circle.stroke,
         scaleX: circle.scaleX,
-        scaleY: circle.scaleY
+        scaleY: circle.scaleY,
+        flipX: circle.flipX,
+        flipY: circle.flipY
+  
       });
       newCircle["uid"] = circleCommand.id
       canvas.add(newCircle)
