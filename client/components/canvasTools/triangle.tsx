@@ -1,6 +1,6 @@
 import { fabric } from 'fabric'
 import {PathCommand} from '../fabricCanvas'
-import { clientSocket, channelId } from '../home'
+import clientSocket from '../../sockets/chat-sockets'
 import {generateId} from './id'
 import { updateStrokeWidth } from '../../store/Panel'
 
@@ -8,7 +8,8 @@ import { updateStrokeWidth } from '../../store/Panel'
 export function   addTriangle(
     stroke: string,
     fill: string,
-    canvas: any
+    canvas: any,
+    channelId: string
 ) {
     const newTriangle = new fabric.Triangle({
       left: 50,
@@ -42,8 +43,8 @@ export function drawTriangle(
       stroke: triangle.stroke,
       fill: triangle.fill,
       scaleX: triangle.scaleX,
-      scaleY: triangle.scaleY, 
-      
+      scaleY: triangle.scaleY,
+
     })
 
     newTriangle["uid"] = triangleCommand.id

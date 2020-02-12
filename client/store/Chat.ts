@@ -1,6 +1,6 @@
 const axios = require('axios').default;
 import {ChatState, Message, ChatActionTypes} from '../types/storeTypes'
-import {clientSocket} from '../components/home'
+import clientSocket from '../sockets/chat-sockets'
 import { Dispatch } from 'react';
 /**
  * INITIAL STATE

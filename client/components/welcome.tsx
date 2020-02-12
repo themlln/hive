@@ -21,7 +21,7 @@ class Welcome extends React.Component<WelcomeStateProps & WelcomeDispatchProps, 
    event.preventDefault()
     await this.props.onClickCreateCanvas()
     //pass screenname to sessionId
-    this.props.history.push('/whiteboard')
+    // this.props.history.push('/whiteboard')
   }
 
   handleChange (event: React.FormEvent<HTMLInputElement>) {
@@ -35,7 +35,7 @@ class Welcome extends React.Component<WelcomeStateProps & WelcomeDispatchProps, 
     event.preventDefault()
     console.log("EVENTTT", event.target);
     await this.props.onClickJoinRoom(event.target.roomkey.value)
-    this.props.history.push('/whiteboard')
+    // this.props.history.push('/whiteboard')
 
     // pass screenname to sessionId
     //call Thunk to match channelId with Room Key

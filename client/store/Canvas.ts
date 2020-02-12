@@ -5,17 +5,16 @@ import clientSocket from '../sockets/chat-sockets'
 /**
  * ACTION TYPES
  */
- const CREATE_NEW = 'CREATE_NEW'
  const GET_CHANNEL_ID = 'GET_CHANNEL_ID'
 
 
  //TYPES OF ACTION TYPES
- interface CreateNewCanvas {
-   type: typeof CREATE_NEW
+ interface getChannelId {
+   type: typeof GET_CHANNEL_ID
    channelId: string
  }
 
- type CanvasActionTypes = CreateNewCanvas
+ type CanvasActionTypes = getChannelId
 
  /**
  * INITIAL STATE
@@ -33,13 +32,6 @@ const initialState: Canvas = {
  * ACTION CREATORS
  */
 
-function createNewCanvas(channelId: string): CanvasActionTypes {
-   return {
-     type: CREATE_NEW,
-     channelId
-   }
- }
-
  function getChannelId(channelId: string): CanvasActionTypes {
    return {
      type: GET_CHANNEL_ID,
@@ -53,9 +45,9 @@ function createNewCanvas(channelId: string): CanvasActionTypes {
 export const creatingNewCanvas = () => async dispatch => {
   try {
     const res = await axios.post('/api/canvases')
-    console.log(res.data, "DATAAA")
-    dispatch(createNewCanvas(res.data))
+    await dispatch(getChannelId(res.data))
     clientSocket.emit('join-drawing', res.data)
+    history.push('/whiteboard?id='+res.data)
   } catch (err) {
     console.error(err)
   }
@@ -63,14 +55,22 @@ export const creatingNewCanvas = () => async dispatch => {
 
 export const fetchingChannel = (channelId: string) => async dispatch => {
   try {
-    //socket here
+    clientSocket.emit('join-drawing', channelId)
+    dispatch(getChannelId(channelId))
+    history.push('/whiteboard?id='+channelId)
+  } catch (err) {
+    console.error(err)
+  }
+}
+
+export const loadingChannelId = (channelId: string) => async dispatch => {
+  try {
     clientSocket.emit('join-drawing', channelId)
     dispatch(getChannelId(channelId))
   } catch (err) {
     console.error(err)
   }
 }
-
  /**
  * REDUCER
  */
@@ -80,7 +80,7 @@ export const fetchingChannel = (channelId: string) => async dispatch => {
    action: CanvasActionTypes
    ): Canvas {
      switch(action.type) {
-       case CREATE_NEW:
+       case GET_CHANNEL_ID:
         return {
           channelId: action.channelId
         }

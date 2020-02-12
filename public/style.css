@@ -131,7 +131,7 @@ main {
 
 .message-list {
   height: 430px;
-  width: 270px;
+  width: 98%;
   overflow-y: scroll;
   overflow-wrap: break-word;
   overflow-x: hidden;
@@ -147,10 +147,10 @@ main {
   flex-direction: row;
   justify-content: flex-start;
   overflow-wrap: break-word;
-  width: 250px;
+  width: 95%;
   padding: 5px;
   border-radius: 10px;
-  margin-left: 10px;
+  margin-left: 5px;
 }
 
 .message-img {
@@ -164,6 +164,7 @@ main {
 .message-right {
   display: flex;
   flex-direction: column;
+  width: 100%;
 }
 
 .messageUsername {
@@ -173,17 +174,18 @@ main {
 
 .timestamp {
   font-size: 10px;
+  margin-right: 3px;
   color: #696969;
 }
 
 .message-right-top {
   display: flex;
   justify-content: space-between;
-  width: 200px;
+  width: 95%;
 }
 
 .message-right-bottom {
-  width: 180px;
+  width: 95%;
   background-color: #E8E8E8;
   border-radius: 10px;
   padding-left: 5px;
@@ -203,7 +205,7 @@ main {
   overflow-wrap: break-word;
   overflow-x: hidden;
   font-size: 11px;
-  width: 200px;
+  width: 98%;
   padding-left: 2px;
 
 }
@@ -216,7 +218,7 @@ main {
 }
 
 #enterMessage{
-  width: 240px;
+  width: 95%;
   height: 25px;
   border: solid;
   border-color: #E8E8E8;
@@ -265,6 +267,34 @@ main {
 }
 
 
+
+/* whiteboard component */
+
+#whiteboardComponent {
+  display: flex;
+  flex-direction: row;
+}
+
+#panel {
+  border-bottom: solid;
+  border-width: 3px;
+  border-color:white;
+  box-shadow: 0px 4px 8px 0px rgba(0,0,0,0.2);
+  margin: 0px;
+  padding:0px;
+  background-color: 	#E8E8E8;
+
+}
+
+/* panel */
+#panelButtons {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+  flex-shrink: 1;
+}
+
 /* home component */
 
 #home {
@@ -281,8 +311,16 @@ canvas {
   height: 100%;
 }
 
+#fabricCanvas {
+  width: 100%;
+  height: 100%;
+}
+
 
 #whiteboard {
+  width: 66%;
+  min-width: 900px;
+  height: 503px;
   margin-left: 10px;
   margin-right: 25px;
   border: solid;
@@ -294,13 +332,13 @@ canvas {
 }
 
 #chat {
+  width: 33%;
   border: solid;
   border-color: #E8E8E8;
   border-width: 2px;
   border-radius: 5px;
   box-shadow: 0px 4px 8px 0px rgba(0,0,0,0.2);
   height: 503px;
-  width: 300px;
   overflow-y: scroll;
 }
 

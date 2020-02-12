@@ -13,11 +13,12 @@ class Chat extends React.Component<ChatStateProps & ChatDispatchProps> {
   }
 
   render() {
+    console.log("CHAT PROPS****", this.props)
     return (
       <div id = "chatBox">
         <div id = "allMessages">
         <ul className="message-list">
-          {this.props.chat.messages.map((message: object) => 
+          {this.props.chat.messages.map((message: object) =>
           <SingleMessage
             message={message}
             key={message.id}
@@ -41,7 +42,7 @@ const mapStateToProps = (state: ChatState, ownProps:{channelId:string}): ChatSta
       messages: state.chat.messages
     },
     user: state.user,
-    channelId: ownProps.channelId
+    channelId: state.canvas.channelId
   }
 }
 

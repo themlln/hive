@@ -1,14 +1,15 @@
 import { fabric } from 'fabric'
 import {PathCommand} from '../fabricCanvas'
 import {generateId} from './id'
-import { clientSocket, channelId } from '../home'
+import clientSocket from '../../sockets/chat-sockets'
 import { updateStrokeWidth } from '../../store/Panel'
 import { resolveTxt } from 'dns'
 
 export function addRectangle(
     stroke: string,
     fill: string,
-    canvas: any
+    canvas: any,
+    channelId: string
 ) {
     const newRectangle = new fabric.Rect({
       left: 100,

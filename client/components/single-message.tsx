@@ -31,13 +31,15 @@ export const SingleMessage: React.FunctionComponent<MessageProps> = ({message, d
           <div className = "message-right-top">
             <div className = "left-side-top">
               <span className = "messageUsername">{ message.username }</span>
-              <span className="timestamp">{ message.timestamp }</span>
             </div>
-            <span><button className="message-remove-btn"
+            <div>
+              <span className="timestamp">{ message.timestamp }</span>
+              <span><button className="message-remove-btn"
                 type = "button"
                 onClick={() => deleteMessage(message, channelId)} >x
-              </button>
+                </button>
             </span>
+            </div>
           </div>
 
           <div className = "message-right-bottom">
