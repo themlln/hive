@@ -100,6 +100,8 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
     this.setState({
       isSelected: true
     })
+
+    console.log(event)
   }
 
   handleObjectModified(event) {
@@ -145,6 +147,8 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
 
       instructions.forEach(instruction => {
         if(instruction.textObject) {
+          console.log('instruction', instruction)
+          console.log(instruction.textObject)
           copyText(instruction, this.props.canvasRef)
         } else if (instruction.circleObject) {
           drawCircle(instruction, this.props.canvasRef)
