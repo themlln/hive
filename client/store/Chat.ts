@@ -55,8 +55,6 @@ export const deletedMessage = (message: Message) => {
  */
 export const fetchingMessages = (channelId: string) => async (dispatch: Dispatch<any>) => {
   try {
-    console.log("fetching messages in store")
-    console.log("/api/messages/"+channelId);
     const { data: messages } = await axios.get("/api/messages/"+channelId)
     dispatch(loadMessages(messages))
     clientSocket.emit('load-messages', channelId, messages)

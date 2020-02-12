@@ -101,7 +101,6 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
       isSelected: true
     })
 
-    console.log(event)
   }
 
   handleObjectModified(event) {

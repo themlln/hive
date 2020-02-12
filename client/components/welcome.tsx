@@ -29,7 +29,6 @@ class Welcome extends React.Component<WelcomeStateProps & WelcomeDispatchProps, 
 
   async handleJoin(event) {
     event.preventDefault()
-    console.log(event.target.roomkey.value, "EVENTTT");
     await this.props.onClickJoinRoom(event.target.roomkey.value)
     // this.props.history.push('/whiteboard')
 
