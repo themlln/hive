@@ -46,9 +46,6 @@ class Welcome extends React.Component<WelcomeStateProps & WelcomeDispatchProps, 
     } else {
       throw Error ('You need to enter a user name!')
     }
-
-    //pass screenname to sessionId
-    // this.props.history.push('/whiteboard')
   }
 
   handleJoin(event: React.SyntheticEvent) {
@@ -109,7 +106,7 @@ const mapState = (state: any, ownProps: any) => {
 const mapDispatch = (dispatch) => {
   return { onClickCreateCanvas: () =>
     dispatch(creatingNewCanvas()),
-    onClickJoinRoom:(key: string) => dispatch(fetchingChannel(key))
+    onClickJoinRoom:(key: string) => dispatch(fetchingChannel(key)),
     sendUsername: (username: string, channelId: string) => dispatch(gettingUsername(username, channelId))
   }
 }
