@@ -47,8 +47,6 @@ module.exports = io => {
     socket.on('modified-from-client', (channelId: any, modifiedCommand: any) => {
       const instructions = getType(channelId, drawings)
       const modifiedObject = instructions.filter(instruction => instruction.id === modifiedCommand.id)
-      modifiedObject[0].path = modifiedCommand.modifiedObject
-      modifiedObject[0].textObject = modifiedCommand.modifiedObject
       if (modifiedObject[0].rectangleObject) {modifiedObject[0].rectangleObject = modifiedCommand.modifiedObject}
       if (modifiedObject[0].circleObject) {modifiedObject[0].circleObject = modifiedCommand.modifiedObject}
       if (modifiedObject[0].triangleObject) {modifiedObject[0].triangleObject = modifiedCommand.modifiedObject}

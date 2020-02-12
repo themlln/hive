@@ -43,3 +43,13 @@ export interface NewMessageMapStateToProps {
 export interface NewMessageDispatchToProps {
   sendMessage: (newMessage: Message, channelId: string) => {newMessage: Message}
 }
+
+export interface UserHomeProps {
+  username: string,
+  email: string
+}
+
+export interface UserHomeState {
+  username: string,
+  email: string
+}

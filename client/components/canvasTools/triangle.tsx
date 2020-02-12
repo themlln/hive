@@ -44,7 +44,8 @@ export function drawTriangle(
       fill: triangle.fill,
       scaleX: triangle.scaleX,
       scaleY: triangle.scaleY,
-
+      flipX: triangle.flipX,
+      flipY: triangle.flipY
     })
 
     newTriangle["uid"] = triangleCommand.id
