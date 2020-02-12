@@ -21,7 +21,7 @@ export class User {
   @Column({default: 'Anonymous bee'})
   username: string;
 
-  @Column({default: "https://visualpharm.com/assets/751/Melon-595b40b75ba036ed117d8629.svg"})
+  @Column({default: "/bee-profile.png"})
   profileImage: string;
 
   @Column({ select: false, nullable: true })

@@ -1,6 +1,12 @@
 import {Message} from './storeTypes'
 import {ComponentState} from 'react'
 
+export interface WelcomeState {
+  roomKey: string;
+  createUsername: string;
+  joinUsername: string;
+}
+
 export interface ChatStateProps {
   chat: {
     messages: Array<Message>

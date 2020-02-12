@@ -12,10 +12,9 @@ const initialState: ChatState = {
 /**
  * ACTIONS
  */
-export const LOAD_MESSAGES = "LOAD_MESSAGES ";
+export const LOAD_MESSAGES = "LOAD_MESSAGES";
 export const GOT_NEW_MESSAGE = "GOT_NEW_MESSAGE";
 export const DELETE_MESSAGE = "DELETE_MESSAGE";
-// const SET_USER = 'SET_USER';
 
 /**
  * ACTION CREATORS
@@ -41,23 +40,16 @@ export const deletedMessage = (message: Message) => {
     payload: message
   }
 }
-// const setUser = (name: string) => {
-//   return {
-//     type: SET_USER,
-//     user: {
-//       name
-//     }
-//   }
-// }
 
 /**
  * THUNKS
  */
+
 export const fetchingMessages = (channelId: string) => async (dispatch: Dispatch<any>) => {
   try {
     console.log("fetching messages in store")
     console.log("/api/messages/"+channelId);
-    const { data: messages } = await axios.get("/api/messages/"+channelId)
+    const { data: messages } = await axios.get(`/api/messages/${channelId}`)
     dispatch(loadMessages(messages))
     clientSocket.emit('load-messages', channelId, messages)
   } catch (error) {
