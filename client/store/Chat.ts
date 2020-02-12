@@ -7,7 +7,8 @@ import { Dispatch } from 'react';
  */
 
 const initialState: ChatState = {
-  messages: []
+  messages: [],
+  username: ''
 }
 /**
  * ACTIONS
@@ -15,6 +16,7 @@ const initialState: ChatState = {
 export const LOAD_MESSAGES = "LOAD_MESSAGES";
 export const GOT_NEW_MESSAGE = "GOT_NEW_MESSAGE";
 export const DELETE_MESSAGE = "DELETE_MESSAGE";
+export const GET_USER = "GET_USER";
 
 /**
  * ACTION CREATORS
@@ -38,6 +40,13 @@ export const deletedMessage = (message: Message) => {
   return {
     type: DELETE_MESSAGE,
     payload: message
+  }
+}
+
+export const getUser = (username: string) => {
+  return {
+    type: GET_USER,
+    payload: username
   }
 }
 
@@ -74,6 +83,16 @@ export const deleteMessage = (message: Message, channelId: string) => async (dis
     clientSocket.emit('delete-message', channelId, message)
   } catch (error) {
     console.log('Error deleting message: ', error)
+  }
+}
+
+export const gettingUsername = (userName: string, channelId: string) => async (dispatch: Dispatch<any>) => {
+  try {
+    const {data: username} = await axios.post(`/api/messages/${channelId}`, userName)
+    dispatch(getUser(username))
+    clientSocket.emit('show-username', channelId, username)
+  } catch (error) {
+    console.log('Error getting username ', error)
   }
 }
 

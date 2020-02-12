@@ -15,6 +15,7 @@ router.post('/login', async (req: Request, res:Response, next: NextFunction) => 
       email: req.body.email
     })
     user.sessionId = req.sessionID
+    user.username = req.body.username
     await userRepository.save(user)
 
     if (!user) {

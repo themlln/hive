@@ -7,19 +7,28 @@ class Welcome extends React.Component<WelcomeStateProps & WelcomeDispatchProps, 
   constructor(props) {
     super(props)
     this.state = {
-      roomKey:''
+      roomKey:'',
+      createUsername: '',
+      joinUsername: ''
     }
 
     this.handleCreate = this.handleCreate.bind(this)
+    this.createUsernameHandleChange = this.createUsernameHandleChange.bind(this)
+    this.joinUsernameHandleChange = this.joinUsernameHandleChange.bind(this)
     this.roomKeyHandleChange = this.roomKeyHandleChange.bind(this)
     this.handleJoin = this.handleJoin.bind(this)
   }
 
-  async handleCreate(event: React.SyntheticEvent) {
-    event.preventDefault()
-    await this.props.onClickCreateCanvas()
-    //pass screenname to sessionId
-    // this.props.history.push('/whiteboard')
+  createUsernameHandleChange (event: any) {
+    this.setState({
+      createUsername: event.target.value
+    })
+  }
+
+  joinUsernameHandleChange (event: any) {
+    this.setState({
+      joinUsername: event.target.value
+    })
   }
 
   roomKeyHandleChange (event: any) {
@@ -28,14 +37,22 @@ class Welcome extends React.Component<WelcomeStateProps & WelcomeDispatchProps, 
     })
   }
 
-  async handleJoin(event: React.SyntheticEvent) {
+  handleCreate(event: React.SyntheticEvent) {
     event.preventDefault()
-    console.log("EVENTTT", event.target);
-    await this.props.onClickJoinRoom(event.target.value)
-    // this.props.history.push('/whiteboard')
+    if (this.state.createUsername) {
+      this.props.onClickCreateCanvas()
+      
+    } else {
+      throw Error ('You need to enter a user name!')
+    }
 
-    // pass screenname to sessionId
-    //call Thunk to match channelId with Room Key
+    //pass screenname to sessionId
+    // this.props.history.push('/whiteboard')
+  }
+
+  handleJoin(event: React.SyntheticEvent) {
+    event.preventDefault()
+    this.props.onClickJoinRoom(event.target.roomKey.value)
   }
 
   render(){
@@ -49,8 +66,9 @@ class Welcome extends React.Component<WelcomeStateProps & WelcomeDispatchProps, 
             className="form-control"
             type="text"
             name="username"
-            value={this.props.username}
-            />
+            value={this.state.createUsername}
+            onChange={this.createUsernameHandleChange}
+            placeholder="Set your username"/>
           </div>
           <button className="btn btn-default" type="submit">Create Room</button>
          </form>
@@ -63,8 +81,9 @@ class Welcome extends React.Component<WelcomeStateProps & WelcomeDispatchProps, 
           className="form-control"
           type="text"
           name="username"
-          value={this.props.username}
-          />
+          value={this.state.joinUsername}
+          onChange={this.joinUsernameHandleChange}
+          placeholder="Set your username"/>
           <label htmlFor="Name">Room Key</label>
           <input
           className="form-control"
@@ -83,7 +102,6 @@ class Welcome extends React.Component<WelcomeStateProps & WelcomeDispatchProps, 
 const mapState = (state: any, ownProps: any) => {
   return {
     history: ownProps.history,
-    username: ownProps.user.username,
     channelId: state.canvas.canvasId
   }
 }

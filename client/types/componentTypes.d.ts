@@ -3,12 +3,13 @@ import {ComponentState} from 'react'
 
 export interface WelcomeState {
   roomKey: string;
+  createUsername: string;
+  joinUsername: string;
 }
 
 export interface WelcomeStateProps {
   history: any,
-  username: string;
-  channelId: string;
+  channelId: string
 }
 
 export interface WelcomeDispatchProps {
