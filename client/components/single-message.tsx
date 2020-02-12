@@ -17,9 +17,9 @@ export const SingleMessage: React.FunctionComponent<MessageProps> = ({message, d
         <div className="message-left">
 
           <a href="#">
-            <img 
-              className="message-img" 
-              src='/melon-icon.png' 
+            <img
+              className="message-img"
+              src='/bee-profile.png'
               height={40}
               alt="image" />
           </a>

@@ -11,16 +11,17 @@ const userRepository = getRepository(User)
 
 router.post('/login', async (req: Request, res:Response, next: NextFunction) => {
   try {
-    const user: User = await userRepository.findOne({
+    const user: User = await userRepository.findOneOrFail({
       email: req.body.email
     })
     user.sessionId = req.sessionID
+    user.username = req.body.username
     await userRepository.save(user)
 
     if (!user) {
       res.json('Wrong username and/or password').status(401)
     } else if (!user.correctPassword(req.body.password)) {
-      res.json('Wrong username and/or password').status(401)
+      res.json('Invalid password').status(401)
     } else {
       const modifiedUser = {id: user.id, email: user.email, username: user.username, profileImage: user.profileImage}
 
@@ -33,7 +34,7 @@ router.post('/login', async (req: Request, res:Response, next: NextFunction) => 
 
 router.post('/signup', async (req: Request, res:Response, next: NextFunction) => {
   try {
-    const user: User = await userRepository.create({
+    const user: User = userRepository.create({
       email: req.body.email,
       password: req.body.password,
       username: req.body.username,
