@@ -31,17 +31,7 @@ class Welcome extends React.Component<WelcomeStateProps & WelcomeDispatchProps, 
     this.setState({
       joinUsername: event.target.value
     })
-
-  async handleJoin(event) {
-    event.preventDefault()
-    await this.props.onClickJoinRoom(event.target.roomkey.value)
-    // this.props.history.push('/whiteboard')
-
-    // pass screenname to sessionId
-    //call Thunk to match channelId with Room Key
-
   }
-
   roomKeyHandleChange (event: any) {
     this.setState({
       roomKey: event.target.value
@@ -56,9 +46,6 @@ class Welcome extends React.Component<WelcomeStateProps & WelcomeDispatchProps, 
     } else {
       throw Error ('You need to enter a user name!')
     }
-
-    //pass screenname to sessionId
-    // this.props.history.push('/whiteboard')
   }
 
   handleJoin(event: React.SyntheticEvent) {
@@ -126,7 +113,7 @@ const mapState = (state: any, ownProps: any) => {
 const mapDispatch = (dispatch) => {
   return { onClickCreateCanvas: () =>
     dispatch(creatingNewCanvas()),
-    onClickJoinRoom:(key: string) => dispatch(fetchingChannel(key))
+    onClickJoinRoom:(key: string) => dispatch(fetchingChannel(key)),
     sendUsername: (username: string, channelId: string) => dispatch(gettingUsername(username, channelId))
   }
 }
