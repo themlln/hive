@@ -10,7 +10,7 @@ import { drawCircle } from './canvasTools/circle'
 import { drawRectangle } from './canvasTools/rectangle'
 import { drawTriangle } from './canvasTools/triangle'
 import { modifyObject } from './canvasTools/modifyObject'
-import {clientSocket, channelId} from './home'
+import clientSocket from '../sockets/chat-sockets'
 import { removeObject } from './canvasTools/delete'
 
 let currentMousePosition: any = {x: 0, y: 0}
@@ -133,8 +133,10 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
 
     document.addEventListener('keydown', function(event){
       if (event.keyCode === 8 || event.keyCode === 46){
-        if (!canvas.getActiveObject().text)
-        removeObject(canvas)
+        if(canvas.getActiveObject()){
+          if (!canvas.getActiveObject().text)
+          removeObject(canvas)
+        }
       }
     })
 
