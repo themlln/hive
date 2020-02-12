@@ -6,16 +6,26 @@ import {logout} from '../store'
 
 const Navbar = ({handleClick, isLoggedIn}) => (
   <div>
-    <h1>hive</h1>
-    <nav>
+    <nav className="navBackground">
       {isLoggedIn ? (
-        <div>
+        <div className="navBar">
           {/* The navbar will show these links after you log in */}
-          <Link to="/home">Home</Link>
+          <span>
+            <Link to="/home">
+            <img
+                src="/hivelogotransparent.png"
+                width={35}
+                height={35}
+                mode="fit"
+              />
+            </Link>
+          </span>
+          <span>
           <a href="#" onClick={handleClick}>
             Logout
           </a>
           <Link to="/whiteboard">Board</Link>
+          </span>
         </div>
       ) : (
         <div>

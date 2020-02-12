@@ -65,7 +65,7 @@ class Panel extends React.Component<PanelStateProps & PanelDispatchProps, State>
 
   render() {
     return(
-      <div>
+      <div id = "panelButtons">
         <span className = "button-wrapper" onClick={() => this.handleClick('draw')}><DrawButton /></span>
         
         <span className = "button-wrapper" onClick={() => {
