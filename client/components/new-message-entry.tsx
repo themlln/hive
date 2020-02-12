@@ -3,6 +3,7 @@ import { sendMessage } from '../store/Chat'
 import {Message} from '../types/storeTypes'
 import {NewMessageDispatchToProps, NewMessageMapStateToProps, NewMessageState} from '../types/componentTypes'
 import { connect } from 'react-redux'
+import SendButton from './buttons/sendButton'
 
 class NewMessageEntry extends React.Component<NewMessageMapStateToProps & NewMessageDispatchToProps, NewMessageState> {
   constructor(props) {
@@ -46,19 +47,22 @@ class NewMessageEntry extends React.Component<NewMessageMapStateToProps & NewMes
   render () {
     return (
       <form id="new-message-form" onSubmit={this.handleSubmit}>
-        <div className="input-group input-group-lg">
+        <span className="newMessageLine">
           <input
-            className="form-control"
+            id="enterMessage"
             type="text"
             name="content"
             value= {this.state.value}
             placeholder="Type here..."
             onChange={this.handleChange}
           />
-          <span className="input-group-btn">
-            <button className="btn btn-default" type="submit">Send</button>
-          </span>
-        </div>
+          <button className="sendButton" type="submit">
+              <img
+                src="/sendIcon.png"
+                height={20}
+                mode="fit"
+              /></button>
+        </span>
       </form>
     );
   }
