@@ -46,10 +46,9 @@ export class Home extends React.Component < {}, {} > {
 
    render() {
         return (
-        <div>
-          <Navbar />
-          <Whiteboard channelId={channelId}/>
-          <Chat channelId={channelId}/>
+        <div id = "home">
+            <div id = "whiteboard"><Whiteboard channelId={channelId}/></div>
+            <div id = "chat"><Chat channelId={channelId}/></div>
         </div>
         )
     }

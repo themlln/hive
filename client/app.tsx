@@ -6,6 +6,7 @@ import UserHome from './components/user-home'
 import { Home } from './components/home'
 import Welcome from './components/welcome'
 import {Login, Signup} from './components/index'
+import Navbar from './components/navbar'
 
 /**
  * COMPONENT
@@ -20,7 +21,10 @@ import {Login, Signup} from './components/index'
     const {isLoggedIn} = this.props
 
     return (
+      <div>
+      <Navbar />
       <Switch>
+
         {/* Routes placed here are available to all visitors */}
         <Route path="/whiteboard" component={Home}/>
         <Route path="/login" component={Login} />
@@ -33,6 +37,7 @@ import {Login, Signup} from './components/index'
         )}
         <Route component={Welcome} />
       </Switch>
+      </div>
     )
   }
 }
