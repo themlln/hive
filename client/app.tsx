@@ -17,7 +17,6 @@ import {Login, Signup} from './components/index'
   }
 
   render() {
-    console.log("PROPS IN APP***", this.props);
     const {isLoggedIn} = this.props
 
     return (

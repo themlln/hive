@@ -2,16 +2,19 @@ import { fabric } from 'fabric'
 import {PathCommand} from '../fabricCanvas'
 import {generateId} from './id'
 import { clientSocket, channelId } from '../home'
+import { updateStrokeWidth } from '../../store/Panel'
 
 export function addText(
-    color: string,
+    stroke: string,
+    fill: string,
     canvas: any
 ) {
     const newText = new fabric.IText('Insert Text Here', {
       fontFamily: 'arial',
       left: 100,
       top: 100 ,
-      fill: color
+      stroke: stroke,
+      fill: fill
     })
     newText["uid"] = generateId(newText)
     let textCommand = {
@@ -30,7 +33,8 @@ export function copyText(
         fontFamily: textCommand.textObject.fontFamily,
         left: textCommand.textObject.left,
         top: textCommand.textObject.top,
-        fill: textCommand.textObject.fill
+        fill: textCommand.textObject.fill,
+        stroke: textCommand.textObject.stroke
       })
       newText["uid"] = textCommand.id
       canvas.add(newText)

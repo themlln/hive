@@ -2,14 +2,18 @@ import { fabric } from 'fabric'
 import {PathCommand} from '../fabricCanvas'
 import {generateId} from './id'
 import { clientSocket, channelId } from '../home'
+import { updateStrokeWidth } from '../../store/Panel'
+import { resolveTxt } from 'dns'
 
 export function addRectangle(
+    stroke: string,
     fill: string,
     canvas: any
 ) {
     const newRectangle = new fabric.Rect({
       left: 100,
       top: 100,
+      stroke: stroke,
       fill: fill,
       width: 20,
       height: 20
@@ -32,6 +36,7 @@ export function drawRectangle (
       left: rect.left,
       top: rect.top,
       fill: rect.fill,
+      stroke: rect.stroke,
       width: rect.width,
       height: rect.height,
       scaleX: rect.scaleX,
