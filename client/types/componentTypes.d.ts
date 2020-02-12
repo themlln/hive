@@ -14,7 +14,8 @@ export interface WelcomeStateProps {
 
 export interface WelcomeDispatchProps {
   onClickCreateCanvas: () => {},
-  onClickJoinRoom: (key: string) => {}
+  onClickJoinRoom: (key: string) => {},
+  sendUsername: (username: string, channelId: string) => string
 }
 
 export interface ChatStateProps {

@@ -1,5 +1,6 @@
 import * as React from 'react'
 import { creatingNewCanvas, fetchingChannel } from '../store/Canvas'
+import { gettingUsername } from '../store/Chat'
 import { connect } from 'react-redux'
 import { WelcomeStateProps, WelcomeDispatchProps, WelcomeState } from '../types/componentTypes'
 
@@ -41,7 +42,7 @@ class Welcome extends React.Component<WelcomeStateProps & WelcomeDispatchProps, 
     event.preventDefault()
     if (this.state.createUsername) {
       this.props.onClickCreateCanvas()
-      
+      this.props.sendUsername(this.state.createUsername, this.props.channelId)
     } else {
       throw Error ('You need to enter a user name!')
     }
@@ -109,6 +110,7 @@ const mapDispatch = (dispatch) => {
   return { onClickCreateCanvas: () =>
     dispatch(creatingNewCanvas()),
     onClickJoinRoom:(key: string) => dispatch(fetchingChannel(key))
+    sendUsername: (username: string, channelId: string) => dispatch(gettingUsername(username, channelId))
   }
 }
 export default connect(mapState,mapDispatch)(Welcome)

@@ -68,6 +68,10 @@ export const fetchingMessages = (channelId: string) => async (dispatch: Dispatch
 
 export const sendMessage = (message: Message, channelId: string) => async (dispatch: Dispatch<any>) => {
   try {
+    const count: number = 0
+    if (!message.username) {
+      message.username = 'Anonymous bee'
+    }
     const { data: newMessage } = await axios.post('/api/messages', message)
     dispatch(gotNewMessage(newMessage))
     clientSocket.emit('new-message', channelId, newMessage)
