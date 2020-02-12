@@ -1,9 +1,10 @@
 import { fabric } from 'fabric'
 import {PathCommand} from '../fabricCanvas'
-import { clientSocket, channelId } from '../home'
+import clientSocket from '../../sockets/chat-sockets'
 
 export function removeObject(
-    canvas: any
+    canvas: any,
+    channelId: string
 ) {
     let activeObject = canvas.getActiveObject()
     if (activeObject) {

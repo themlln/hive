@@ -7,12 +7,11 @@ import FabricCanvas from './fabricCanvas'
 export default class Whiteboard extends React.Component {
 
     public render() {
-        console.log("WHITE BOARD PROPS***", this.props);
+        console.log("WHITEBOARD PROPS", this.props)
         return (
-
-        <div>
-          <Panel channelId={this.props.channelId} />
-          <FabricCanvas channelId={this.props.channelId}/>
+        <div id = "whiteBoardComponent">
+          <div id = "panel"><Panel channelId={this.props.channelId} /></div>
+          <div id = "fabricCanvas"><FabricCanvas channelId={this.props.channelId}/></div>
         </div>
 
         )

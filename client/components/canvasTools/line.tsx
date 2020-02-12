@@ -1,7 +1,7 @@
 import { fabric } from 'fabric'
 import {PathCommand} from '../fabricCanvas'
 import {generateId} from './id'
-import { clientSocket, channelId } from '../home'
+import clientSocket from '../../sockets/chat-sockets'
 
 export function line (
     start: Array<number> = [0,0],
@@ -9,7 +9,8 @@ export function line (
     fill: string,
     stroke: string,
     strokeWidth: number,
-    canvas: any
+    canvas: any,
+    channelId: string
   ) {
     const newLine = new fabric.Line([...start, ...end], {
       fill: fill,

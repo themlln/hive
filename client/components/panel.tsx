@@ -2,13 +2,13 @@ import * as React from 'react'
 import {updateTool} from '../store/Panel'
 import { connect } from 'react-redux'
 import { fabric } from 'fabric'
-import { clientSocket } from './home'
+import clientSocket from '../sockets/chat-sockets'
 import {removeObject} from '../components/canvasTools/delete'
 import {addText} from '../components/canvasTools/text'
 import {addCircle} from '../components/canvasTools/circle'
 import {addRectangle} from '../components/canvasTools/rectangle'
 import {addTriangle} from '../components/canvasTools/triangle'
-//buttons - change to one line** 
+//buttons - change to one line**
 import DeleteButton from './buttons/deleteButton'
 import DrawButton from './buttons/drawButton'
 import SelectButton from './buttons/selectButton'
@@ -21,7 +21,6 @@ import DownloadButton from './buttons/downloadButton'
 import ClearCanvasButton from './buttons/clearCanvasButton'
 import ColorButton from './buttons/colorButton'
 import ColorPicker from './color'
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 
 
 
@@ -60,17 +59,18 @@ class Panel extends React.Component<PanelStateProps & PanelDispatchProps, State>
 
  async handleClick(action: string) {
    await this.props.updateTool(action)
-
   }
 
   render() {
     return(
-      <div>
-        <span className = "button-wrapper" onClick={() => this.handleClick('draw')}><DrawButton /></span>
-        
+      <div id = "panelButtons">
+        <span className = "button-wrapper" onClick={
+          () => this.handleClick('draw')
+          }><DrawButton /></span>
+
         <span className = "button-wrapper" onClick={() => {
           this.handleClick('delete')
-          removeObject(this.props.canvasRef)
+          removeObject(this.props.canvasRef, this.props.channelId)
           }}> <DeleteButton />
         </span>
 
@@ -78,7 +78,7 @@ class Panel extends React.Component<PanelStateProps & PanelDispatchProps, State>
 
         <span className = "button-wrapper" onClick={() => {
           this.handleClick('text')
-          addText(this.props.color, this.props.fill, this.props.canvasRef)
+          addText(this.props.color, this.props.fill, this.props.canvasRef, this.props.channelId)
           }}><TextButton /></span>
 
           {this.state.active && <ColorPicker />}
@@ -92,17 +92,17 @@ class Panel extends React.Component<PanelStateProps & PanelDispatchProps, State>
 
         <span className = "button-wrapper" onClick={() => {
           this.handleClick('circle')
-          addCircle(this.props.color, this.props.fill, this.props.canvasRef)
+          addCircle(this.props.color, this.props.fill, this.props.canvasRef, this.props.channelId)
           }}><CircleButton /></span>
 
         <span className = "button-wrapper" onClick={() => {
           this.handleClick('rectangle')
-          addRectangle(this.props.color, this.props.fill, this.props.canvasRef)
+          addRectangle(this.props.color, this.props.fill, this.props.canvasRef, this.props.channelId)
           }}><RectangleButton /></span>
 
         <span className = "button-wrapper" onClick={() => {
           this.handleClick('triangle')
-          addTriangle(this.props.color, this.props.fill, this.props.canvasRef)
+          addTriangle(this.props.color, this.props.fill, this.props.canvasRef, this.props.channelId)
           }}><TriangleButton /></span>
 
         <span className = "button-wrapper" onClick={() => this.clearCanvas('clearCanvas')}><ClearCanvasButton /></span>
@@ -129,7 +129,7 @@ interface PanelStateProps {
   tool: string
   canvasRef: any
   channelId: string
-  color: string, 
+  color: string,
   fill: string
 }
 

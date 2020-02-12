@@ -31,7 +31,7 @@ module.exports = io => {
         socket.broadcast.to(channelId).emit('triangle-from-server', command)
       } else if (command.lineObject) {
         socket.broadcast.to(channelId).emit('line-from-server', command)
-      } else {
+      } else if (command.path){
         socket.broadcast.to(channelId).emit('draw-from-server', command)
       }
     })
@@ -43,11 +43,17 @@ module.exports = io => {
       socket.broadcast.to(channelId).emit('delete-object-from-server', deleteCommand)
     })
 
-    socket.on('modified-from-client', (channelId: string, modifiedCommand: any) => {
+    socket.on('modified-from-client', (channelId: any, modifiedCommand: any) => {
       const instructions = getType(channelId, drawings)
-      const modifiedObject = instructions.filter((instruction: object) => instruction.id === modifiedCommand.id)
+      const modifiedObject = instructions.filter(instruction => instruction.id === modifiedCommand.id)
       modifiedObject[0].path = modifiedCommand.modifiedObject
       modifiedObject[0].textObject = modifiedCommand.modifiedObject
+      if (modifiedObject[0].rectangleObject) {modifiedObject[0].rectangleObject = modifiedCommand.modifiedObject}
+      if (modifiedObject[0].circleObject) {modifiedObject[0].circleObject = modifiedCommand.modifiedObject}
+      if (modifiedObject[0].triangleObject) {modifiedObject[0].triangleObject = modifiedCommand.modifiedObject}
+      if (modifiedObject[0].path) { modifiedObject[0].path = modifiedCommand.modifiedObject }
+      if (modifiedObject[0].textObject) {modifiedObject[0].textObject = modifiedCommand.modifiedObject}
+      if (modifiedObject[0].lineObject) {modifiedObject[0].lineObject = modifiedCommand.modifiedObject}
       socket.broadcast.to(channelId).emit('modified-from-server', modifiedCommand)
     })
 
@@ -58,6 +64,7 @@ module.exports = io => {
 
     socket.on('load-messages', (channelId: string, messagesToLoad: Array<object>) => {
       const channelMessages = getType(channelId, messages)
+      console.log("THIS IS FROM THE SERVER, WE ARE REPLAYING CHANNEL MESSAGES", channelMessages)
       socket.broadcast.to(channelId).emit('replay-messages', channelMessages)
     })
 

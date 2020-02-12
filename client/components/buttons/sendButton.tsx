@@ -1,7 +1,7 @@
 import React from 'react';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
-import ShareIcon from '@material-ui/icons/Share';
+import SendIcon from '@material-ui/icons/Send';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -13,13 +13,13 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-export default function ShareButton() {
+export default function SendButton() {
   const classes = useStyles();
 
   return (
     <div className={classes.root}>
-      <IconButton aria-label="delete">
-        <ShareIcon/>
+      <IconButton aria-label="text">
+        <SendIcon/>
       </IconButton>
     </div>
   );

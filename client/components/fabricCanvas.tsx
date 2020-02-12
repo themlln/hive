@@ -71,7 +71,7 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
 
   handleMouseUp(event) {
     if (this.props.tool === 'draw'){
-      sendDrawing(this.props.canvasRef, this.state.shouldBroadcast, this.state.isSelected)
+      sendDrawing(this.props.canvasRef, this.state.shouldBroadcast, this.state.isSelected, this.props.channelId)
 
       this.setState({
         shouldBroadcast: false,
@@ -80,7 +80,7 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
 
     } else if (this.props.tool === "line") {
       let currentMousePosition = this.position(event.e)
-      line (firstMousePosition, currentMousePosition,this.props.color, this.props.color, this.props.strokeWidth, this.props.canvasRef)
+      line (firstMousePosition, currentMousePosition,this.props.color, this.props.color, this.props.strokeWidth, this.props.canvasRef, this.props.channelId)
     }
   }
 
@@ -119,8 +119,8 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
       preserveObjectStacking: false,
       backgroundColor: 'white'
     })
-    fabricCanvas.setHeight(500)
-    fabricCanvas.setWidth(1000)
+    fabricCanvas.setHeight(450)
+    fabricCanvas.setWidth(900)
 
     await this.setState({
       canvas: fabricCanvas
@@ -130,12 +130,13 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
 
     let canvas = this.props.canvasRef
     let tool = this.props.tool
+    let channelId = this.props.channelId
 
     document.addEventListener('keydown', function(event){
       if (event.keyCode === 8 || event.keyCode === 46){
         if(canvas.getActiveObject()){
           if (!canvas.getActiveObject().text)
-          removeObject(canvas)
+          removeObject(canvas, channelId)
         }
       }
     })
@@ -214,6 +215,7 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
     return (
       <>
         <canvas
+          id = "canvasRender"
           ref={this.state.canvasRef}
           onMouseDown={this.handleMouseDown}
           onMouseMove={this.handleMouseMove}
