@@ -55,7 +55,7 @@ const initialState: Panel = {
   tool: 'draw',
   strokeWidth: 3,
   color: 'black',
-  fill: '',
+  fill: 'black',
   canvasRef: null,
   instructions: []
 }

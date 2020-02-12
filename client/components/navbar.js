@@ -3,43 +3,63 @@ import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
 import {logout} from '../store'
+import ShareButton from './buttons/shareButton'
 
 const Navbar = ({handleClick, isLoggedIn}) => (
   <div>
-    <nav className="navBackground">
-      {isLoggedIn ? (
-        <div className="navBar">
-          {/* The navbar will show these links after you log in */}
-          <span>
-            <Link to="/home">
-            <img
-                src="/hivelogotransparent.png"
-                width={35}
+    <nav className = "navBackground">
+      <div className = "navBar">
+      <span className = "navBarLeft">
+      <span> <Link to="/whiteboard">
+              <img
+                src="/hive-icon.png"
                 height={35}
                 mode="fit"
               />
             </Link>
-          </span>
-          <span>
-          <a href="#" onClick={handleClick}>
-            Logout
-          </a>
-          <Link to="/whiteboard">Board</Link>
-          </span>
-        </div>
+      </span>
+      </span>
+
+      <span>
+      {isLoggedIn ? (
+        <span className = "navBarRight">
+        <span className = "dropdown">
+
+          {/* The navbar will show these links after you log in */}
+            <button className = "dropbtn">
+            <img
+                src="/profileIconHive.png"
+                width={40}
+                height={40}
+                mode="fit"
+              /></button>
+            <div className = "dropdown-content">
+              <span className = "navItem"><a href="#" onClick={handleClick}>logout</a></span>
+            </div>
+        </span>
+        </span>
       ) : (
-        <div>
+        <div className = "dropdown">
           {/* The navbar will show these links before you log in */}
-          <Link to="/login">Login</Link>
-          <Link to="/signup">Sign Up</Link>
-          <Link to="/canvas">Board</Link>
+          <button className = "dropbtn">
+            <img
+                src="/profileIconHive.png"
+                width={40}
+                height={40}
+                mode="fit"
+              /></button>
+          <div className = "dropdown-content">
+            <span className = "navItem"> <Link to="/login">login</Link></span>
+            <span className = "navItem"><Link to="/signup">sign up</Link></span>
+          </div>
         </div>
       )}
+     </span>
+      </div>
     </nav>
     <hr />
   </div>
 )
-
 /**
  * CONTAINER
  */

@@ -21,7 +21,6 @@ import DownloadButton from './buttons/downloadButton'
 import ClearCanvasButton from './buttons/clearCanvasButton'
 import ColorButton from './buttons/colorButton'
 import ColorPicker from './color'
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 
 
 
@@ -60,13 +59,16 @@ class Panel extends React.Component<PanelStateProps & PanelDispatchProps, State>
 
  async handleClick(action: string) {
    await this.props.updateTool(action)
-
+   console.log("handle click action")
+   console.log("event", event.target)
   }
 
   render() {
     return(
       <div id = "panelButtons">
-        <span className = "button-wrapper" onClick={() => this.handleClick('draw')}><DrawButton /></span>
+        <span className = "button-wrapper" onClick={
+          () => this.handleClick('draw')
+          }><DrawButton /></span>
         
         <span className = "button-wrapper" onClick={() => {
           this.handleClick('delete')
