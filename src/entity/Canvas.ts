@@ -8,7 +8,7 @@ export class Canvas {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column()
+    @Column({nullable: true})
     canvasObj: string;
 
     @CreateDateColumn()
