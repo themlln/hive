@@ -1,6 +1,23 @@
 import {Message} from './storeTypes'
 import {ComponentState} from 'react'
 
+export interface WelcomeState {
+  roomKey: string;
+  createUsername: string;
+  joinUsername: string;
+}
+
+export interface WelcomeStateProps {
+  history: any,
+  channelId: string
+}
+
+export interface WelcomeDispatchProps {
+  onClickCreateCanvas: () => {},
+  onClickJoinRoom: (key: string) => {},
+  sendUsername: (username: string, channelId: string) => string
+}
+
 export interface ChatStateProps {
   chat: {
     messages: Array<Message>

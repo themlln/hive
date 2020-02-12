@@ -11,17 +11,17 @@ export class User {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ unique: true, nullable: true })
+  @Column({ unique: true })
   @IsEmail()
   email: string;
 
-  @Column({nullable: true})
+  @Column()
   password: string;
 
   @Column({default: 'Anonymous bee'})
   username: string;
 
-  @Column({default: "https://visualpharm.com/assets/751/Melon-595b40b75ba036ed117d8629.svg"})
+  @Column({default: "/bee-profile.png"})
   profileImage: string;
 
   @Column({ select: false, nullable: true })
@@ -30,7 +30,7 @@ export class User {
   @Column({ nullable: true })
   salt: string;
 
-  @Column()
+  @Column({nullable: true})
   sessionId: string;
 
   @Column({ nullable: true })

@@ -1,4 +1,4 @@
-import {GOT_NEW_MESSAGE, JOIN_MESSAGE, DELETE_MESSAGE} from '../store/Chat'
+import {GOT_NEW_MESSAGE, JOIN_MESSAGE, DELETE_MESSAGE, GET_USER} from '../store/Chat'
 
 export interface Message {
   id?: number;
@@ -12,7 +12,7 @@ export interface Message {
 
 export interface ChatState {
   messages: Array<Message>
-  user?: Array<object>
+  username: string
   canvas: {channelId:string}
 }
 
@@ -34,11 +34,9 @@ interface DeleteMessageAction {
   payload: Message
 }
 
-export type ChatActionTypes = GotNewMessageAction | DeleteMessageAction | GotMessagesFromServerAction
+interface GetUserAction {
+  type: typeof GET_USER;
+  payload: string
+}
 
-// interface SetUserAction {
-//   type: typeof SET_USER
-//   payload: {
-//     name: string
-//   }
-// }
+export type ChatActionTypes = GotNewMessageAction | DeleteMessageAction | GotMessagesFromServerAction | GetUserAction

@@ -1,5 +1,6 @@
 const drawings: object = {}
 const messages: object = {}
+const usernames: object = {}
 
 const getType = (channelId: string, type: object) => {
   if (!type[channelId]) {
@@ -77,6 +78,12 @@ module.exports = io => {
       const updatedMessages = channelMessages.filter((message: object) => message.id !== messageToDelete.id)
       channelMessages[channelId] = updatedMessages
       socket.broadcast.to(channelId).emit('delete-message-from-server', messageToDelete)
+    })
+
+    socket.on('show-username', (channelId: string, username: string) => {
+      const channelMessages = getType(channelId, usernames)
+      channelMessages.push(username)
+      socket.broadcast.to(channelId).emit('get-username', username)
     })
 
     socket.on('disconnect', () => {

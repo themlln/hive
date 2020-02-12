@@ -7,15 +7,16 @@ import { Dispatch } from 'react';
  */
 
 const initialState: ChatState = {
-  messages: []
+  messages: [],
+  username: ''
 }
 /**
  * ACTIONS
  */
-export const LOAD_MESSAGES = "LOAD_MESSAGES ";
+export const LOAD_MESSAGES = "LOAD_MESSAGES";
 export const GOT_NEW_MESSAGE = "GOT_NEW_MESSAGE";
 export const DELETE_MESSAGE = "DELETE_MESSAGE";
-// const SET_USER = 'SET_USER';
+export const GET_USER = "GET_USER";
 
 /**
  * ACTION CREATORS
@@ -41,21 +42,26 @@ export const deletedMessage = (message: Message) => {
     payload: message
   }
 }
-// const setUser = (name: string) => {
-//   return {
-//     type: SET_USER,
-//     user: {
-//       name
-//     }
-//   }
-// }
+
+export const getUser = (username: string) => {
+  return {
+    type: GET_USER,
+    payload: username
+  }
+}
 
 /**
  * THUNKS
  */
+
 export const fetchingMessages = (channelId: string) => async (dispatch: Dispatch<any>) => {
   try {
-    const { data: messages } = await axios.get("/api/messages/"+channelId)
+
+    console.log("fetching messages in store")
+    console.log("/api/messages/"+channelId);
+    const { data: messages } = await axios.get(`/api/messages/${channelId}`)
+
+
     dispatch(loadMessages(messages))
     clientSocket.emit('load-messages', channelId, messages)
   } catch (error) {
@@ -65,6 +71,9 @@ export const fetchingMessages = (channelId: string) => async (dispatch: Dispatch
 
 export const sendMessage = (message: Message, channelId: string) => async (dispatch: Dispatch<any>) => {
   try {
+    if (!message.username) {
+      message.username = 'Anonymous bee'
+    }
     const { data: newMessage } = await axios.post('/api/messages', message)
     dispatch(gotNewMessage(newMessage))
     clientSocket.emit('new-message', channelId, newMessage)
@@ -80,6 +89,16 @@ export const deleteMessage = (message: Message, channelId: string) => async (dis
     clientSocket.emit('delete-message', channelId, message)
   } catch (error) {
     console.log('Error deleting message: ', error)
+  }
+}
+
+export const gettingUsername = (userName: string, channelId: string) => async (dispatch: Dispatch<any>) => {
+  try {
+    const {data: username} = await axios.post(`/api/messages/${channelId}`, userName)
+    dispatch(getUser(username))
+    clientSocket.emit('show-username', channelId, username)
+  } catch (error) {
+    console.log('Error getting username ', error)
   }
 }
 
