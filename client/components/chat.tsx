@@ -27,7 +27,7 @@ class Chat extends React.Component<ChatStateProps & ChatDispatchProps> {
           />)}
         </ul>
         </div>
-        <div id = "enterMessage">
+        <div id = "writeMessage">
         <ConnectNewMessageEntry channelId={this.props.channelId}/>
         </div>
       </div>

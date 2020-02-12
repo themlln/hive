@@ -215,18 +215,17 @@ main {
 }
 
 #enterMessage{
-  position:fixed;
   width: 240px;
   height: 25px;
   border: solid;
   border-color: #E8E8E8;
   border-radius: 10px;
   border-width: 1px;
-  top: 565px;
-  left: 985px;
   z-index: 1;
   padding-left: 8px;
   box-shadow: 0px 1px 2px 0px rgba(0,0,0,0.2);
+  margin-left: 10px;
+  margin-right: 5px;
 }
 
 #enterMessage:focus {
@@ -239,12 +238,10 @@ main {
   background-color: 	#E8E8E8;
   border-color: 	#E8E8E8;
   border-radius: 50px;
-  margin-right: 0px;
+  margin-right: 3px;
   padding-left: 3px;
   padding-right: 2px;
   z-index: 100;
-  top: 565px;
-  left: 1200px;
 }
 
 .sendButton:focus {
