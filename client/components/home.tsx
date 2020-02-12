@@ -2,19 +2,16 @@ import * as React from 'react'
 import Whiteboard from './whiteboard'
 import Navbar from './navbar'
 import Chat from './chat'
-import * as createClientSocket from 'socket.io-client'
-
 import store from '../store/index.js'
 import { loadMessages, gotNewMessage, deletedMessage } from '../store/Chat'
 import { Message } from '../types/storeTypes'
+import { connect } from 'react-redux'
+import { loadingChannelId } from '../store/Canvas'
+
+// export const clientSocket: any = createClientSocket(window.location.origin)
 
 
-export const clientSocket: any = createClientSocket(window.location.origin)
-
-export let channelId: string
-
-
-export class Home extends React.Component < {}, {} > {
+class Home extends React.Component < {}, {} > {
     constructor(props) {
         super(props)
         this.state = {
@@ -22,51 +19,37 @@ export class Home extends React.Component < {}, {} > {
         }
     }
 
-    componentDidMount() {
-      // channelId = this.props.location.search.slice(4)
-      // clientSocket.on('connect', () => {
-      //   console.log('Client-Socket: I have a made a persistent two-way connection!', channelId)
-      //   clientSocket.emit('join-drawing', channelId)
-
-      //   clientSocket.on('replay-messages', (messages: Array<Message>) => {
-      //     store.dispatch(loadMessages(messages))
-      //   })
-
-      //   clientSocket.on('receive-message', (message: Message) => {
-      //     store.dispatch(gotNewMessage(message))
-      //   })
-
-      //   clientSocket.on('delete-message-from-server', (message: Message) => {
-      //     store.dispatch(deletedMessage(message))
-      //   })
-      // })
-
+    async componentDidMount() {
+      this.props.onLoadChannelId(this.props.location.search.slice(4))
     }
 
-    public render() {
-        console.log("PROPS IN HOME", this.props)
+   render() {
         return (
         <div id = "home">
-            <div id = "whiteboard"><Whiteboard channelId={channelId}/></div>
-            <div id = "chat"><Chat channelId={channelId}/></div>
+            <div id = "whiteboard"><Whiteboard channelId={this.props.channelId}/></div>
+            <div id = "chat"><Chat channelId={this.props.channelId}/></div>
         </div>
         )
     }
 }
 
-clientSocket.on('connect', () => {
-  console.log('Client-Socket: I have a made a persistent two-way connection!', channelId)
-  clientSocket.emit('join-drawing', channelId)
 
-  clientSocket.on('replay-messages', (messages: Array<Message>) => {
-    store.dispatch(loadMessages(messages))
-  })
+const mapState = state => {
+  return {
+    channelId: state.canvas.channelId
+  }
+}
 
-  clientSocket.on('receive-message', (message: Message) => {
-    store.dispatch(gotNewMessage(message))
-  })
+const mapDispatch = dispatch => {
+  return {
+    onLoadChannelId:(channelId) => {
+      dispatch(loadingChannelId(channelId))
+    }
+    }
+}
 
-  clientSocket.on('delete-message-from-server', (message: Message) => {
-    store.dispatch(deletedMessage(message))
-  })
-})
+
+// The `withRouter` wrapper makes sure that updates are not blocked
+// when the url changes
+export default (connect(mapState, mapDispatch)(Home))
+

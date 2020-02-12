@@ -1,7 +1,7 @@
 import { fabric } from 'fabric'
 import {PathCommand} from '../fabricCanvas'
 import {generateId} from './id'
-import { clientSocket, channelId } from '../home'
+import clientSocket from '../../sockets/chat-sockets'
 
 export function draw (
     start: any = [0,0],
@@ -18,7 +18,8 @@ export function draw (
 export function sendDrawing (
   canvas: any,
   shouldBroadcast: boolean,
-  isSelected: boolean
+  isSelected: boolean,
+  channelId: string
 ) {
   const index = canvas._objects.length - 1
   const path = canvas._objects[index]

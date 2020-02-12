@@ -1,39 +1,41 @@
 const axios = require('axios').default;
 import history from '../history'
+import clientSocket from '../sockets/chat-sockets'
 
 /**
  * ACTION TYPES
  */
- const CREATE_NEW = 'CREATE_NEW'
+ const GET_CHANNEL_ID = 'GET_CHANNEL_ID'
+
 
  //TYPES OF ACTION TYPES
- interface CreateNewCanvas {
-   type: typeof CREATE_NEW
-   canvasId: string
+ interface getChannelId {
+   type: typeof GET_CHANNEL_ID
+   channelId: string
  }
 
- type CanvasActionTypes = CreateNewCanvas
+ type CanvasActionTypes = getChannelId
 
  /**
  * INITIAL STATE
  */
 
 interface Canvas {
-  canvasId: string
+  channelId: string
 }
 
 const initialState: Canvas = {
-  canvasId: ""
+  channelId: ""
 }
 
  /**
  * ACTION CREATORS
  */
 
-function createNewCanvas(canvasId:string): CanvasActionTypes {
+ function getChannelId(channelId: string): CanvasActionTypes {
    return {
-     type: CREATE_NEW,
-     canvasId
+     type: GET_CHANNEL_ID,
+     channelId
    }
  }
 
@@ -43,14 +45,32 @@ function createNewCanvas(canvasId:string): CanvasActionTypes {
 export const creatingNewCanvas = () => async dispatch => {
   try {
     const res = await axios.post('/api/canvases')
-    dispatch(createNewCanvas(res.data))
-    history.push('/whiteboard?id='+res.data);
+    await dispatch(getChannelId(res.data))
+    clientSocket.emit('join-drawing', res.data)
+    history.push('/whiteboard?id='+res.data)
   } catch (err) {
     console.error(err)
   }
 }
 
+export const fetchingChannel = (channelId: string) => async dispatch => {
+  try {
+    clientSocket.emit('join-drawing', channelId)
+    dispatch(getChannelId(channelId))
+    history.push('/whiteboard?id='+channelId)
+  } catch (err) {
+    console.error(err)
+  }
+}
 
+export const loadingChannelId = (channelId: string) => async dispatch => {
+  try {
+    clientSocket.emit('join-drawing', channelId)
+    dispatch(getChannelId(channelId))
+  } catch (err) {
+    console.error(err)
+  }
+}
  /**
  * REDUCER
  */
@@ -60,9 +80,9 @@ export const creatingNewCanvas = () => async dispatch => {
    action: CanvasActionTypes
    ): Canvas {
      switch(action.type) {
-       case CREATE_NEW:
+       case GET_CHANNEL_ID:
         return {
-          canvasId: action.canvasId
+          channelId: action.channelId
         }
        default:
         return state

@@ -10,7 +10,7 @@ import { drawCircle } from './canvasTools/circle'
 import { drawRectangle } from './canvasTools/rectangle'
 import { drawTriangle } from './canvasTools/triangle'
 import { modifyObject } from './canvasTools/modifyObject'
-import {clientSocket, channelId} from './home'
+import clientSocket from '../sockets/chat-sockets'
 import { removeObject } from './canvasTools/delete'
 
 let currentMousePosition: any = {x: 0, y: 0}
@@ -71,7 +71,7 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
 
   handleMouseUp(event) {
     if (this.props.tool === 'draw'){
-      sendDrawing(this.props.canvasRef, this.state.shouldBroadcast, this.state.isSelected)
+      sendDrawing(this.props.canvasRef, this.state.shouldBroadcast, this.state.isSelected, this.props.channelId)
 
       this.setState({
         shouldBroadcast: false,
@@ -80,7 +80,7 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
 
     } else if (this.props.tool === "line") {
       let currentMousePosition = this.position(event.e)
-      line (firstMousePosition, currentMousePosition,this.props.color, this.props.color, this.props.strokeWidth, this.props.canvasRef)
+      line (firstMousePosition, currentMousePosition,this.props.color, this.props.color, this.props.strokeWidth, this.props.canvasRef, this.props.channelId)
     }
   }
 
@@ -130,11 +130,14 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
 
     let canvas = this.props.canvasRef
     let tool = this.props.tool
+    let channelId = this.props.channelId
 
     document.addEventListener('keydown', function(event){
       if (event.keyCode === 8 || event.keyCode === 46){
-        if (!canvas.getActiveObject().text)
-        removeObject(canvas)
+        if(canvas.getActiveObject()){
+          if (!canvas.getActiveObject().text)
+          removeObject(canvas, channelId)
+        }
       }
     })
 
