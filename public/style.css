@@ -10,12 +10,335 @@ label {
   display: block;
 }
 
-nav a {
-  display: inline-block;
-  margin: 1em;
+/* navBar */
+/* navigation bar */
+.navBackground {
+  background-color: white;
+  height: 55px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width:100%;
+  padding: 0;
+  z-index: 100;
+  box-shadow: 0px 4px 8px 0px rgba(0,0,0,0.2);
 }
+
+.navBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  align-content: center;
+  padding-top: 5px;
+  padding-right: 10px;
+  padding-left: 10px;
+  padding-bottom: 5px
+  border: 0px;
+}
+
+.navBarLeft {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding-left: 5px;
+}
+
+.navBarRight {
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  text-align: center;
+  align-items: center;
+}
+
+.navItem {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  color: white;
+  font-size: 15px;
+}
+
+
+
+
+/* dropdown button, login/logout */
+
+/* Dropdown Button */
+.dropbtn {
+  border:none
+}
+
+/* The container <div> - needed to position the dropdown content */
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f1f1f1;
+  border-radius: 10px;
+  min-width: 100px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+  right:100%;
+  top:20px;
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+  color: black;
+  border-radius: 10px;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+/* Change color of dropdown links on hover */
+.dropdown-content a:hover {background-color: #ddd;}
+
+/* Show the dropdown menu on hover */
+.dropdown:hover .dropdown-content {display: block;}
+
+/* end of navbar */ 
 
 form div {
   margin: 1em;
   display: inline-block;
 }
+
+
+main {
+  margin: 78px 25px 25px 25px;
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+/* chat component */
+#chatBox { 
+  display: flex;
+  flex-direction: column;
+}
+
+#allMessages {
+  display: flex;
+  flex-direction: column;
+  margin-left: 0;
+  padding-left: 0;
+}
+
+.message-list {
+  height: 430px;
+  width: 98%;
+  overflow-y: scroll;
+  overflow-wrap: break-word;
+  overflow-x: hidden;
+  margin-left: 0;
+  padding-left: 0;
+}
+
+/* single message component */
+
+.message {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  overflow-wrap: break-word;
+  width: 95%;
+  padding: 5px;
+  border-radius: 10px;
+  margin-left: 5px;
+}
+
+.message-img {
+  border-radius: 50px;
+}
+
+.message:hover {
+  background-color: #E8E8E8;
+}
+
+.message-right {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.messageUsername {
+  font-size: 11px;
+  font-weight: bolder;
+}
+
+.timestamp {
+  font-size: 10px;
+  margin-right: 3px;
+  color: #696969;
+}
+
+.message-right-top {
+  display: flex;
+  justify-content: space-between;
+  width: 95%;
+}
+
+.message-right-bottom {
+  width: 95%;
+  background-color: #E8E8E8;
+  border-radius: 10px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+
+.message-remove-btn {
+  border-radius: 50px;
+  box-shadow: 0px 1px 2px 0px rgba(0,0,0,0.2);
+  border:solid;
+  border-color: white;
+  padding:2px;
+}
+
+.message-body {
+  overflow-wrap: break-word;
+  overflow-x: hidden;
+  font-size: 11px;
+  width: 98%;
+  padding-left: 2px;
+  
+}
+
+/* message form */
+
+.newMessageLine {
+  display: flex;
+  justify-content: flex-end;
+}
+
+#enterMessage{
+  width: 95%;
+  height: 25px;
+  border: solid;
+  border-color: #E8E8E8;
+  border-radius: 10px;
+  border-width: 1px;
+  z-index: 1;
+  padding-left: 8px;
+  box-shadow: 0px 1px 2px 0px rgba(0,0,0,0.2);
+  margin-left: 10px;
+  margin-right: 5px;
+}
+
+#enterMessage:focus {
+  outline:none;
+}
+
+.sendButton { 
+  border:solid;
+  border-width:1px;
+  background-color: 	#E8E8E8;
+  border-color: 	#E8E8E8;
+  border-radius: 50px;
+  margin-right: 3px;
+  padding-left: 3px;
+  padding-right: 2px;
+  z-index: 100;
+}
+
+.sendButton:focus {
+  outline: none;
+}
+
+
+/* color picker */
+#colorPickers {
+  display: flex;
+  flex-direction: row;
+  z-index: 100;
+  position: fixed;
+  margin-top: 90px;
+  margin-left: 20px;
+}
+
+#colortitle {
+  margin: 0;
+}
+
+
+
+/* whiteboard component */
+
+#whiteboardComponent {
+  display: flex;
+  flex-direction: row;
+}
+
+#panel { 
+  border-bottom: solid;
+  border-width: 3px;
+  border-color:white;
+  box-shadow: 0px 4px 8px 0px rgba(0,0,0,0.2);
+  margin: 0px;
+  padding:0px;
+  background-color: 	#E8E8E8;
+
+}
+
+/* panel */
+#panelButtons {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+  flex-shrink: 1;
+}
+
+/* home component */
+
+#home {
+  display: flex;
+  margin: 25px;
+  align-items: flex-end;
+  justify-content: center;
+
+}
+/*canvas */
+canvas {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+#fabricCanvas {
+  width: 100%;
+  height: 100%; 
+}
+
+
+#whiteboard { 
+  width: 66%;
+  min-width: 900px;
+  height: 503px;
+  margin-left: 10px;
+  margin-right: 25px;
+  border: solid;
+  border-color: #E8E8E8;
+  box-shadow: 0px 4px 8px 0px rgba(0,0,0,0.2);
+  border-width: 3px;
+  border-radius: 5px;
+  margin-top:60px;
+}
+
+#chat {
+  width: 33%;
+  border: solid;
+  border-color: #E8E8E8;
+  border-width: 2px;
+  border-radius: 5px;
+  box-shadow: 0px 4px 8px 0px rgba(0,0,0,0.2);
+  height: 503px;
+  overflow-y: scroll;
+}
+

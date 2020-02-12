@@ -1,71 +1,34 @@
-// import React from 'react'
-// import PropTypes from 'prop-types'
-// import {connect} from 'react-redux'
-
-// /**
-//  * COMPONENT
-//  */
-// export const UserHome = props => {
-//   const {email} = props
-
-//   return (
-//     <div>
-//       <h3>Welcome, {email}</h3>
-//     </div>
-//   )
-// }
-
-// /**
-//  * CONTAINER
-//  */
-// const mapState = state => {
-//   return {
-//     email: state.user.email
-//   }
-// }
-
-// export default connect(mapState)(UserHome)
-
-// /**
-//  * PROP TYPES
-//  */
-// UserHome.propTypes = {
-//   email: PropTypes.string
-// }
 
 import * as React from 'react'
+import {Redirect} from 'react-router'
 import {connect} from 'react-redux'
+import { UserHomeState, UserHomeProps } from '../types/componentTypes'
+import { Navbar } from './index'
 
-/**
- * COMPONENT
- */
-/**
- * COMPONENT
- */
+const UserHome = (props: UserHomeProps) => {
+  const {email, username} = props
 
-// type Props = {
-//   email: string;
-// };
-
-const UserHome: React.FC<{email: string}> = () => {
-
-  return (
-    <div>
-      <h3>Welcome</h3>
-    </div>
-  )
+  if (!email) {
+    return <Redirect to="/" />
+  } else {
+    return (
+      <>
+        <Navbar />
+        <div className="userhome-container">
+          <h1>Welcome back {username}!</h1>
+        </div>
+      </>
+    )
+  }
 }
-
 /**
  * CONTAINER
  */
-const mapState = state => {
+const mapStateToProps = (state: UserHomeState) => {
   return {
+    username: state.user.username,
     email: state.user.email
   }
 }
 
-export default connect(mapState)(UserHome)
-/**
- * PROP TYPES
- */
+export default connect(mapStateToProps)(UserHome)

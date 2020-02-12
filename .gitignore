@@ -5,3 +5,12 @@ secrets.js
 .DS_Store
 npm-debug.log
 yarn-error.log
+server/.idea/
+server/.vscode/
+server/build/
+server/tmp/
+server/temp/
+server/ormconfig
+ormconfig.env
+ormconfig.json
+secrets.js
