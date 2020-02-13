@@ -44,62 +44,69 @@ class Welcome extends React.Component<WelcomeStateProps & WelcomeDispatchProps, 
       this.props.onClickCreateCanvas()
       this.props.sendUsername(this.state.createUsername, this.props.channelId)
     } else {
-      throw Error ('You need to enter a user name!')
+      alert ('You need to enter a user name!')
     }
   }
 
   handleJoin(event: React.SyntheticEvent) {
     event.preventDefault()
-    this.props.onClickJoinRoom(event.target.roomKey.value)
+    if(event.target.roomkey.value){
+      this.props.onClickJoinRoom(event.target.roomkey.value)
+    } else {
+      alert ('Invalid Room Key')
+    }
+
   }
 
   render(){
     return(
       <div>
+        <div className="limiter">
+        <div className="container-login100">
+        <div className="wrap-login100">
         <header id="center">
           <img src="/hivelogotransparent.png" width={400}/>
         </header>
       <div id="welcome">
-
-         <form id="createform" onSubmit={this.handleCreate}>
-         <h1>Create</h1>
-
-          <div>
+         <form className ="login100-form validate-form p-b-33 p-t-5" id="createform" onSubmit={this.handleCreate}>
+         <h1 className="login100-form-title p-b-41">Create</h1>
             <label htmlFor="Username">Set Name</label>
-            <input
-            className="form-control"
+            <input className="input2 form-control"
             type="text"
             name="username"
             value={this.state.createUsername}
             onChange={this.createUsernameHandleChange}
             placeholder="Set your username"/>
-          </div>
-
-          <button className="btn btn-default" type="submit">Create Room</button>
+          <button className="login100-form-btn" type="submit">Create Room</button>
          </form>
 
-        <form id ="joinform" onSubmit={this.handleJoin}>
-        <h1>Join</h1>
+        <form className ="login100-form validate-form p-b-33 p-t-5" id ="joinform" onSubmit={this.handleJoin}>
+        <h1 className="login100-form-title p-b-41">Join</h1>
+
         <label htmlFor="Name">Set Name</label>
           <input
-          className="form-control"
+          className="input2 form-control"
           type="text"
           name="username"
           value={this.state.joinUsername}
           onChange={this.joinUsernameHandleChange}
           placeholder="Set your username"/>
+
           <label htmlFor="Name">Room Key</label>
           <input
-          className="form-control"
+          className="input2 form-control"
           type="text"
           name="roomkey"
           value={this.state.roomKey}
           onChange={this.roomKeyHandleChange}
           placeholder="Enter Room Key here"/>
-          <button className="btn btn-default" type="submit">Join Room</button>
+          <button className="login100-form-btn" type="submit">Join Room</button>
       </form>
+        </div>
       </div>
       </div>
+      </div>
+    </div>
     )
   }
 }

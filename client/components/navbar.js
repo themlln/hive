@@ -10,7 +10,7 @@ const Navbar = ({handleClick, isLoggedIn}) => (
     <nav className = "navBackground">
       <div className = "navBar">
       <span className = "navBarLeft">
-      <span> <Link to="/whiteboard">
+      <span> <Link to="/">
               <img
                 src="/hive-icon.png"
                 height={35}

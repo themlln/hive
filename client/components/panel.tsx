@@ -75,13 +75,11 @@ class Panel extends React.Component<PanelStateProps & PanelDispatchProps, State>
 
   render() {
     return(
-
+      <div id="allPanels">
+      <Clipboard id="clipboard" option-text={this.getText} onSuccess={this.onSuccess} title="Copy sharable room key" onClick= {() => this.handleClick('copy')}>
+      Get Room Key
+    </Clipboard>
       <div id = "panelButtons">
-
-        <Clipboard className = {this.props.tool === 'copy' ? "button-wrapper": ''} option-text={this.getText} onSuccess={this.onSuccess} title="Copy sharable room key" onClick= {() => this.handleClick('copy')}>
-          Get Room Key
-        </Clipboard>
-
         <span className = {this.props.tool === 'draw' ? "button-wrapper": ''} title="Pen Tool: Move your cursor to draw or write." onClick={
           () => this.handleClick('draw')
           }><DrawButton /></span>
@@ -144,6 +142,7 @@ class Panel extends React.Component<PanelStateProps & PanelDispatchProps, State>
         }}><DownloadButton /></span>
 
       </div>
+    </div>
     )
   }
 }
