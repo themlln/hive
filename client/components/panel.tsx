@@ -1,5 +1,5 @@
 import * as React from 'react'
-import {updateTool} from '../store/Panel'
+import {updateTool} from '../store/panel-store'
 import { connect } from 'react-redux'
 import { fabric } from 'fabric'
 import clientSocket from '../sockets/chat-sockets'

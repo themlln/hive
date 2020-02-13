@@ -61,7 +61,7 @@ module.exports = io => {
       socket.broadcast.to(channelId).emit('clear-canvas')
     })
 
-    socket.on('load-messages', (channelId: string, messagesToLoad: Array<object>) => {
+    socket.on('load-messages', (channelId: string) => {
       const channelMessages = getType(channelId, messages)
       console.log("THIS IS FROM THE SERVER, WE ARE REPLAYING CHANNEL MESSAGES", channelMessages)
       socket.broadcast.to(channelId).emit('replay-messages', channelMessages)

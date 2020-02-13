@@ -1,6 +1,19 @@
 import {Message} from './storeTypes'
 import {ComponentState} from 'react'
 
+export interface HomeState {
+  showLogin: boolean
+}
+
+export type HomeStateProps = {
+  channelId: string
+}
+
+export type HomeDispatch = {
+  onLoadChannelId: (channelId: string) => void,
+  fetchMessages: (channelId: string) => void
+}
+
 export interface WelcomeState {
   roomKey: string;
   createUsername: string;

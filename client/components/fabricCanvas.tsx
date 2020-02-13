@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { connect } from 'react-redux'
-import {updateCanvas} from '../store/Panel'
+import {updateCanvas} from '../store/panel-store'
 import { fabric } from 'fabric'
 import { draw, sendDrawing, drawPath} from './canvasTools/draw'
 import {line, drawLine} from './canvasTools/line'

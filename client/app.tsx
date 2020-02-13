@@ -1,7 +1,7 @@
 import * as React from 'react'
 import {connect} from 'react-redux'
 import {withRouter, Route, Switch} from 'react-router-dom'
-import {loggingIn} from './store/user.js'
+import {loggingIn} from './store/user-store'
 import UserHome from './components/user-home'
 import Home from './components/home'
 import Welcome from './components/welcome'

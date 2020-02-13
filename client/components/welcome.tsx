@@ -1,6 +1,6 @@
 import * as React from 'react'
-import { creatingNewCanvas, fetchingChannel } from '../store/Canvas'
-import { gettingUsername } from '../store/Chat'
+import { creatingNewCanvas, fetchingChannel } from '../store/canvas-store'
+import { gettingUsername } from '../store/chat-store'
 import { connect } from 'react-redux'
 import { WelcomeStateProps, WelcomeDispatchProps, WelcomeState } from '../types/componentTypes'
 
@@ -25,7 +25,6 @@ class Welcome extends React.Component<WelcomeStateProps & WelcomeDispatchProps, 
       createUsername: event.target.value
     })
   }
-
 
   joinUsernameHandleChange (event: any) {
     this.setState({

@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { CompactPicker } from 'react-color'
 import { connect } from 'react-redux'
-import { updateColor, updateFill } from '../store/Panel'
+import { updateColor, updateFill } from '../store/panel-store'
 
 
 class ColorPicker extends React.Component<ColorStateProps & ColorDispatchProps> {

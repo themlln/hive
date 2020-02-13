@@ -1,7 +1,7 @@
 import * as createClientSocket from 'socket.io-client'
 import store from '../store/index'
 import { Message } from '../types/storeTypes'
-import { loadMessages, gotNewMessage, deletedMessage, getUser } from '../store/Chat'
+import { loadMessages, gotNewMessage, deletedMessage, getUser } from '../store/chat-store'
 
 const clientSocket: any = createClientSocket(window.location.origin)
 clientSocket.on('connect', () => {
