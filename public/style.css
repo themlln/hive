@@ -358,12 +358,6 @@ main {
 
 
 /* whiteboard component */
-
-#welcome {
-  display: flex;
-  flex-direction: row;
-}
-
 #panel {
   border-bottom: solid;
   border-width: 3px;
@@ -522,7 +516,8 @@ main {
   border-radius: 25px;
   margin: 20px;
 
-  background: #bbab82;
+  /* background: #bbab82; */
+  background-image: url(hive-icon.png);
   position: relative;
   z-index: 1;
 

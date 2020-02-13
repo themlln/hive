@@ -74,7 +74,7 @@ class Welcome extends React.Component<WelcomeStateProps & WelcomeDispatchProps, 
             value={this.state.createUsername}
             onChange={this.createUsernameHandleChange}
             placeholder="Set your username"/>
-          <button className="login100-form-btn" type="submit">Create Room</button>
+          <button className="login100-form-btn" type="submit"></button>
          </form>
 
         <form className ="login100-form validate-form p-b-33 p-t-5" id ="joinform" onSubmit={this.handleJoin}>
