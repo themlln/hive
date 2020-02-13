@@ -297,6 +297,12 @@ main {
   align-items: center;
   flex-shrink: 1;
 }
+.clipboard {
+  align-self: center;
+  height: 30px;
+  border-radius: 20px;
+  margin-left: 10px;
+}
 
 .button-wrapper {
   background: 	#F8F8F8;

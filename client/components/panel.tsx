@@ -76,7 +76,7 @@ class Panel extends React.Component<PanelStateProps & PanelDispatchProps, State>
   render() {
     return(
       <div id="allPanels">
-      <Clipboard id="clipboard" option-text={this.getText} onSuccess={this.onSuccess} title="Copy sharable room key" onClick= {() => this.handleClick('copy')}>
+      <Clipboard className='clipboard' option-text={this.getText} onSuccess={this.onSuccess} title="Copy sharable room key" onClick= {() => this.handleClick('copy')}>
       Get Room Key
     </Clipboard>
       <div id = "panelButtons">
