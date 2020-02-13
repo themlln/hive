@@ -33,7 +33,6 @@ export const loggingIn = () => async dispatch => {
 export const auth = (email, password, method) => async dispatch => {
   let res
   try {
-    console.log("AUTH THUNK BEING CALLED HERE", email, password, method);
     res = await axios.post(`/auth/${method}`, {email, password})
     console.log("", res.data)
   } catch (authError) {

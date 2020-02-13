@@ -21,11 +21,7 @@ router.post('/login', async (req: Request, res:Response, next: NextFunction) => 
     } else {
       const modifiedUser = {id: user.id, email: user.email, username: user.username, profileImage: user.profileImage}
       user.sessionId = req.sessionID
-      console.log("LINE 20 is running, req.sessionID", req.sessionID),
-      console.log("user being updated", user);
       await userRepository.save(user)
-
-
       req.login(modifiedUser, err => (err ? next(err) : res.json(modifiedUser)))
     }
   } catch (err) {
