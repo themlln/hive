@@ -41,7 +41,9 @@ export function drawRectangle (
       width: rect.width,
       height: rect.height,
       scaleX: rect.scaleX,
-      scaleY: rect.scaleY
+      scaleY: rect.scaleY,
+      flipX: rect.flipX, 
+      flipY: rect.flixY
     })
     newRectangle["uid"] = rectangleCommand.id
     canvas.add(newRectangle)

@@ -295,6 +295,11 @@ main {
   flex-shrink: 1;
 }
 
+.button-wrapper {
+  background: 	#F8F8F8;
+  box-shadow: 0px 1px 2px 0px rgba(0,0,0,0.2);
+  border-radius: 50px;
+}
 /* home component */
 
 #home {
@@ -342,6 +347,35 @@ canvas {
   overflow-y: scroll;
 }
 
+
+/* whiteboard component */
+
+#welcome {
+  display: flex;
+  flex-direction: row;
+}
+
+#panel {
+  border-bottom: solid;
+  border-width: 3px;
+  border-color:white;
+  box-shadow: 0px 4px 8px 0px rgba(0,0,0,0.2);
+  margin: 0px;
+  padding:0px;
+  background-color: 	#E8E8E8;
+
+}
+
+/* panel */
+#panelButtons {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+}
+#createform {
+  margin-right: 20px;
+}
 /* Welcome Page */
 #welcome {
   display: flex;
@@ -349,6 +383,7 @@ canvas {
   align-items: center;
   justify-content: center;
 }
+
 #center {
   margin-top: 100px;
   display: flex;

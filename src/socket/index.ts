@@ -1,5 +1,6 @@
 const drawings: object = {}
 const messages: object = {}
+const usernames: object = {}
 
 const getType = (channelId: string, type: object) => {
   if (!type[channelId]) {
@@ -46,8 +47,6 @@ module.exports = io => {
     socket.on('modified-from-client', (channelId: any, modifiedCommand: any) => {
       const instructions = getType(channelId, drawings)
       const modifiedObject = instructions.filter(instruction => instruction.id === modifiedCommand.id)
-      modifiedObject[0].path = modifiedCommand.modifiedObject
-      modifiedObject[0].textObject = modifiedCommand.modifiedObject
       if (modifiedObject[0].rectangleObject) {modifiedObject[0].rectangleObject = modifiedCommand.modifiedObject}
       if (modifiedObject[0].circleObject) {modifiedObject[0].circleObject = modifiedCommand.modifiedObject}
       if (modifiedObject[0].triangleObject) {modifiedObject[0].triangleObject = modifiedCommand.modifiedObject}
@@ -79,6 +78,12 @@ module.exports = io => {
       const updatedMessages = channelMessages.filter((message: object) => message.id !== messageToDelete.id)
       channelMessages[channelId] = updatedMessages
       socket.broadcast.to(channelId).emit('delete-message-from-server', messageToDelete)
+    })
+
+    socket.on('show-username', (channelId: string, username: string) => {
+      const channelMessages = getType(channelId, usernames)
+      channelMessages.push(username)
+      socket.broadcast.to(channelId).emit('get-username', username)
     })
 
     socket.on('disconnect', () => {
