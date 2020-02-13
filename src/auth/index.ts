@@ -14,13 +14,12 @@ router.post('/login', async (req: Request, res:Response, next: NextFunction) => 
     const user: User = await userRepository.findOne({
       email: req.body.email
     })
-    user.sessionId = req.sessionID
-    await userRepository.save(user)
-
     if (!user) {
-      res.json('Wrong username and/or password').status(401)
+      console.log("DOES USER NOT EXIST?", user)
+      res.send("WRONG NAME", user)
     } else if (!user.correctPassword(req.body.password)) {
-      res.json('Wrong username and/or password').status(401)
+      console.log("USER PASSWORD IS INCORRECT", user);
+      res.send("WRONG PW")
     } else {
       const modifiedUser = {id: user.id, email: user.email, username: user.username, profileImage: user.profileImage}
 
