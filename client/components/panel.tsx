@@ -106,10 +106,6 @@ class Panel extends React.Component<PanelStateProps & PanelDispatchProps, State>
             <ColorButton/>
           </span>
 
-        <span className = "button-wrapper" title="Line Tool: Draw linear vectors." onClick={() => {
-          this.handleClick('line')
-          }}><LineButton /></span>
-
         <span className = {this.props.tool === 'line' ? "button-wrapper": ''} title="Line Tool: Draw linear vectors." onClick={() => {
           this.handleClick('line')
           }}><LineButton /></span>
