@@ -18,7 +18,7 @@ export default function ColorButton() {
 
   return (
     <div className={classes.root}>
-      <IconButton aria-label="delete">
+      <IconButton title="Color Palette: Select colors for stroke and shape/text fill" aria-label="delete">
         <PaletteIcon/>
       </IconButton>
     </div>
