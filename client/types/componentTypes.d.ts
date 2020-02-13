@@ -40,7 +40,6 @@ export interface ChatStateProps {
 }
 
 export interface ChatDispatchProps {
-  fetchingMessages: (channelId: string) => {messages: Array<Message>},
   deleteMessage: (message: Message, channelId: string) => {message: Message}
 }
 

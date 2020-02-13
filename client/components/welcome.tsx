@@ -1,6 +1,5 @@
 import * as React from 'react'
 import { creatingNewCanvas, fetchingChannel } from '../store/canvas-store'
-import { gettingUsername } from '../store/chat-store'
 import { connect } from 'react-redux'
 import { WelcomeStateProps, WelcomeDispatchProps, WelcomeState } from '../types/componentTypes'
 
@@ -112,8 +111,7 @@ const mapState = (state: any, ownProps: any) => {
 const mapDispatch = (dispatch) => {
   return { onClickCreateCanvas: () =>
     dispatch(creatingNewCanvas()),
-    onClickJoinRoom:(key: string) => dispatch(fetchingChannel(key)),
-    sendUsername: (username: string, channelId: string) => dispatch(gettingUsername(username, channelId))
+    onClickJoinRoom:(key: string) => dispatch(fetchingChannel(key))
   }
 }
 export default connect(mapState,mapDispatch)(Welcome)

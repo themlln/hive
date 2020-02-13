@@ -1,10 +1,7 @@
 import * as React from 'react'
 import Whiteboard from './whiteboard'
-import Navbar from './navbar'
 import Chat from './chat'
-import store from '../store/index.js'
-import { loadMessages, gotNewMessage, deletedMessage, fetchingMessages } from '../store/chat-store'
-import { Message } from '../types/storeTypes'
+import { fetchingMessages } from '../store/chat-store'
 import { connect } from 'react-redux'
 import { loadingChannelId } from '../store/canvas-store'
 import { HomeStateProps, HomeDispatch, HomeState } from '../types/componentTypes'
@@ -17,8 +14,8 @@ class Home extends React.Component < HomeStateProps & HomeDispatch, HomeState > 
         }
     }
 
-    componentDidMount() {
-      this.props.onLoadChannelId(this.props.location.search.slice(4))
+    async componentDidMount() {
+      await this.props.onLoadChannelId(this.props.location.search.slice(4))
       this.props.fetchMessages(this.props.channelId)
     }
 

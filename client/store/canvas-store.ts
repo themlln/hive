@@ -3,8 +3,6 @@ import { CanvasActionTypes, Canvas } from '../types/storeTypes'
 import history from '../history'
 import clientSocket from '../sockets/chat-sockets'
 import { Dispatch } from 'react';
-import { loadMessages } from './chat-store';
-import { Message } from '../types/storeTypes';
 
 /**
  * ACTION TYPES
@@ -57,10 +55,6 @@ export const loadingChannelId = (channelId: string) => async (dispatch: Dispatch
   try {
     clientSocket.emit('join-drawing', channelId)
     dispatch(getChannelId(channelId))
-    const { data: messages } = await axios.get('/api/messages')
-    const filteredMessages = messages.filter((message: Message) => message.channelId === channelId)
-    console.log("FILTERED MESSAGES", filteredMessages)
-    dispatch(loadMessages(filteredMessages || []))
   } catch (err) {
     console.error(err)
   }

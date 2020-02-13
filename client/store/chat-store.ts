@@ -8,8 +8,7 @@ import { Dispatch } from 'react';
 
 const initialState: ChatState = {
   messages: [],
-  username: '',
-  canvas: {channelId: ''}
+  username: ''
 }
 /**
  * ACTIONS
@@ -47,20 +46,15 @@ export const deletedMessage = (message: Message) => {
  * THUNKS
  */
 
-// export const fetchingMessages = (channelId: string) => async (dispatch: Dispatch<any>) => {
-//   try {
-//     console.log("CHANNEL ID", channelId)
-//     const { data: messages } = await axios.get('/api/messages')
-//     console.log("DATA IN MESSAGES", messages)
-//     const filteredMessages = messages.filter((message: Message) => message.channelId === channelId)
-//     console.log("DATA IN FILTERED MESSAGES", filteredMessages)
-//     dispatch(loadMessages(filteredMessages || []))
-
-//     clientSocket.emit('load-messages', channelId)
-//   } catch (error) {
-//     console.log('Fetching Messages', error)
-//   }
-// }
+export const fetchingMessages = (channelId: string) => async (dispatch: Dispatch<any>) => {
+  try {
+    const { data: messages } = await axios.get('/api/messages')
+    const filteredMessages = messages.filter((message: Message) => message.channelId === channelId)
+    dispatch(loadMessages(filteredMessages || []))
+  } catch (error) {
+    console.log('Fetching Messages', error)
+  }
+}
 
 export const sendMessage = (message: Message, channelId: string) => async (dispatch: Dispatch<any>) => {
   try {
@@ -94,21 +88,17 @@ export const chatReducer = (state = initialState, action: ChatActionTypes): Chat
     case LOAD_MESSAGES:
       return {
         messages: [...action.payload],
-        username: state.username,
-        canvas: state.canvas
-
+        username: state.username
       }
     case GOT_NEW_MESSAGE:
       return {
         messages: [...state.messages, action.payload],
-        username: state.username,
-        canvas: state.canvas
+        username: state.username
       }
     case DELETE_MESSAGE:
       return {
         messages: state.messages.filter(message => message.id !== action.payload.id),
-        username: state.username,
-        canvas: state.canvas
+        username: state.username
       }
     default:
       return state

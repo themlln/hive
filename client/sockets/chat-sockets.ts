@@ -7,11 +7,6 @@ const clientSocket: any = createClientSocket(window.location.origin)
 clientSocket.on('connect', () => {
   console.log('Client-Socket: I have a made a persistent two-way connection!')
 
-
-  clientSocket.on('replay-messages', (messages: Array<Message>) => {
-    store.dispatch(loadMessages(messages))
-  })
-
   clientSocket.on('receive-message', (message: Message) => {
     store.dispatch(gotNewMessage(message))
   })
