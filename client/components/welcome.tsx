@@ -40,7 +40,6 @@ class Welcome extends React.Component<WelcomeStateProps & WelcomeDispatchProps, 
     event.preventDefault()
     if (this.state.createUsername) {
       this.props.onClickCreateCanvas()
-      this.props.sendUsername(this.state.createUsername, this.props.channelId)
     } else {
       throw Error ('You need to enter a user name!')
     }
