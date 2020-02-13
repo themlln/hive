@@ -1,14 +1,15 @@
 import * as morgan from 'morgan'
 import * as path from 'path'
 import * as express from 'express'
-import {Request, Response, NextFunction} from 'express'
+import { Request, Response, NextFunction } from 'express'
 import * as compression from 'compression'
 
-import { createConnection, Connection, Repository } from 'typeorm'
+import { createConnection, Connection, getRepository, Repository } from 'typeorm'
 import 'reflect-metadata'
-import { TypeormStore } from 'typeorm-store'
+import { TypeormStore } from 'connect-typeorm'
 import { User } from './entity/User'
 import { Session } from './entity/Session'
+import { Session2 } from './entity/Session2'
 
 
 import * as session from 'express-session'
@@ -32,9 +33,13 @@ module.exports = app
  */
 // if (process.env.NODE_ENV !== 'production') require('../secrets')
 
+// Session Repository
 
-const createApp = (sessionRepository: Repository<Session>) => {
+
+
+const createApp = (typeORMStore:any) => {
   // logging middleware
+  console.log("CREATE APP RUNNNING!!!")
   app.use(morgan('dev'))
 
   // body parsing middleware
@@ -48,13 +53,21 @@ const createApp = (sessionRepository: Repository<Session>) => {
   app.use(
     session({
       secret: process.env.SESSION_SECRET || 'my best friend is Cody',
-      store: new TypeormStore({ repository: sessionRepository }),
+      store: typeORMStore,
       resave: false,
       saveUninitialized: false
     })
   )
+
   app.use(passport.initialize())
   app.use(passport.session())
+
+  app.use('*', (req: Request, res: Response, next) => {
+    console.log("REQ SESSION IN APP****", req.sessionID);
+    next()
+  })
+
+
 
   // auth and api routes
   app.use('/auth', require('./auth'))
@@ -78,6 +91,9 @@ const createApp = (sessionRepository: Repository<Session>) => {
   app.use('*', (req: Request, res: Response) => {
     res.sendFile(path.join(__dirname, '..', 'public/index.html'))
   })
+
+
+
 
   // error handling endware
   app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
@@ -104,16 +120,25 @@ async function bootApp() {
     const connection: Connection = await createConnection()
     await connection.runMigrations()
     console.log("connection created to database")
-    const userRepository = connection.getRepository(User);
-    const sessionRepository = connection.getRepository(Session);
+
+    const sessionRepository: Repository<any> = getRepository('Session2')
+    console.log("sessionRepository", sessionRepository)
+    const userRepository = getRepository('User')
+    console.log("user repository", userRepository)
+
+    const typeORMStore = new TypeormStore({
+      cleanupLimit: 2,
+      limitSubquery: false,
+      ttl: 86400
+    }).connect(sessionRepository)
 
     //passport registration
     passport.serializeUser((user: User, done) => done(null, user.id))
 
     passport.deserializeUser(async (id: number, done) => {
       try {
-        const user = await userRepository.findOne({
-          select:['id', 'email', 'username', 'profileImage'],
+        const user = await getRepository('User').findOne({
+          select: ['id', 'email', 'username', 'profileImage'],
           where: { id: id },
         });
         done(null, user)
@@ -121,6 +146,12 @@ async function bootApp() {
         done(err)
       }
     })
+
+
+
+    // const userRepository = connection.getRepository(User);
+    // const sessionRepository = connection.getRepository(Session2);
+
 
     // app.use('*', (req: Request, res: Response, next: NextFunction) => {
     //   try {
@@ -136,7 +167,7 @@ async function bootApp() {
     //   }
     // })
 
-    await createApp(sessionRepository)
+    await createApp(typeORMStore)
     await startListening()
   } catch (err) {
     console.error(err)
