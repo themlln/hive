@@ -14,6 +14,7 @@ router.post('/login', async (req: Request, res:Response, next: NextFunction) => 
     const user: User = await userRepository.findOne({
       email: req.body.email
     })
+    console.log
     if (!user) {
       console.log("DOES USER NOT EXIST?", user)
       res.send("WRONG NAME", user)
