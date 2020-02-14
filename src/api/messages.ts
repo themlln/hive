@@ -6,13 +6,9 @@ module.exports = router
 
 const messageRepository = getRepository(Message)
 
-router.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
+router.get('/', async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const channelId: string = req.params.id;
-    const messages = await messageRepository.find({
-      where: {channelId: channelId}
-    })
-    // const messages = await messageRepository.find()
+    const messages = await messageRepository.find()
     res.json(messages)
   } catch (error) {
     next(error)
@@ -35,8 +31,8 @@ router.put('/:id', async (req: Request, res: Response, next: NextFunction) => {
     const message = await messageRepository.findOne(req.params.id)
     if (message) {
       await messageRepository.merge(message, req.body)
-      const updatedMesasge = await messageRepository.save(message)
-      res.json(updatedMesasge)
+      const updatedMessage = await messageRepository.save(message)
+      res.json(updatedMessage)
     } else {
       throw Error('Message not found')
     }
@@ -47,7 +43,10 @@ router.put('/:id', async (req: Request, res: Response, next: NextFunction) => {
 
 router.delete('/:id', async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const messageToDelete = await messageRepository.findOne(req.params.id)
+    const messageId = req.params.id
+    const messageToDelete = await messageRepository.findOne({where: {
+      id: messageId
+    }})
     if (!messageToDelete) {
       throw Error('Message not found')
     } else {
@@ -57,5 +56,4 @@ router.delete('/:id', async (req: Request, res: Response, next: NextFunction) =>
   } catch (error) {
     next(error)
   }
-
 })

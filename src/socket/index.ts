@@ -2,7 +2,7 @@ const drawings: object = {}
 const messages: object = {}
 const usernames: object = {}
 
-const getType = (channelId: string, type: object) => {
+const getType = (channelId: string, type: any) => {
   if (!type[channelId]) {
     type[channelId] = []
   }
@@ -59,12 +59,6 @@ module.exports = io => {
     socket.on('clear-canvas', (channelId: string) => {
       drawings[channelId] = []
       socket.broadcast.to(channelId).emit('clear-canvas')
-    })
-
-    socket.on('load-messages', (channelId: string, messagesToLoad: Array<object>) => {
-      const channelMessages = getType(channelId, messages)
-      console.log("THIS IS FROM THE SERVER, WE ARE REPLAYING CHANNEL MESSAGES", channelMessages)
-      socket.broadcast.to(channelId).emit('replay-messages', channelMessages)
     })
 
     socket.on('new-message', (channelId: string, message: object) => {

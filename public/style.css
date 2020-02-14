@@ -358,12 +358,6 @@ main {
 
 
 /* whiteboard component */
-
-#welcome {
-  display: flex;
-  flex-direction: row;
-}
-
 #panel {
   border-bottom: solid;
   border-width: 3px;
@@ -514,11 +508,9 @@ main {
   padding: 0;
   border: none;
   background: none;
-
   display: flex;
   justify-content: center;
   align-items: center;
-
   background: transparent;
   position: relative;
   z-index: 1;

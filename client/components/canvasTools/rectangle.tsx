@@ -2,7 +2,7 @@ import { fabric } from 'fabric'
 import {PathCommand} from '../fabricCanvas'
 import {generateId} from './id'
 import clientSocket from '../../sockets/chat-sockets'
-import { updateStrokeWidth } from '../../store/Panel'
+import { updateStrokeWidth } from '../../store/panel-store'
 import { resolveTxt } from 'dns'
 
 export function addRectangle(
@@ -42,7 +42,7 @@ export function drawRectangle (
       height: rect.height,
       scaleX: rect.scaleX,
       scaleY: rect.scaleY,
-      flipX: rect.flipX, 
+      flipX: rect.flipX,
       flipY: rect.flixY
     })
     newRectangle["uid"] = rectangleCommand.id

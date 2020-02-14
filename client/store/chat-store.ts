@@ -16,7 +16,6 @@ const initialState: ChatState = {
 export const LOAD_MESSAGES = "LOAD_MESSAGES";
 export const GOT_NEW_MESSAGE = "GOT_NEW_MESSAGE";
 export const DELETE_MESSAGE = "DELETE_MESSAGE";
-export const GET_USER = "GET_USER";
 
 /**
  * ACTION CREATORS
@@ -43,29 +42,17 @@ export const deletedMessage = (message: Message) => {
   }
 }
 
-export const getUser = (username: string) => {
-  return {
-    type: GET_USER,
-    payload: username
-  }
-}
-
 /**
  * THUNKS
  */
 
 export const fetchingMessages = (channelId: string) => async (dispatch: Dispatch<any>) => {
   try {
-
-    console.log("fetching messages in store")
-    console.log("/api/messages/"+channelId);
-    const { data: messages } = await axios.get(`/api/messages/${channelId}`)
-
-
-    dispatch(loadMessages(messages))
-    clientSocket.emit('load-messages', channelId, messages)
+    const { data: messages } = await axios.get('/api/messages')
+    const filteredMessages = messages.filter((message: Message) => message.channelId === channelId)
+    dispatch(loadMessages(filteredMessages || []))
   } catch (error) {
-    console.log('Error fetching messages: ', error)
+    console.log('Fetching Messages', error)
   }
 }
 
@@ -74,11 +61,11 @@ export const sendMessage = (message: Message, channelId: string) => async (dispa
     if (!message.username) {
       message.username = 'Anonymous bee'
     }
-    const { data: newMessage } = await axios.post('/api/messages', message)
+    const { data: newMessage } = await axios.post(`/api/messages`, message)
     dispatch(gotNewMessage(newMessage))
     clientSocket.emit('new-message', channelId, newMessage)
   } catch (error) {
-    console.log('Error sending a message: ', error)
+    console.log('Send Message', error)
   }
 }
 
@@ -88,17 +75,7 @@ export const deleteMessage = (message: Message, channelId: string) => async (dis
     dispatch(deletedMessage(message))
     clientSocket.emit('delete-message', channelId, message)
   } catch (error) {
-    console.log('Error deleting message: ', error)
-  }
-}
-
-export const gettingUsername = (userName: string, channelId: string) => async (dispatch: Dispatch<any>) => {
-  try {
-    const {data: username} = await axios.post(`/api/messages/${channelId}`, userName)
-    dispatch(getUser(username))
-    clientSocket.emit('show-username', channelId, username)
-  } catch (error) {
-    console.log('Error getting username ', error)
+    console.log('Delete Message', error)
   }
 }
 
@@ -110,15 +87,18 @@ export const chatReducer = (state = initialState, action: ChatActionTypes): Chat
   switch(action.type) {
     case LOAD_MESSAGES:
       return {
-        messages: [...action.payload]
+        messages: [...action.payload],
+        username: state.username
       }
     case GOT_NEW_MESSAGE:
       return {
-        messages: [...state.messages, action.payload]
+        messages: [...state.messages, action.payload],
+        username: state.username
       }
     case DELETE_MESSAGE:
       return {
-        messages: state.messages.filter(message => message.id !== action.payload.id)
+        messages: state.messages.filter(message => message.id !== action.payload.id),
+        username: state.username
       }
     default:
       return state
