@@ -22,13 +22,16 @@ class Welcome extends React.Component<WelcomeStateProps & WelcomeDispatchProps, 
 
  async handleCreate(event) {
    event.preventDefault()
-    await this.props.onClickCreateCanvas(event.target.username.value)
+   console.log("EVENTTARGET", event.target);
+
+  //  await this.props.onClickCreateCanvas(event.target.username.value)
     //pass screenname to sessionId
     // this.props.history.push('/whiteboard')
   }
 
   async handleJoin(event) {
     event.preventDefault()
+    console.log("event.target.username.value", event.target.username.value);
     await this.props.onClickJoinRoom(event.target.roomkey.value, event.target.username.value)
     // this.props.history.push('/whiteboard')
 
@@ -43,6 +46,7 @@ class Welcome extends React.Component<WelcomeStateProps & WelcomeDispatchProps, 
   }
 
   render(){
+
     return(
       <div>
         <header id="center">
@@ -56,8 +60,8 @@ class Welcome extends React.Component<WelcomeStateProps & WelcomeDispatchProps, 
             <input
             className="form-control"
             type="text"
-            name="content"
-            placeholder="Set your screenname"/>
+            name="username"
+            placeholder="Set your username"/>
           <button className="btn btn-default" type="submit">Create Room</button>
          </form>
 
