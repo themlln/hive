@@ -77,7 +77,9 @@ class Welcome extends React.Component<WelcomeStateProps & WelcomeDispatchProps, 
             value={this.state.createUsername}
             onChange={this.createUsernameHandleChange}
             placeholder="Set your username"/>
-          <button className="login100-form-btn" type="submit">Create Room</button>
+          <button className="buttonicon" type="submit">
+            <img src="/hive-icon.png" width={40}/>
+          </button>
          </form>
 
         <form className ="login100-form validate-form p-b-33 p-t-5" id ="joinform" onSubmit={this.handleJoin}>
@@ -100,7 +102,10 @@ class Welcome extends React.Component<WelcomeStateProps & WelcomeDispatchProps, 
           value={this.state.roomKey}
           onChange={this.roomKeyHandleChange}
           placeholder="Enter Room Key here"/>
-          <button className="login100-form-btn" type="submit">Join Room</button>
+             <button className="buttonicon"type="submit">
+            <img src="/hive-icon.png" width={40}/>
+          </button>
+          {/* <button className="login100-form-btn" type="submit">Join Room</button> */}
       </form>
         </div>
       </div>
