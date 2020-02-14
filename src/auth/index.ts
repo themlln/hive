@@ -11,7 +11,7 @@ const userRepository = getRepository(User)
 
 router.post('/login', async (req: Request, res:Response, next: NextFunction) => {
   try {
-    const user: User = await userRepository.findOne({
+    const user: User = await userRepository.findOneOrFail({
       email: req.body.email
     })
     if (!user) {
@@ -38,7 +38,7 @@ router.post('/login', async (req: Request, res:Response, next: NextFunction) => 
 
 router.post('/signup', async (req: Request, res:Response, next: NextFunction) => {
   try {
-    const user: User = await userRepository.create({
+    const user: User = userRepository.create({
       email: req.body.email,
       password: req.body.password,
       username: req.body.username,

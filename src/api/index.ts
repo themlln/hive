@@ -9,7 +9,7 @@ router.use('/canvases', require('./canvases'))
 
 
 router.use((req: Request, res: Response, next: NextFunction) => {
-  const error = new Error('Not Found')
+  const error = new Error('Error Handler Triggered! Not Found')
   error.status = 404
   next(error)
 })

@@ -2,7 +2,7 @@ import { fabric } from 'fabric'
 import {PathCommand} from '../fabricCanvas'
 import clientSocket from '../../sockets/chat-sockets'
 import {generateId} from './id'
-import { updateStrokeWidth } from '../../store/Panel'
+import { updateStrokeWidth } from '../../store/panel-store'
 
 
 export function   addTriangle(
@@ -44,7 +44,8 @@ export function drawTriangle(
       fill: triangle.fill,
       scaleX: triangle.scaleX,
       scaleY: triangle.scaleY,
-
+      flipX: triangle.flipX,
+      flipY: triangle.flipY
     })
 
     newTriangle["uid"] = triangleCommand.id

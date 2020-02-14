@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { connect } from 'react-redux'
-import {updateCanvas} from '../store/Panel'
+import {updateCanvas} from '../store/panel-store'
 import { fabric } from 'fabric'
 import { draw, sendDrawing, drawPath} from './canvasTools/draw'
 import {line, drawLine} from './canvasTools/line'
@@ -100,6 +100,7 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
     this.setState({
       isSelected: true
     })
+
   }
 
   handleObjectModified(event) {
@@ -145,6 +146,8 @@ class Canvas extends React.Component <CanvasStateProps & CanvasDispatchProps, St
 
       instructions.forEach(instruction => {
         if(instruction.textObject) {
+          console.log('instruction', instruction)
+          console.log(instruction.textObject)
           copyText(instruction, this.props.canvasRef)
         } else if (instruction.circleObject) {
           drawCircle(instruction, this.props.canvasRef)

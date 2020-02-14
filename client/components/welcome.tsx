@@ -1,102 +1,112 @@
 import * as React from 'react'
-import { Link } from 'react-router-dom'
-import { creatingNewCanvas, fetchingChannel } from '../store/Canvas'
+import { creatingNewCanvas, fetchingChannel } from '../store/canvas-store'
 import { connect } from 'react-redux'
+import { WelcomeStateProps, WelcomeDispatchProps, WelcomeState } from '../types/componentTypes'
 
-interface State {
-  value: string;
-}
-
-class Welcome extends React.Component<WelcomeStateProps & WelcomeDispatchProps, State> {
+class Welcome extends React.Component<WelcomeStateProps & WelcomeDispatchProps, WelcomeState> {
   constructor(props) {
     super(props)
-
     this.state = {
-      value:''
+      roomKey:'',
+      createUsername: '',
+      joinUsername: ''
     }
 
     this.handleCreate = this.handleCreate.bind(this)
+    this.createUsernameHandleChange = this.createUsernameHandleChange.bind(this)
+    this.joinUsernameHandleChange = this.joinUsernameHandleChange.bind(this)
+    this.roomKeyHandleChange = this.roomKeyHandleChange.bind(this)
     this.handleJoin = this.handleJoin.bind(this)
-    this.handleChange = this.handleChange.bind(this)
   }
 
- async handleCreate(event) {
-   event.preventDefault()
-   console.log("EVENTTARGET", event.target);
-
-  //  await this.props.onClickCreateCanvas(event.target.username.value)
-    //pass screenname to sessionId
-    // this.props.history.push('/whiteboard')
-  }
-
-  async handleJoin(event) {
-    event.preventDefault()
-    console.log("event.target.username.value", event.target.username.value);
-    await this.props.onClickJoinRoom(event.target.roomkey.value, event.target.username.value)
-    // this.props.history.push('/whiteboard')
-
-    // pass screenname to sessionId
-    //call Thunk to match channelId with Room Key
-  }
-
-  handleChange (event: any) {
+  createUsernameHandleChange (event: any) {
     this.setState({
-      value: event.target.value
+      createUsername: event.target.value
     })
+  }
+
+  joinUsernameHandleChange (event: any) {
+    this.setState({
+      joinUsername: event.target.value
+    })
+  }
+  roomKeyHandleChange (event: any) {
+    this.setState({
+      roomKey: event.target.value
+    })
+  }
+
+  handleCreate(event: React.SyntheticEvent) {
+    event.preventDefault()
+    if (this.state.createUsername) {
+      this.props.onClickCreateCanvas()
+    } else {
+      alert ('You need to enter a user name!')
+    }
+  }
+
+  handleJoin(event: React.SyntheticEvent) {
+    event.preventDefault()
+    if(event.target.roomkey.value){
+      this.props.onClickJoinRoom(event.target.roomkey.value)
+    } else {
+      alert ('Invalid Room Key')
+    }
+
   }
 
   render(){
 
     return(
       <div>
+        <div className="limiter">
+        <div className="container-login100">
+        <div className="wrap-login100">
         <header id="center">
           <img src="/hivelogotransparent.png" width={400}/>
         </header>
       <div id="welcome">
-
-         <form id="createform" onSubmit={this.handleCreate}>
-         <h1>Create</h1>
-            <label htmlFor="Name">Set Name</label>
-            <input
-            className="form-control"
+         <form className ="login100-form validate-form p-b-33 p-t-5" id="createform" onSubmit={this.handleCreate}>
+         <h1 className="login100-form-title p-b-41">Create</h1>
+            <label htmlFor="Username">Set Name</label>
+            <input className="input2 form-control"
             type="text"
             name="username"
+            value={this.state.createUsername}
+            onChange={this.createUsernameHandleChange}
             placeholder="Set your username"/>
-          <button className="btn btn-default" type="submit">Create Room</button>
+          <button className="login100-form-btn" type="submit"></button>
          </form>
 
-        <form id ="joinform" onSubmit={this.handleJoin}>
-        <h1>Join</h1>
+        <form className ="login100-form validate-form p-b-33 p-t-5" id ="joinform" onSubmit={this.handleJoin}>
+        <h1 className="login100-form-title p-b-41">Join</h1>
+
         <label htmlFor="Name">Set Name</label>
           <input
-          className="form-control"
+          className="input2 form-control"
           type="text"
           name="username"
+          value={this.state.joinUsername}
+          onChange={this.joinUsernameHandleChange}
           placeholder="Set your username"/>
+
           <label htmlFor="Name">Room Key</label>
           <input
-          className="form-control"
+          className="input2 form-control"
           type="text"
           name="roomkey"
-          value={this.state.value}
-          onChange={this.handleChange}
+          value={this.state.roomKey}
+          onChange={this.roomKeyHandleChange}
           placeholder="Enter Room Key here"/>
-          <button className="btn btn-default" type="submit">Join Room</button>
+          <button className="login100-form-btn" type="submit">Join Room</button>
       </form>
+        </div>
       </div>
       </div>
+      </div>
+    </div>
     )
   }
-}
-
-interface WelcomeStateProps {
-  history: any
-  channelId: string
-}
-
-interface WelcomeDispatchProps {
-  onClickCreateCanvas: (username: string) => {},
-  onClickJoinRoom: (key: string, username: string) => {}
 }
 
 const mapState = (state: any, ownProps: any) => {

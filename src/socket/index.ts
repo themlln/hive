@@ -1,7 +1,8 @@
 const drawings: object = {}
 const messages: object = {}
+const usernames: object = {}
 
-const getType = (channelId: string, type: object) => {
+const getType = (channelId: string, type: any) => {
   if (!type[channelId]) {
     type[channelId] = []
   }
@@ -46,8 +47,6 @@ module.exports = io => {
     socket.on('modified-from-client', (channelId: any, modifiedCommand: any) => {
       const instructions = getType(channelId, drawings)
       const modifiedObject = instructions.filter(instruction => instruction.id === modifiedCommand.id)
-      modifiedObject[0].path = modifiedCommand.modifiedObject
-      modifiedObject[0].textObject = modifiedCommand.modifiedObject
       if (modifiedObject[0].rectangleObject) {modifiedObject[0].rectangleObject = modifiedCommand.modifiedObject}
       if (modifiedObject[0].circleObject) {modifiedObject[0].circleObject = modifiedCommand.modifiedObject}
       if (modifiedObject[0].triangleObject) {modifiedObject[0].triangleObject = modifiedCommand.modifiedObject}
@@ -62,12 +61,6 @@ module.exports = io => {
       socket.broadcast.to(channelId).emit('clear-canvas')
     })
 
-    socket.on('load-messages', (channelId: string, messagesToLoad: Array<object>) => {
-      const channelMessages = getType(channelId, messages)
-      console.log("THIS IS FROM THE SERVER, WE ARE REPLAYING CHANNEL MESSAGES", channelMessages)
-      socket.broadcast.to(channelId).emit('replay-messages', channelMessages)
-    })
-
     socket.on('new-message', (channelId: string, message: object) => {
       const channelMessages = getType(channelId, messages)
       channelMessages.push(message)
@@ -79,6 +72,12 @@ module.exports = io => {
       const updatedMessages = channelMessages.filter((message: object) => message.id !== messageToDelete.id)
       channelMessages[channelId] = updatedMessages
       socket.broadcast.to(channelId).emit('delete-message-from-server', messageToDelete)
+    })
+
+    socket.on('show-username', (channelId: string, username: string) => {
+      const channelMessages = getType(channelId, usernames)
+      channelMessages.push(username)
+      socket.broadcast.to(channelId).emit('get-username', username)
     })
 
     socket.on('disconnect', () => {

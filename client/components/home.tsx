@@ -1,17 +1,12 @@
 import * as React from 'react'
 import Whiteboard from './whiteboard'
-import Navbar from './navbar'
 import Chat from './chat'
-import store from '../store/index.js'
-import { loadMessages, gotNewMessage, deletedMessage } from '../store/Chat'
-import { Message } from '../types/storeTypes'
+import { fetchingMessages } from '../store/chat-store'
 import { connect } from 'react-redux'
-import { loadingChannelId } from '../store/Canvas'
+import { loadingChannelId } from '../store/canvas-store'
+import { HomeStateProps, HomeDispatch, HomeState } from '../types/componentTypes'
 
-// export const clientSocket: any = createClientSocket(window.location.origin)
-
-
-class Home extends React.Component < {}, {} > {
+class Home extends React.Component < HomeStateProps & HomeDispatch, HomeState > {
     constructor(props) {
         super(props)
         this.state = {
@@ -20,32 +15,36 @@ class Home extends React.Component < {}, {} > {
     }
 
     async componentDidMount() {
-      this.props.onLoadChannelId(this.props.location.search.slice(4))
+      await this.props.onLoadChannelId(this.props.location.search.slice(4))
+      this.props.fetchMessages(this.props.channelId)
     }
 
    render() {
-        return (
-        <div id = "home">
-            <div id = "whiteboard"><Whiteboard channelId={this.props.channelId}/></div>
-            <div id = "chat"><Chat channelId={this.props.channelId}/></div>
-        </div>
-        )
-    }
+    return (
+      <div id = "home">
+          <div id = "whiteboard"><Whiteboard channelId={this.props.channelId}/></div>
+          <div id = "chat"><Chat channelId={this.props.channelId}/></div>
+      </div>
+    )
+  }
 }
 
 
-const mapState = state => {
+const mapState = (state: React.ComponentState): HomeStateProps => {
   return {
     channelId: state.canvas.channelId
   }
 }
 
-const mapDispatch = dispatch => {
+const mapDispatch = (dispatch: any): HomeDispatch => {
   return {
-    onLoadChannelId:(channelId) => {
+    onLoadChannelId:(channelId: string) => {
       dispatch(loadingChannelId(channelId))
+    },
+    fetchMessages: (channelId: string) => {
+      dispatch(fetchingMessages(channelId))
     }
-    }
+  }
 }
 
 

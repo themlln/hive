@@ -1,48 +1,36 @@
 const axios = require('axios').default;
+import { CanvasActionTypes, Canvas } from '../types/storeTypes'
 import history from '../history'
 import clientSocket from '../sockets/chat-sockets'
+import { Dispatch } from 'react';
 
 /**
  * ACTION TYPES
  */
- const GET_CHANNEL_ID = 'GET_CHANNEL_ID'
-
-
- //TYPES OF ACTION TYPES
- interface getChannelId {
-   type: typeof GET_CHANNEL_ID
-   channelId: string
- }
-
- type CanvasActionTypes = getChannelId
-
+ export const GET_CHANNEL_ID = 'GET_CHANNEL_ID'
  /**
  * INITIAL STATE
  */
-
-interface Canvas {
-  channelId: string
-}
 
 const initialState: Canvas = {
   channelId: ""
 }
 
- /**
+/**
  * ACTION CREATORS
  */
 
- function getChannelId(channelId: string): CanvasActionTypes {
-   return {
-     type: GET_CHANNEL_ID,
-     channelId
-   }
- }
+const getChannelId = (channelId: string): CanvasActionTypes => {
+  return {
+    type: GET_CHANNEL_ID,
+    channelId
+  }
+}
 
- /**
+/**
  * THUNK CREATORS
  */
-export const creatingNewCanvas = (username: string) => async dispatch => {
+export const creatingNewCanvas = () => async (dispatch: Dispatch<any>) => {
   try {
     const user = await axios.put('/auth/username', username)
     const res = await axios.post('/api/canvases')
@@ -54,7 +42,7 @@ export const creatingNewCanvas = (username: string) => async dispatch => {
   }
 }
 
-export const fetchingChannel = (channelId: string, username: string) => async dispatch => {
+export const fetchingChannel = (channelId: string) => async (dispatch: Dispatch<any>) => {
   try {
     clientSocket.emit('join-drawing', channelId)
     dispatch(getChannelId(channelId))
@@ -65,7 +53,7 @@ export const fetchingChannel = (channelId: string, username: string) => async di
   }
 }
 
-export const loadingChannelId = (channelId: string) => async dispatch => {
+export const loadingChannelId = (channelId: string) => async (dispatch: Dispatch<any>) => {
   try {
     clientSocket.emit('join-drawing', channelId)
     dispatch(getChannelId(channelId))
@@ -73,21 +61,19 @@ export const loadingChannelId = (channelId: string) => async dispatch => {
     console.error(err)
   }
 }
+
  /**
  * REDUCER
  */
 
- export default function canvasReducer(
-   state=initialState,
-   action: CanvasActionTypes
-   ): Canvas {
-     switch(action.type) {
-       case GET_CHANNEL_ID:
-        return {
-          channelId: action.channelId
-        }
-       default:
-        return state
-     }
-   }
+export const canvasReducer = (state=initialState, action: CanvasActionTypes): Canvas => {
+  switch(action.type) {
+    case GET_CHANNEL_ID:
+      return {
+        channelId: action.channelId
+      }
+    default:
+      return state
+  }
+}
 
