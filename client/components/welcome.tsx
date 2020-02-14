@@ -22,15 +22,14 @@ class Welcome extends React.Component<WelcomeStateProps & WelcomeDispatchProps, 
 
  async handleCreate(event) {
    event.preventDefault()
-    await this.props.onClickCreateCanvas()
+    await this.props.onClickCreateCanvas(event.target.username.value)
     //pass screenname to sessionId
     // this.props.history.push('/whiteboard')
   }
 
   async handleJoin(event) {
     event.preventDefault()
-    console.log(event.target.roomkey.value, "EVENTTT");
-    await this.props.onClickJoinRoom(event.target.roomkey.value)
+    await this.props.onClickJoinRoom(event.target.roomkey.value, event.target.username.value)
     // this.props.history.push('/whiteboard')
 
     // pass screenname to sessionId
@@ -92,8 +91,8 @@ interface WelcomeStateProps {
 }
 
 interface WelcomeDispatchProps {
-  onClickCreateCanvas: () => {},
-  onClickJoinRoom: (key: string) => {}
+  onClickCreateCanvas: (username: string) => {},
+  onClickJoinRoom: (key: string, username: string) => {}
 }
 
 const mapState = (state: any, ownProps: any) => {
@@ -103,9 +102,9 @@ const mapState = (state: any, ownProps: any) => {
   }
 }
 const mapDispatch = (dispatch) => {
-  return { onClickCreateCanvas: () =>
-    dispatch(creatingNewCanvas()),
-    onClickJoinRoom:(key: string) => dispatch(fetchingChannel(key))
+  return {
+    onClickCreateCanvas: (username:string) => dispatch(creatingNewCanvas(username)),
+    onClickJoinRoom:(key: string, username: string) => dispatch(fetchingChannel(key, username))
   }
 }
 export default connect(mapState,mapDispatch)(Welcome)

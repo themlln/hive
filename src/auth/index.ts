@@ -21,7 +21,14 @@ router.post('/login', async (req: Request, res:Response, next: NextFunction) => 
     } else {
       const modifiedUser = {id: user.id, email: user.email, username: user.username, profileImage: user.profileImage}
       user.sessionId = req.sessionID
-      await userRepository.save(user)
+      const guestUser: User = await userRepository.findOne({
+        where: {
+          sessionId: req.sessionID,
+          email: null
+        }
+      })
+      await userRepository.remove(guestUser);
+      await userRepository.save(user);
       req.login(modifiedUser, err => (err ? next(err) : res.json(modifiedUser)))
     }
   } catch (err) {
@@ -38,7 +45,6 @@ router.post('/signup', async (req: Request, res:Response, next: NextFunction) =>
       sessionId: req.sessionID
     })
     await userRepository.save(user);
-
     const modifiedUser: object = {id: user.id, email: user.email, name: user.username, profileImage: user.profileImage}
     req.login(modifiedUser, err => (err ? next(err) : res.json(modifiedUser)))
   } catch (err) {
@@ -49,6 +55,16 @@ router.post('/signup', async (req: Request, res:Response, next: NextFunction) =>
     }
   }
 })
+
+router.put('/username', async (req: Request, res:Response, next: NextFunction) => {
+  try {
+    console.log("REQUEST", req)
+  } catch (err) {
+      next(err)
+  }
+})
+
+
 
 router.post('/logout', (req: Request, res:Response) => {
   req.logout()
