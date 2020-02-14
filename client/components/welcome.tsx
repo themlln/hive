@@ -1,6 +1,5 @@
 import * as React from 'react'
-import { creatingNewCanvas, fetchingChannel } from '../store/Canvas'
-import { gettingUsername } from '../store/Chat'
+import { creatingNewCanvas, fetchingChannel } from '../store/canvas-store'
 import { connect } from 'react-redux'
 import { WelcomeStateProps, WelcomeDispatchProps, WelcomeState } from '../types/componentTypes'
 
@@ -26,7 +25,6 @@ class Welcome extends React.Component<WelcomeStateProps & WelcomeDispatchProps, 
     })
   }
 
-
   joinUsernameHandleChange (event: any) {
     this.setState({
       joinUsername: event.target.value
@@ -42,7 +40,6 @@ class Welcome extends React.Component<WelcomeStateProps & WelcomeDispatchProps, 
     event.preventDefault()
     if (this.state.createUsername) {
       this.props.onClickCreateCanvas()
-      this.props.sendUsername(this.state.createUsername, this.props.channelId)
     } else {
       alert ('You need to enter a user name!')
     }
@@ -77,7 +74,7 @@ class Welcome extends React.Component<WelcomeStateProps & WelcomeDispatchProps, 
             value={this.state.createUsername}
             onChange={this.createUsernameHandleChange}
             placeholder="Set your username"/>
-          <button className="login100-form-btn" type="submit">Create Room</button>
+          <button className="login100-form-btn" type="submit"></button>
          </form>
 
         <form className ="login100-form validate-form p-b-33 p-t-5" id ="joinform" onSubmit={this.handleJoin}>
@@ -120,8 +117,7 @@ const mapState = (state: any, ownProps: any) => {
 const mapDispatch = (dispatch) => {
   return { onClickCreateCanvas: () =>
     dispatch(creatingNewCanvas()),
-    onClickJoinRoom:(key: string) => dispatch(fetchingChannel(key)),
-    sendUsername: (username: string, channelId: string) => dispatch(gettingUsername(username, channelId))
+    onClickJoinRoom:(key: string) => dispatch(fetchingChannel(key))
   }
 }
 export default connect(mapState,mapDispatch)(Welcome)

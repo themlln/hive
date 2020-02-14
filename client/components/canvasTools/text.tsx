@@ -2,7 +2,7 @@ import { fabric } from 'fabric'
 import {PathCommand} from '../fabricCanvas'
 import {generateId} from './id'
 import clientSocket from '../../sockets/chat-sockets'
-import { updateStrokeWidth } from '../../store/Panel'
+import { updateStrokeWidth } from '../../store/panel-store'
 
 export function addText(
     stroke: string,
@@ -35,7 +35,7 @@ export function copyText(
         left: textCommand.textObject.left,
         top: textCommand.textObject.top,
         fill: textCommand.textObject.fill,
-        stroke: textCommand.textObject.stroke, 
+        stroke: textCommand.textObject.stroke,
         flipX: textCommand.textObject.flipX,
         flipY: textCommand.textObject.flipY
       })

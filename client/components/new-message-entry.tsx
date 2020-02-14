@@ -1,9 +1,8 @@
 import * as React from 'react'
-import { sendMessage } from '../store/Chat'
+import { sendMessage } from '../store/chat-store'
 import {Message} from '../types/storeTypes'
 import {NewMessageDispatchToProps, NewMessageMapStateToProps, NewMessageState} from '../types/componentTypes'
 import { connect } from 'react-redux'
-import SendButton from './buttons/sendButton'
 
 class NewMessageEntry extends React.Component<NewMessageMapStateToProps & NewMessageDispatchToProps, NewMessageState> {
   constructor(props) {
