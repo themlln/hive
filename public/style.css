@@ -516,4 +516,48 @@ main {
   z-index: 1;
 }
 
+/*Login Page */
+#top {
+  margin-top: 50px;
+  display: flex;
+  justify-content: center;
+}
+
+#loginContainer {
+  display:flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.emailInput {
+  font-size: 15px;
+  margin: 5px;
+  padding-left: 5px;
+  border-radius: 10px;
+}
+
+.myButton {
+	box-shadow:inset 0px 1px 0px 0px #f9eca0;
+	background:linear-gradient(to bottom, #f7db74 5%, #facc78 100%);
+	background-color:#f7db74;
+	border-radius:34px;
+	border:1px solid #eb9f90;
+	display:inline-block;
+	cursor:pointer;
+	color:#bd4128;
+	font-family:Arial;
+	font-size:15px;
+	font-weight:bold;
+	padding:5px 24px;
+	text-decoration:none;
+	text-shadow:0px 1px 0px #ffee7d;
+}
+.myButton:hover {
+	background:linear-gradient(to bottom, #facc78 5%, #f7db74 100%);
+	background-color:#facc78;
+}
+.myButton:active {
+	position:relative;
+	top:1px;
+}
 

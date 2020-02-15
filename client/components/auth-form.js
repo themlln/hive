@@ -11,18 +11,22 @@ const AuthForm = props => {
 
   return (
     <div>
-      <form onSubmit={handleSubmit} name={name}>
+       <header id="top">
+          <img src="/hivelogotransparent.png" width={400}/>
+        </header>
+      <div id="loginContainer">
+      <form  onSubmit={handleSubmit} name={name}>
         <div>
           <label htmlFor="email">
-            <small>Email</small>
+            <span>Email</span>
           </label>
-          <input name="email" type="text" />
+          <input className="emailInput"name="email" type="text" />
         </div>
         <div>
           <label htmlFor="password">
-            <small>Password</small>
+            <span>Password</span>
           </label>
-          <input name="password" type="password" />
+          <input className="emailInput" name="password" type="password" />
         </div>
         {/* <div>
           <label htmlFor="username">
@@ -31,11 +35,13 @@ const AuthForm = props => {
           <input name="username" type="username" />
         </div> */}
         <div>
-          <button type="submit">{displayName}</button>
+          <button className="myButton" type="submit">{displayName}</button>
         </div>
         {error && error.response && <div> {error.response.data} </div>}
       </form>
+
       <a href="/auth/google">{displayName} with Google</a>
+      </div>
     </div>
   )
 }
