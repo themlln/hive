@@ -41,11 +41,10 @@ export const creatingNewCanvas = () => async (dispatch: Dispatch<any>) => {
   }
 }
 
-export const fetchingChannel = (username: string, channelId: string) => async (dispatch: Dispatch<any>) => {
+export const fetchingChannel = (channelId: string) => async (dispatch: Dispatch<any>) => {
   try {
     clientSocket.emit('join-drawing', channelId)
     dispatch(getChannelId(channelId))
-    const user = await axios.put('/auth/username', username)
     history.push('/whiteboard?id='+channelId)
   } catch (err) {
     console.error(err)

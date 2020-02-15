@@ -19,7 +19,8 @@ export interface CreateRoomState {
 }
 
 export interface CreateRoomDispatchProps {
-  onClickCreateCanvas: (username: string) => {},
+  onClickCreateUser: (username: string) => {},
+  onClickCreateCanvas: () => {}
 }
 
 export interface JoinRoomState {
@@ -28,7 +29,8 @@ export interface JoinRoomState {
 }
 
 export interface JoinRoomDispatchProps {
-  onClickJoinRoom: (key: string) => {},
+  onClickCreateUser: (username: string) => {},
+  onClickJoinRoom: (roomKey: string) => {},
 }
 
 export interface WelcomeState {

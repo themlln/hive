@@ -1,5 +1,6 @@
 import * as React from 'react'
 import { fetchingChannel } from '../store/canvas-store'
+import { creatingNewUser } from '../store/user-store'
 import { connect } from 'react-redux'
 import { JoinRoomState, JoinRoomDispatchProps } from '../types/componentTypes'
 
@@ -27,13 +28,13 @@ class JoinRoom extends React.Component<JoinRoomDispatchProps, JoinRoomState>{
     })
   }
 
-  handleJoin(event: React.SyntheticEvent) {
+  async handleJoin(event: React.SyntheticEvent) {
     event.preventDefault()
-
-    if (event.target.roomkey.value) {
-      this.props.onClickJoinRoom(event.target.roomkey.value)
+    if (this.state.roomKey && this.state.userName) {
+      await this.props.onClickCreateUser(this.state.userName)
+      await this.props.onClickJoinRoom(this.state.roomKey)
     } else {
-      alert('Invalid Room Key')
+      alert('Enter a room key and username')
     }
   }
 
@@ -66,7 +67,9 @@ class JoinRoom extends React.Component<JoinRoomDispatchProps, JoinRoomState>{
 
 const mapDispatch = (dispatch: React.Dispatch<any>) => {
   return {
-    onClickJoinRoom: (key: string, username: string) => dispatch(fetchingChannel(key, username))
+    onClickCreateUser: (username: string) => dispatch(creatingNewUser(username)),
+    onClickJoinRoom: (roomKey: string) => dispatch(fetchingChannel(roomKey)),
+
   }
 }
 

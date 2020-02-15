@@ -1,6 +1,4 @@
 import * as React from 'react'
-import { creatingNewCanvas, fetchingChannel } from '../store/canvas-store'
-import { connect } from 'react-redux'
 import { WelcomeStateProps, WelcomeDispatchProps, WelcomeState } from '../types/componentTypes'
 import JoinRoomForm from './join-room-form'
 import CreateRoomForm from './create-room-form'
