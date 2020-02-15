@@ -408,8 +408,10 @@ main {
 }
 
 .input2{
-  font-size: 13px;
+  font-size: 15px;
   margin: 5px;
+  padding-left: 5px;
+  border-radius: 10px;
 }
 
 .limiter {
@@ -502,55 +504,16 @@ main {
   justify-content: center;
 }
 
-.login100-form-btn {
-  font-size: 15px;
-  color: #fff;
-  line-height: 1.2;
-
+.buttonicon {
+  padding: 0;
+  border: none;
+  background: none;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 0 20px;
-  min-width: 130px;
-  height: 30px;
-  border-radius: 25px;
-  margin: 20px;
-
-  /* background: #bbab82; */
-  background-image: url(hive-icon.png);
+  background: transparent;
   position: relative;
   z-index: 1;
-
-  -webkit-transition: all 0.4s;
-  -o-transition: all 0.4s;
-  -moz-transition: all 0.4s;
-  transition: all 0.4s;
 }
 
-.login100-form-btn::before {
-  content: "";
-  display: block;
-  position: absolute;
-  z-index: -1;
-  width: 100%;
-  height: 100%;
-  border-radius: 21px;
-  background-color: #555555;
-  top: 0;
-  left: 0;
-  opacity: 0;
-
-  -webkit-transition: all 0.4s;
-  -o-transition: all 0.4s;
-  -moz-transition: all 0.4s;
-  transition: all 0.4s;
-}
-
-.login100-form-btn:hover {
-  background-color: transparent;
-}
-
-.login100-form-btn:hover:before {
-  opacity: 1;
-}
 
