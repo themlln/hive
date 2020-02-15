@@ -30,9 +30,10 @@ const getChannelId = (channelId: string): CanvasActionTypes => {
 /**
  * THUNK CREATORS
  */
-export const creatingNewCanvas = () => async (dispatch: Dispatch<any>) => {
+export const creatingNewCanvas = (username: string) => async (dispatch: Dispatch<any>) => {
   try {
     const user = await axios.put('/auth/username', username)
+    console.log("USER IN CREATINGNEW THUNKS", user)
     const res = await axios.post('/api/canvases')
     await dispatch(getChannelId(res.data))
     clientSocket.emit('join-drawing', res.data)
@@ -42,7 +43,7 @@ export const creatingNewCanvas = () => async (dispatch: Dispatch<any>) => {
   }
 }
 
-export const fetchingChannel = (channelId: string) => async (dispatch: Dispatch<any>) => {
+export const fetchingChannel = (username: string, channelId: string) => async (dispatch: Dispatch<any>) => {
   try {
     clientSocket.emit('join-drawing', channelId)
     dispatch(getChannelId(channelId))
