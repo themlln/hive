@@ -66,7 +66,7 @@ export interface User {}
 
 interface getUserAction {
   type: typeof GET_USER,
-  payload: User
+  user: User
 }
 
 interface removeUserAction {

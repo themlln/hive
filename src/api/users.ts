@@ -6,22 +6,6 @@ module.exports = router
 
 const userRepository = getRepository(User)
 
-// router.use('*', async (req: Request, res: Response, next: NextFunction) => {
-//   try {
-//     const user = await userRepository.findOne({
-//       where: {
-//         id: req.params.id
-//       }
-//     })
-//     if (req.sessionID === user.sessionId) {
-//       next()
-//     } else {
-//       res.json().status(403)
-//     }
-//   } catch (error) {
-//     next(error)
-//   }
-// })
 
 router.get('/', async (req: Request, res: Response, next: NextFunction) => {
   try {

@@ -14,6 +14,25 @@ export type HomeDispatch = {
   fetchMessages: (channelId: string) => void
 }
 
+export interface CreateRoomState {
+  userName: string,
+}
+
+export interface CreateRoomDispatchProps {
+  onClickCreateUser: (username: string) => {},
+  onClickCreateCanvas: () => {}
+}
+
+export interface JoinRoomState {
+  roomKey: string,
+  userName: string
+}
+
+export interface JoinRoomDispatchProps {
+  onClickCreateUser: (username: string) => {},
+  onClickJoinRoom: (roomKey: string) => {},
+}
+
 export interface WelcomeState {
   roomKey: string;
   createUsername: string;
@@ -26,8 +45,6 @@ export interface WelcomeStateProps {
 }
 
 export interface WelcomeDispatchProps {
-  onClickCreateCanvas: () => {},
-  onClickJoinRoom: (key: string) => {},
   sendUsername: (username: string, channelId: string) => string
 }
 

@@ -9,22 +9,36 @@ module.exports = router
 
 const userRepository = getRepository(User)
 
+const modifyUser = (user: User) => {
+  return {
+    sessionId: user.sessionID || user.sessionId,
+    email: user.email,
+    id: user.id,
+    username: user.username,
+    profileImage: user.profileImage
+  }
+}
+
 router.post('/login', async (req: Request, res:Response, next: NextFunction) => {
   try {
     const user: User = await userRepository.findOneOrFail({
       email: req.body.email
     })
-    user.sessionId = req.sessionID
-    user.username = req.body.username
-    await userRepository.save(user)
-
     if (!user) {
-      res.json('Wrong username and/or password').status(401)
+      res.status(401).send('Wrong username and/or password')
     } else if (!user.correctPassword(req.body.password)) {
-      res.json('Invalid password').status(401)
+      res.status(401).send('Wrong username and/or password')
     } else {
-      const modifiedUser = {id: user.id, email: user.email, username: user.username, profileImage: user.profileImage}
-
+      user.sessionId = req.sessionID
+      const guestUser: User = await userRepository.findOne({
+        where: {
+          sessionId: req.sessionID,
+          email: null
+        }
+      })
+      await userRepository.remove(guestUser);
+      await userRepository.save(user);
+      const modifiedUser = modifyUser(user);
       req.login(modifiedUser, err => (err ? next(err) : res.json(modifiedUser)))
     }
   } catch (err) {
@@ -41,8 +55,7 @@ router.post('/signup', async (req: Request, res:Response, next: NextFunction) =>
       sessionId: req.sessionID
     })
     await userRepository.save(user);
-
-    const modifiedUser: object = {id: user.id, email: user.email, name: user.username, profileImage: user.profileImage}
+    const modifiedUser = modifyUser(user);
     req.login(modifiedUser, err => (err ? next(err) : res.json(modifiedUser)))
   } catch (err) {
     if (err.name === 'TypeORMUniqueConstraintError') {
@@ -53,6 +66,24 @@ router.post('/signup', async (req: Request, res:Response, next: NextFunction) =>
   }
 })
 
+router.put('/username', async (req: Request, res:Response, next: NextFunction) => {
+  try {
+    const user: User = await userRepository.findOneOrFail({
+      sessionId: req.sessionID
+    })
+    // update the username on database
+    user.username = req.body.username
+    // update the username on the session
+    req.session.user.username = req.body.username
+    const modifiedUser = modifyUser(user)
+    await userRepository.save(modifiedUser);
+    res.status(202).json(user)
+  } catch (err) {
+      next(err)
+  }
+})
+
+
 router.post('/logout', (req: Request, res:Response) => {
   req.logout()
   req.session.destroy()
@@ -60,7 +91,8 @@ router.post('/logout', (req: Request, res:Response) => {
 })
 
 router.get('/loggingin', (req: Request, res:Response) => {
-  res.json(req.user)
+  const modifiedUser = modifyUser(req.session.user)
+  res.json(modifiedUser)
 })
 
 router.use('/google', require('./google'))
