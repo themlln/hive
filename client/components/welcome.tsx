@@ -18,8 +18,8 @@ class Welcome extends React.Component<WelcomeStateProps & WelcomeDispatchProps, 
                 <img src="/hivelogotransparent.png" width={400} />
               </header>
               <div id="welcome">
-                <JoinRoomForm />
                 <CreateRoomForm />
+                <JoinRoomForm />
               </div>
             </div>
           </div>
