@@ -9,6 +9,7 @@ const canvasRepository = getRepository(Canvas)
 router.post('/', async (req:Request, res:Response, next:NextFunction) => {
   try {
     const canvas = new Canvas();
+    canvas.owner = req.session.user.id
     await canvasRepository.save(canvas)
     res.json(canvas.id);
   } catch (err) {

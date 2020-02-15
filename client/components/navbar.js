@@ -21,7 +21,6 @@ const Navbar = ({handleClick, isLoggedIn}) => (
       </span>
 
       <span>
-      {isLoggedIn ? (
         <span className = "navBarRight">
         <span className = "dropdown">
 
@@ -34,26 +33,12 @@ const Navbar = ({handleClick, isLoggedIn}) => (
                 mode="fit"
               /></button>
             <div className = "dropdown-content">
-              <span className = "navItem"><a href="#" onClick={handleClick}>logout</a></span>
+              <span className = "navItem"> <Link to="/login">login</Link></span>
+            <span className = "navItem"><Link to="/signup">sign up</Link></span>
+            <span className = "navItem"><a href="#" onClick={handleClick}>logout</a></span>
             </div>
         </span>
         </span>
-      ) : (
-        <div className = "dropdown">
-          {/* The navbar will show these links before you log in */}
-          <button className = "dropbtn">
-            <img
-                src="/profileIconHive.png"
-                width={40}
-                height={40}
-                mode="fit"
-              /></button>
-          <div className = "dropdown-content">
-            <span className = "navItem"> <Link to="/login">login</Link></span>
-            <span className = "navItem"><Link to="/signup">sign up</Link></span>
-          </div>
-        </div>
-      )}
      </span>
       </div>
     </nav>

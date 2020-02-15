@@ -23,6 +23,18 @@ export const removeUser = () => ({type: REMOVE_USER})
 /**
  * THUNK CREATORS
  */
+
+export const creatingNewUser = (username: string) => async (dispatch: Dispatch<any>) => {
+  try {
+    console.log("CREATING USER GETTING CALLED")
+    const {data} = await axios.put('/auth/username', {username})
+    dispatch(getUser(data || defaultUser))
+  } catch (error) {
+    console.error(error)
+  }
+
+}
+
 export const loggingIn = () => async (dispatch: Dispatch<any>) => {
   try {
     const {data} = await axios.get('/auth/loggingin')
@@ -64,7 +76,7 @@ export const logout = () => async (dispatch: Dispatch<any>) => {
 export const userReducer = (state = defaultUser, action: UserActionTypes): User => {
   switch (action.type) {
     case GET_USER:
-      return action.payload ? action.payload : defaultUser
+      return action.user ? action.user : defaultUser
     case REMOVE_USER:
       return defaultUser
     default:

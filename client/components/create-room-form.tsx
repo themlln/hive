@@ -1,4 +1,5 @@
 import * as React from 'react'
+import { creatingNewUser } from '../store/user-store'
 import { creatingNewCanvas } from '../store/canvas-store'
 import { connect } from 'react-redux'
 import { CreateRoomState, CreateRoomDispatchProps } from '../types/componentTypes'
@@ -8,7 +9,7 @@ class CreateRoom extends React.Component<CreateRoomDispatchProps, CreateRoomStat
   constructor(props) {
     super(props)
     this.state = {
-      userName:'',
+      userName: '',
     }
     this.handleCreate = this.handleCreate.bind(this)
     this.handleChange = this.handleChange.bind(this)
@@ -20,10 +21,11 @@ class CreateRoom extends React.Component<CreateRoomDispatchProps, CreateRoomStat
     })
   }
 
-  handleCreate(event: React.SyntheticEvent) {
+  async handleCreate(event: React.SyntheticEvent) {
     event.preventDefault()
     if (this.state.userName) {
-      this.props.onClickCreateCanvas(this.state.userName)
+      await this.props.onClickCreateUser(this.state.userName)
+      await this.props.onClickCreateCanvas()
     } else {
       alert('You need to enter a user name!')
     }
@@ -48,10 +50,11 @@ class CreateRoom extends React.Component<CreateRoomDispatchProps, CreateRoomStat
 
 const mapDispatch = (dispatch: React.Dispatch<any>) => {
   return {
-    onClickCreateCanvas: (username: string) => dispatch(creatingNewCanvas(username))
+    onClickCreateUser: (username: string) => dispatch(creatingNewUser(username)),
+    onClickCreateCanvas: () => dispatch(creatingNewCanvas())
   }
 }
 
 
 
-export default connect(null, mapDispatch) (CreateRoom)
+export default connect(null, mapDispatch)(CreateRoom)

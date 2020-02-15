@@ -12,7 +12,6 @@ class Welcome extends React.Component<WelcomeStateProps & WelcomeDispatchProps, 
   }
 
   render() {
-
     return (
         <div className="limiter">
           <div className="container-login100">

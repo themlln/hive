@@ -51,7 +51,7 @@ export class User {
   @OneToMany(type => Collaborators, sharedCanvas => sharedCanvas.user)
   sharedCanvas: Collaborators[];
 
-  @BeforeUpdate()
+  // @BeforeUpdate()
   @BeforeInsert()
   setSaltAndPassword = () => {
     if (this.tempPassword !== this.password) {
