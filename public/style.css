@@ -316,8 +316,13 @@ main {
   margin: 25px;
   align-items: flex-end;
   justify-content: center;
-
 }
+
+#auth-form {
+  margin-top: 50px;
+  margin-left: 10px;
+}
+
 /*canvas */
 #canvas {
   position: relative;
@@ -419,6 +424,30 @@ main {
   margin: 0 auto;
 }
 
+.auth-container-login100 {
+  min-height: 40vh;
+  width: 100%;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  padding: 15px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  position: absolute;
+  z-index: 1;
+}
+
+#submit-button {
+  font-size: small;
+  border-radius: 2px;
+}
+
 .container-login100 {
   width: 100%;
   min-height: 100vh;
@@ -436,7 +465,6 @@ main {
   background-size: cover;
   position: relative;
   z-index: 1;
-
 }
 
 .container-login100::before {
@@ -457,7 +485,6 @@ main {
   background: #fff;
   padding: 35px;
   box-shadow: 0px 4px 10px 0px rgba(0,0,0,0.2);
-
 }
 
 .login100-form {
@@ -489,7 +516,6 @@ main {
   line-height: 1.2;
   text-align: center;
   text-transform: uppercase;
-
   display: block;
 }
 
@@ -560,4 +586,5 @@ main {
 	position:relative;
 	top:1px;
 }
+
 

@@ -29,12 +29,7 @@ import Navbar from './components/navbar'
         <Route path="/whiteboard" component={Home}/>
         <Route path="/login" component={Login} />
         <Route path="/signup" component={Signup} />
-        {isLoggedIn && (
-          <Switch>
-            {/* Routes placed here are only available after logging in */}
-            <Route path="/account" component={UserHome} />
-          </Switch>
-        )}
+        <Route path="/account" component={UserHome} />
         <Route component={Welcome} />
       </Switch>
       </div>

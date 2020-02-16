@@ -28,19 +28,14 @@ const AuthForm = props => {
           </label>
           <input className="emailInput" name="password" type="password" />
         </div>
-        {/* <div>
-          <label htmlFor="username">
-            <small>Username</small>
-          </label>
-          <input name="username" type="username" />
-        </div> */}
+
         <div>
           <button className="myButton" type="submit">{displayName}</button>
         </div>
         {error && error.response && <div> {error.response.data} </div>}
       </form>
-
-      <a href="/auth/google">{displayName} with Google</a>
+    
+     {/* <a href="/auth/google">{displayName} with Google</a> */}
       </div>
     </div>
   )
@@ -73,7 +68,6 @@ const mapDispatch = dispatch => {
   return {
     handleSubmit(evt) {
       evt.preventDefault()
-      console.log("EVENT IN HANDLE SUBMIT", evt)
       const formName = evt.target.name
       const email = evt.target.email.value
       const password = evt.target.password.value

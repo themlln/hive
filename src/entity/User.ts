@@ -11,11 +11,11 @@ export class User {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ unique: true })
+  @Column({ unique: true , nullable: true})
   @IsEmail()
   email: string;
 
-  @Column()
+  @Column({ nullable: true })
   password: string;
 
   @Column({default: 'Anonymous bee'})
@@ -30,7 +30,7 @@ export class User {
   @Column({ nullable: true })
   salt: string;
 
-  @Column({nullable: true})
+  @Column({ nullable: true})
   sessionId: string;
 
   @Column({ nullable: true })
@@ -51,7 +51,7 @@ export class User {
   @OneToMany(type => Collaborators, sharedCanvas => sharedCanvas.user)
   sharedCanvas: Collaborators[];
 
-  @BeforeUpdate()
+  // @BeforeUpdate()
   @BeforeInsert()
   setSaltAndPassword = () => {
     if (this.tempPassword !== this.password) {

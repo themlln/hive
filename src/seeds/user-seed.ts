@@ -1,21 +1,36 @@
 export const UserSeed = [
   {
-    email: "cody@email.com",
-    password: "123",
+    email: "laura@email.com",
+    password: "12345",
+    username: "Laura",
+    profileImage:"/Laura.JPG",
     createdAt: `${new Date()}`,
     updatedAt: `${new Date()}`,
     enabled: true
   },
   {
-    email: "lucy@email.com",
+    email: "nuri@email.com",
     password: "12345",
+    username: "Nuri",
+    profileImage:"/Nuri.jpeg",
     createdAt: `${new Date()}`,
     updatedAt: `${new Date()}`,
     enabled: true
   },
   {
-    email: "mingo@email.com",
+    email: "ming@email.com",
     password: "12345",
+    username: "Ming",
+    profileImage:"/Ming.png",
+    createdAt: `${new Date()}`,
+    updatedAt: `${new Date()}`,
+    enabled: true
+  },
+  {
+    email: "Lizzo@email.com",
+    password: "12345",
+    username: "Lizzo",
+    profileImage:"/Lizzo.JPG",
     createdAt: `${new Date()}`,
     updatedAt: `${new Date()}`,
     enabled: true
