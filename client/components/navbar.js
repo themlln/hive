@@ -33,9 +33,16 @@ const Navbar = ({handleClick, isLoggedIn}) => (
                 mode="fit"
               /></button>
             <div className = "dropdown-content">
-              <span className = "navItem"> <Link to="/login">login</Link></span>
-            <span className = "navItem"><Link to="/signup">sign up</Link></span>
-            <span className = "navItem"><a href="#" onClick={handleClick}>logout</a></span>
+              {isLoggedIn ? (
+                <span className = "navItem"><a href="#" onClick={handleClick}>logout</a></span>
+              ) : (
+                <div>
+                  <span className = "navItem"> <Link to="/login">login</Link></span>
+                  <span className = "navItem"><Link to="/signup">sign up</Link></span>
+                </div>
+              )}
+
+
             </div>
         </span>
         </span>
