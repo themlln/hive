@@ -10,29 +10,32 @@ const AuthForm = props => {
   const {name, displayName, handleSubmit, error} = props
 
   return (
-    <div className="limiter">
-      <div className="auth-container-login100">
-        <div className="wrap-login100">
-          <form onSubmit={handleSubmit} name={name}>
-            <div>
-              <label htmlFor="email">
-                <small>Email</small>
-              </label>
-              <input name="email" type="text" />
-            </div>
-            <div>
-              <label htmlFor="password">
-                <small>Password</small>
-              </label>
-              <input name="password" type="password" />
-            </div>
-            <div>
-              <button id="submit-button" type="submit">{displayName}</button>
-            </div>
-            {error && error.response && <div> {error.response.data} </div>}
-          </form>
-          {/* <a href="/auth/google">{displayName} with Google</a> */}
+    <div>
+       <header id="top">
+          <img src="/hivelogotransparent.png" width={400}/>
+        </header>
+      <div id="loginContainer">
+      <form  onSubmit={handleSubmit} name={name}>
+        <div>
+          <label htmlFor="email">
+            <span>Email</span>
+          </label>
+          <input className="emailInput"name="email" type="text" />
         </div>
+        <div>
+          <label htmlFor="password">
+            <span>Password</span>
+          </label>
+          <input className="emailInput" name="password" type="password" />
+        </div>
+
+        <div>
+          <button className="myButton" type="submit">{displayName}</button>
+        </div>
+        {error && error.response && <div> {error.response.data} </div>}
+      </form>
+    
+     {/* <a href="/auth/google">{displayName} with Google</a> */}
       </div>
     </div>
   )
