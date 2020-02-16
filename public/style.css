@@ -519,17 +519,6 @@ main {
   display: block;
 }
 
-.container-login100-form-btn {
-  width: 100%;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -moz-box;
-  display: -ms-flexbox;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-
 .buttonicon {
   padding: 0;
   border: none;

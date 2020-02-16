@@ -42,7 +42,9 @@ class CreateRoom extends React.Component<CreateRoomDispatchProps, CreateRoomStat
           value={this.state.userName}
           onChange={this.handleChange}
           placeholder="Set your username" />
-        <button className="login100-form-btn" type="submit"></button>
+        <button className="buttonicon" type="submit">
+        <img src="/hive-icon.png" width={40}/>
+        </button>
       </form>
     )
   }
