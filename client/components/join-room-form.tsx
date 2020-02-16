@@ -59,7 +59,9 @@ class JoinRoom extends React.Component<JoinRoomDispatchProps, JoinRoomState>{
           value={this.state.roomKey}
           onChange={this.roomHandleChange}
           placeholder="Enter Room Key here" />
-        <button className="login100-form-btn" type="submit">Join Room</button>
+        <button className="buttonicon" type="submit">
+        <img src="/hive-icon.png" width={40}/>
+        </button>
       </form>
     )
   }

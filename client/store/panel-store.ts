@@ -30,7 +30,7 @@ const initialState: Panel = {
    }
  }
 
- export const = updateColor(color: string): PanelActionTypes => {
+ export const updateColor = (color: string): PanelActionTypes => {
    return {
      type: UPDATE_COLOR,
      color
