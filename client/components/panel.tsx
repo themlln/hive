@@ -104,9 +104,9 @@ class Panel extends React.Component<PanelStateProps & PanelDispatchProps, State>
             <ColorButton/>
           </span>
 
-        <span className = {this.props.tool === 'line' ? "button-wrapper": ''} title="Line Tool: Draw linear vectors." onClick={() => {
+        {/* <span className = {this.props.tool === 'line' ? "button-wrapper": ''} title="Line Tool: Draw linear vectors." onClick={() => {
           this.handleClick('line')
-          }}><LineButton /></span>
+          }}><LineButton /></span> */}
 
         <span className = {this.props.tool === 'circle' ? "button-wrapper": ''} title="Circle Tool: Create and manipulate a circle object." onClick={() => {
           this.handleClick('circle')
