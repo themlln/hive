@@ -14,7 +14,7 @@ class NewMessageEntry extends React.Component<NewMessageMapStateToProps & NewMes
     this.handleSubmit = this.handleSubmit.bind(this)
   }
 
-  handleChange (event: any) {
+  handleChange (event: Event) {
     this.setState({
       value: event.target.value
     })
