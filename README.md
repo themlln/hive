@@ -7,16 +7,12 @@ Hive utilizes Fabric.js to build a manipulatable whiteboard object that allows u
 -[ ] Liz Einstein (https://github.com/elizabetheinstein)
 -[ ] Nuri Park (https://github.com/nurpny)
 ## Technologies Used
-Front-end: Typescript, React, Redux, React-Redux, Fabric.js, Material-UI
+Front-end: Typescript, React, Redux, React-Redux, Fabric.js
 Back-end: TypeORM/PostgreSQL, Node.js, Express
 ## Getting Started
 1.  `git clone` this repository to your local computer.
 2.  In your computer's terminal, run `npm install`.
 3.  Run `npm run start-dev`.
-## Database Schema
-## User Flow
-![Image of User Flow]
-(public/user-flow.png)
 ### Draw
 The Draw tools can be found in the top panel of the whiteboard. Set the color before clicking on the shapes, text and line. There are two color options for stroke and fill. Stroke refers to text, lines and shape borders. Fill refers to the shape's body.
 ### Room Key
