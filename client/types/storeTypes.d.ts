@@ -33,8 +33,9 @@ export interface Message {
 }
 
 export interface ChatState {
-  messages: Array<Message>
-  username: string
+  chat: {messages: Array<Message>},
+  user: User,
+  username: string,
 }
 
 /**

@@ -20,7 +20,7 @@ class NewMessageEntry extends React.Component<NewMessageMapStateToProps & NewMes
     })
   }
 
-  handleSubmit = (event: any) => {
+  handleSubmit = (event: Event) => {
     event.preventDefault()
     const content: string = event.target.content.value
     const timestamp: string = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})

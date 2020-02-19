@@ -44,6 +44,7 @@ interface AppStateProps {
 interface AppDispatchProps {
   loadInitialData: () => {};
 }
+
 /**
  * CONTAINER
  */

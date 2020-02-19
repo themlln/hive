@@ -6,12 +6,16 @@ export interface HomeState {
 }
 
 export type HomeStateProps = {
-  channelId: string
+  channelId: string,
 }
 
 export type HomeDispatch = {
   onLoadChannelId: (channelId: string) => void,
   fetchMessages: (channelId: string) => void
+}
+
+export type WhiteboardProps = {
+  channelId: string
 }
 
 export interface CreateRoomState {
@@ -48,6 +52,7 @@ export interface WelcomeDispatchProps {
   sendUsername: (username: string, channelId: string) => string
 }
 
+
 export interface ChatStateProps {
   chat: {
     messages: Array<Message>
@@ -61,13 +66,14 @@ export interface ChatDispatchProps {
 }
 
 export interface NewMessageState {
-  value: string
+  value: string;
 }
 
 export interface NewMessageMapStateToProps {
   user: ComponentState,
   channelId: ComponentState
 }
+
 
 export interface NewMessageDispatchToProps {
   sendMessage: (newMessage: Message, channelId: string) => {newMessage: Message}
