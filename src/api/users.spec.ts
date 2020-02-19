@@ -1,21 +1,28 @@
-/* global describe beforeEach it */
+import * as expect from 'chai'
+import * as app from '../index';
+import * as request from 'supertest'
 
-const {expect} = require('chai')
-const request = require('supertest')
-const db = require('../db')
-const app = require('../index')
-const User = db.model('user')
+import {userRepository} from './users'
+import {User} from '../entity/User'
+import {createConnection} from 'typeorm'
 
 describe('User routes', () => {
   beforeEach(() => {
-    return db.sync({force: true})
+    return createConnection({
+      synchronize: true
+    })
   })
 
   describe('/api/users/', () => {
-    const codysEmail = 'cody@puppybook.com'
+    const codysEmail = new User({
+      email: "cody@puppybook.com",
+    })
+
+
 
     beforeEach(() => {
-      return User.create({
+
+      return codysEmail.save({
         email: codysEmail
       })
     })

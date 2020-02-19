@@ -4,7 +4,7 @@ import { getRepository } from 'typeorm'
 import { Request, NextFunction } from 'express'
 module.exports = router
 
-const userRepository = getRepository(User)
+export const userRepository = getRepository(User)
 
 
 router.get('/', async (req: Request, res: Response, next: NextFunction) => {
