@@ -80,6 +80,7 @@ class Panel extends React.Component<PanelStateProps & PanelDispatchProps, State>
       Get Room Key
     </Clipboard>
       <div id = "panelButtons">
+
         <span className = {this.props.tool === 'draw' ? "button-wrapper": ''} title="Pen Tool: Move your cursor to draw or write." onClick={
           () => this.handleClick('draw')
           }><DrawButton /></span>
@@ -93,6 +94,7 @@ class Panel extends React.Component<PanelStateProps & PanelDispatchProps, State>
         <span className = {this.props.tool === 'select' ? "button-wrapper": ''} title="Select Tool: Select the element you would like to manipulate/move." onClick={() => this.handleClick('select')}><SelectButton /> </span>
 
         <span className = {this.props.tool === 'text' ? "button-wrapper": ''} title="Text Tool: Insert text box." onClick={() => {
+
           this.handleClick('text')
           addText(this.props.color, this.props.fill, this.props.canvasRef, this.props.channelId)
           }}><TextButton /></span>
