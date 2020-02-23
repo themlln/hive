@@ -1,6 +1,38 @@
 import {Message} from './storeTypes'
 import {ComponentState} from 'react'
 
+export interface HomeState {
+  showLogin: boolean
+}
+
+export type HomeStateProps = {
+  channelId: string
+}
+
+export type HomeDispatch = {
+  onLoadChannelId: (channelId: string) => void,
+  fetchMessages: (channelId: string) => void
+}
+
+export interface CreateRoomState {
+  userName: string,
+}
+
+export interface CreateRoomDispatchProps {
+  onClickCreateUser: (username: string) => {},
+  onClickCreateCanvas: () => {}
+}
+
+export interface JoinRoomState {
+  roomKey: string,
+  userName: string
+}
+
+export interface JoinRoomDispatchProps {
+  onClickCreateUser: (username: string) => {},
+  onClickJoinRoom: (roomKey: string) => {},
+}
+
 export interface WelcomeState {
   roomKey: string;
   createUsername: string;
@@ -13,8 +45,6 @@ export interface WelcomeStateProps {
 }
 
 export interface WelcomeDispatchProps {
-  onClickCreateCanvas: () => {},
-  onClickJoinRoom: (key: string) => {},
   sendUsername: (username: string, channelId: string) => string
 }
 
@@ -27,7 +57,6 @@ export interface ChatStateProps {
 }
 
 export interface ChatDispatchProps {
-  fetchingMessages: (channelId: string) => {messages: Array<Message>},
   deleteMessage: (message: Message, channelId: string) => {message: Message}
 }
 

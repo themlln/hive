@@ -1,12 +1,12 @@
 import * as morgan from 'morgan'
 import * as path from 'path'
 import * as express from 'express'
-import {Request, Response, NextFunction} from 'express'
+import { Request, Response, NextFunction } from 'express'
 import * as compression from 'compression'
 
-import { createConnection, Connection, Repository } from 'typeorm'
+import { createConnection, Connection, getRepository, Repository } from 'typeorm'
 import 'reflect-metadata'
-import { TypeormStore } from 'typeorm-store'
+import { TypeormStore } from 'connect-typeorm'
 import { User } from './entity/User'
 import { Session } from './entity/Session'
 
@@ -32,8 +32,11 @@ module.exports = app
  */
 // if (process.env.NODE_ENV !== 'production') require('../secrets')
 
+// Session Repository
 
-const createApp = (sessionRepository: Repository<Session>) => {
+
+
+const createApp = (typeORMStore:TypeormStore, userRepository: Repository<User>) => {
   // logging middleware
   app.use(morgan('dev'))
 
@@ -48,13 +51,37 @@ const createApp = (sessionRepository: Repository<Session>) => {
   app.use(
     session({
       secret: process.env.SESSION_SECRET || 'my best friend is Cody',
-      store: new TypeormStore({ repository: sessionRepository }),
+      store: typeORMStore,
       resave: false,
       saveUninitialized: false
     })
   )
+
   app.use(passport.initialize())
   app.use(passport.session())
+
+
+  // creates guests with session IDs as users
+  app.use('*', async (req, res, next) => {
+    try {
+      if (!req.session.user) {
+        //if you are logged in
+        if (req.user) {
+          req.session.user = req.user
+        } else {
+          //if you are a guest
+          const newUser = new User;
+          newUser.sessionId = req.session.id;
+          const newUserUpdated = await userRepository.save(newUser)
+          req.session.user = newUser
+          req.user = newUser
+        }
+      }
+      next()
+    } catch (error) {
+      next(error)
+    }
+  })
 
   // auth and api routes
   app.use('/auth', require('./auth'))
@@ -104,16 +131,24 @@ async function bootApp() {
     const connection: Connection = await createConnection()
     await connection.runMigrations()
     console.log("connection created to database")
-    const userRepository = connection.getRepository(User);
-    const sessionRepository = connection.getRepository(Session);
+
+    // connect to typeorm databases
+    const sessionRepository: Repository<Session> = getRepository('Session')
+    const userRepository: Repository<User> = getRepository('User')
+
+    const typeORMStore = new TypeormStore({
+      cleanupLimit: 2,
+      limitSubquery: false,
+      ttl: 86400
+    }).connect(sessionRepository)
 
     //passport registration
     passport.serializeUser((user: User, done) => done(null, user.id))
 
     passport.deserializeUser(async (id: number, done) => {
       try {
-        const user = await userRepository.findOne({
-          select:['id', 'email', 'username', 'profileImage'],
+        const user = await getRepository('User').findOne({
+          select: ['id', 'email', 'username', 'profileImage'],
           where: { id: id },
         });
         done(null, user)
@@ -122,21 +157,7 @@ async function bootApp() {
       }
     })
 
-    // app.use('*', (req: Request, res: Response, next: NextFunction) => {
-    //   try {
-    //     if (req.session) {
-    //       if (!req.user) {
-    //         const newUser = userRepository.create({sessionId: req.sessionID})
-    //         req.user = newUser
-    //       }
-    //     }
-    //     next()
-    //   } catch (error) {
-    //     next(error)
-    //   }
-    // })
-
-    await createApp(sessionRepository)
+    await createApp(typeORMStore, userRepository)
     await startListening()
   } catch (err) {
     console.error(err)

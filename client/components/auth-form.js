@@ -67,7 +67,6 @@ const mapDispatch = dispatch => {
   return {
     handleSubmit(evt) {
       evt.preventDefault()
-      console.log("EVENT IN HANDLE SUBMIT", evt)
       const formName = evt.target.name
       const email = evt.target.email.value
       const password = evt.target.password.value

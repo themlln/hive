@@ -1,5 +1,5 @@
 import * as React from 'react'
-import {updateTool} from '../store/Panel'
+import {updateTool} from '../store/panel-store'
 import { connect } from 'react-redux'
 import { fabric } from 'fabric'
 import clientSocket from '../sockets/chat-sockets'
@@ -8,6 +8,7 @@ import {addText} from '../components/canvasTools/text'
 import {addCircle} from '../components/canvasTools/circle'
 import {addRectangle} from '../components/canvasTools/rectangle'
 import {addTriangle} from '../components/canvasTools/triangle'
+import Clipboard from 'react-clipboard.js'
 //buttons - change to one line**
 import DeleteButton from './buttons/deleteButton'
 import DrawButton from './buttons/drawButton'
@@ -39,7 +40,8 @@ class Panel extends React.Component<PanelStateProps & PanelDispatchProps, State>
     this.clearCanvas = this.clearCanvas.bind(this)
     this.handleClick = this.handleClick.bind(this)
     this.handleToggle = this.handleToggle.bind(this)
-
+    this.onSuccess = this.onSuccess.bind(this)
+    this.getText = this.getText.bind(this)
   }
 
   componentDidMount() {
@@ -61,22 +63,38 @@ class Panel extends React.Component<PanelStateProps & PanelDispatchProps, State>
    await this.props.updateTool(action)
   }
 
+  onSuccess(event) {
+    event.trigger.textContent='Copied!'
+    window.setTimeout(function() {
+      event.trigger.textContent='Get Room Key'
+    }, 2000)
+  }
+  getText() {
+    return `${this.props.channelId}`
+  }
+
   render() {
     return(
+      <div id="allPanels">
+      <Clipboard className='clipboard' option-text={this.getText} onSuccess={this.onSuccess} title="Copy sharable room key" onClick= {() => this.handleClick('copy')}>
+      Get Room Key
+    </Clipboard>
       <div id = "panelButtons">
-        <span className = {this.props.tool === 'draw' ? "button-wrapper": ''} onClick={
+
+        <span className = {this.props.tool === 'draw' ? "button-wrapper": ''} title="Pen Tool: Move your cursor to draw or write." onClick={
           () => this.handleClick('draw')
           }><DrawButton /></span>
 
-        <span className = {this.props.tool === 'delete' ? "button-wrapper": ''}  onClick={() => {
+        <span className = {this.props.tool === 'delete' ? "button-wrapper": ''}  title="Delete Tool: To Delete, select the item you want to delete and then press the delete key on your keyboard." onClick={() => {
           this.handleClick('delete')
           removeObject(this.props.canvasRef, this.props.channelId)
           }}> <DeleteButton />
         </span>
 
-        <span className = {this.props.tool === 'select' ? "button-wrapper": ''} onClick={() => this.handleClick('select')}><SelectButton /> </span>
+        <span className = {this.props.tool === 'select' ? "button-wrapper": ''} title="Select Tool: Select the element you would like to manipulate/move." onClick={() => this.handleClick('select')}><SelectButton /> </span>
 
-        <span className = {this.props.tool === 'text' ? "button-wrapper": ''} onClick={() => {
+        <span className = {this.props.tool === 'text' ? "button-wrapper": ''} title="Text Tool: Insert text box." onClick={() => {
+
           this.handleClick('text')
           addText(this.props.color, this.props.fill, this.props.canvasRef, this.props.channelId)
           }}><TextButton /></span>
@@ -88,31 +106,31 @@ class Panel extends React.Component<PanelStateProps & PanelDispatchProps, State>
             <ColorButton/>
           </span>
 
-        <span className = {this.props.tool === 'line' ? "button-wrapper": ''} onClick={() => {
+        <span className = {this.props.tool === 'line' ? "button-wrapper": ''} title="Line Tool: Draw linear vectors." onClick={() => {
           this.handleClick('line')
           }}><LineButton /></span>
 
-        <span className = {this.props.tool === 'circle' ? "button-wrapper": ''} onClick={() => {
+        <span className = {this.props.tool === 'circle' ? "button-wrapper": ''} title="Circle Tool: Create and manipulate a circle object." onClick={() => {
           this.handleClick('circle')
           addCircle(this.props.color, this.props.fill, this.props.canvasRef, this.props.channelId)
           }}><CircleButton /></span>
 
-        <span className = {this.props.tool === 'rectangle' ? "button-wrapper": ''} onClick={() => {
+        <span className = {this.props.tool === 'rectangle' ? "button-wrapper": ''} title="Rectangle Tool: Create and manipulate a rectangle object." onClick={() => {
           this.handleClick('rectangle')
           addRectangle(this.props.color, this.props.fill, this.props.canvasRef, this.props.channelId)
           }}><RectangleButton /></span>
 
-        <span className = {this.props.tool === 'triangle' ? "button-wrapper": ''} onClick={() => {
+        <span className = {this.props.tool === 'triangle' ? "button-wrapper": ''} title="Triangle Tool: Create and manipulate a triangle object." onClick={() => {
           this.handleClick('triangle')
           addTriangle(this.props.color, this.props.fill, this.props.canvasRef, this.props.channelId)
           }}><TriangleButton /></span>
 
-        <span className = {this.props.tool === 'clear' ? "button-wrapper": ''} onClick={() => {
+        <span className = {this.props.tool === 'clear' ? "button-wrapper": ''} title="Clear Canvas" onClick={() => {
           this.clearCanvas('clearCanvas')
           this.handleClick('clear')
         }}><ClearCanvasButton /></span>
 
-        <span className = {this.props.tool === 'download' ? "button-wrapper": ''} onClick={ () => {
+        <span className = {this.props.tool === 'download' ? "button-wrapper": ''} title="Download Canvas: Download Canvas as an image."  onClick={ () => {
           const dataURL = this.props.canvasRef.toDataURL({
             format: 'jpeg'
           })
@@ -126,6 +144,7 @@ class Panel extends React.Component<PanelStateProps & PanelDispatchProps, State>
         }}><DownloadButton /></span>
 
       </div>
+    </div>
     )
   }
 }
