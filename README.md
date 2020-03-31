@@ -7,7 +7,6 @@ Hive utilizes Fabric.js to build a manipulatable whiteboard object that allows u
 - [Laura Barger](https://github.com/lauraaltia)
 - [Elizabeth Einstein](https://github.com/elizabetheinstein)
 - [Nuri Park](https://github.com/nurpny)
-- [Joanna Huang](https://github.com/jthnyc)
 
 **Technologies Used**
 - Frontend: Typescript, React, Redux, React-Redux, Fabric.js
