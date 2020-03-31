@@ -1,14 +1,19 @@
 # Hive
 ##### A real-time, interactive collaboration platform to share ideas visually and verbally.
 Hive utilizes Fabric.js to build a manipulatable whiteboard object that allows users to easily create and update their ideas, alongside a chat box to discuss the changes.
-## The Team
--[ ] Ming Chen (https://github.com/mzchen14)
--[ ] Laura Barger (https://github.com/lauraaltia)
--[ ] Liz Einstein (https://github.com/elizabetheinstein)
--[ ] Nuri Park (https://github.com/nurpny)
-## Technologies Used
-Front-end: Typescript, React, Redux, React-Redux, Fabric.js
-Back-end: TypeORM/PostgreSQL, Node.js, Express
+
+**The Team**
+- [Ming Chen](https://github.com/mzchen14)
+- [Laura Barger](https://github.com/lauraaltia)
+- [Elizabeth Einstein](https://github.com/elizabetheinstein)
+- [Nuri Park](https://github.com/nurpny)
+- [Joanna Huang](https://github.com/jthnyc)
+
+**Technologies Used**
+- Frontend: Typescript, React, Redux, React-Redux, Fabric.js
+- Backend: TypeORM/PostgreSQL, Node.js, Express
+- Deployment: Heroku
+
 ## Getting Started
 1.  `git clone` this repository to your local computer.
 2.  In your computer's terminal, run `npm install`.
