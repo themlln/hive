@@ -44,7 +44,7 @@
     "@types/redux": "^3.6.0",
     "@types/socket.io": "^2.1.4",
     "@types/socket.io-client": "^1.4.32",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "class-validator": "^0.11.0",
     "compression": "^1.7.3",
     "connect-session-sequelize": "^6.0.0",
